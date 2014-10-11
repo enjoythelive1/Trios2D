@@ -24,8 +24,16 @@
      * @param y the vertical position
      */
     function Vector(x, y) {
-        this.x = x;
-        this.y = y;
+        if (Array.isArray(x)) {
+            this.x = x[0] || 0;
+            this.y = x[1] || 0;
+        } else if (typeof x === "object") {
+            this.x = x.x || 0;
+            this.y = x.y || 0;
+        } else {
+            this.x = x || 0;
+            this.y = y || 0;
+        }
     }
 
     Vector.prototype = {
@@ -95,17 +103,30 @@
     /*********************************************** Input ******************************************************/
     /************************************************************************************************************/
     
+    /*
+     * Contains info about the input for the game
+     * @param input reference to the object where the key events are saved
+     */
+    
     function Input(input) {
         this.kbInput = input;
     }
     
     Input.prototype = {
+        /*
+         * Chech if the specified key was pressed
+         * @param keyCode the key to check
+         */
         isKeyPressed: function isKeyPressed(keyCode) {
             var pressed = this.kbInput.keypress[keyCode];
             delete this.kbInput.keypress[keyCode];
             return pressed;
         },
         
+        /*
+         * Chech if the specified key is down at the moment
+         * @param keyCode the key to check
+         */
         isKeyDown: function isKeyDown(keyCode) {
             if (keyCode === Input.ANY) {
                 var prop;
@@ -120,6 +141,10 @@
             return this.kbInput.keydown[keyCode];
         },
         
+        /*
+         * Chech if the specified key is going up at the moment
+         * @param keyCode the key to check
+         */
         isKeyUp: function isKeyUp(keyCode) {
             if (keyCode === Input.ANY) {
                 var prop;
@@ -135,106 +160,106 @@
         }
     };
     
+    // Key variables
     Input.ANY = -1;
-    Input.BACKSPACE=8;
-    Input.TAB=9;
-    Input.ENTER=13;
-    Input.SHIFT=16;
-    Input.CTRL=17;
-    Input.ALT=18;
-    Input.PAUSE=19;
-    Input.CAPS_LOCK=20;
-    Input.ESCAPE=27;
-    Input.PAGE_;
-    Input.UP=33;
-    Input.PAGE_DOWN=34;
-    Input.END=35;
-    Input.HOME=36;
-    Input.LEFT_ARROW=37;
-    Input.UP_ARROW=38;
-    Input.RIGHT_ARROW=39;
-    Input.DOWN_ARROW=40;
-    Input.INSERT=45;
-    Input.DELETE=46;
-    Input.KB_0=48;
-    Input.KB_1=49;
-    Input.KB_2=50;
-    Input.KB_3=51;
-    Input.KB_4=52;
-    Input.KB_5=53;
-    Input.KB_6=54;
-    Input.KB_7=55;
-    Input.KB_8=56;
-    Input.KB_9=57;
-    Input.A=65;
-    Input.B=66;
-    Input.C=67;
-    Input.D=68;
-    Input.E=69;
-    Input.F=70;
-    Input.G=71;
-    Input.H=72;
-    Input.I=73;
-    Input.J=74;
-    Input.K=75;
-    Input.L=76;
-    Input.M=77;
-    Input.N=78;
-    Input.O=79;
-    Input.P=80;
-    Input.Q=81;
-    Input.R=82;
-    Input.S=83;
-    Input.T=84;
-    Input.U=85;
-    Input.V=86;
-    Input.W=87;
-    Input.X=88;
-    Input.Y=89;
-    Input.Z=90;
-    Input.LEFT_WINDOW_KEY=91;
-    Input.RIGHT_WINDOW_KEY=92;
-    Input.SELECT_KEY=93;
-    Input.NUMPAD_0=96;
-    Input.NUMPAD_1=97;
-    Input.NUMPAD_2=98;
-    Input.NUMPAD_3=99;
-    Input.NUMPAD_4=100;
-    Input.NUMPAD_5=101;
-    Input.NUMPAD_6=102;
-    Input.NUMPAD_7=103;
-    Input.NUMPAD_8=104;
-    Input.NUMPAD_9=105;
-    Input.MULTIPLY=106;
-    Input.ADD=107;
-    Input.SUBTRACT=109;
-    Input.DECIMAL_POINT=110;
-    Input.DIVIDE=111;
-    Input.F1=112;
-    Input.F2=113;
-    Input.F3=114;
-    Input.F4=115;
-    Input.F5=116;
-    Input.F6=117;
-    Input.F7=118;
-    Input.F8=119;
-    Input.F9=120;
-    Input.F10=121;
-    Input.F11=122;
-    Input.F12=123;
-    Input.NUM_LOCK=144;
-    Input.SCROLL_LOCK=145;
-    Input.SEMI_COLON=186;
-    Input.EQUAL_SIGN=187;
-    Input.COMMA=188;
-    Input.DASH=189;
-    Input.PERIOD=190;
-    Input.FORWARD_SLASH=191;
-    Input.GRAVE_ACCENT=192;
-    Input.OPEN_BRACKET=219;
-    Input.BACK_SLASH=220;
-    Input.CLOSE_BRAKET=221;
-    Input.SINGLE_QUOTE=222;
+    Input.BACKSPACE = 8;
+    Input.TAB = 9;
+    Input.ENTER = 13;
+    Input.SHIFT = 16;
+    Input.CTRL = 17;
+    Input.ALT = 18;
+    Input.PAUSE = 19;
+    Input.CAPS_LOCK = 20;
+    Input.ESCAPE = 27;
+    Input.PAGE_UP = 33;
+    Input.PAGE_DOWN = 34;
+    Input.END = 35;
+    Input.HOME = 36;
+    Input.LEFT_ARROW = 37;
+    Input.UP_ARROW = 38;
+    Input.RIGHT_ARROW = 39;
+    Input.DOWN_ARROW = 40;
+    Input.INSERT = 45;
+    Input.DELETE = 46;
+    Input.KB_0 = 48;
+    Input.KB_1 = 49;
+    Input.KB_2 = 50;
+    Input.KB_3 = 51;
+    Input.KB_4 = 52;
+    Input.KB_5 = 53;
+    Input.KB_6 = 54;
+    Input.KB_7 = 55;
+    Input.KB_8 = 56;
+    Input.KB_9 = 57;
+    Input.A = 65;
+    Input.B = 66;
+    Input.C = 67;
+    Input.D = 68;
+    Input.E = 69;
+    Input.F = 70;
+    Input.G = 71;
+    Input.H = 72;
+    Input.I = 73;
+    Input.J = 74;
+    Input.K = 75;
+    Input.L = 76;
+    Input.M = 77;
+    Input.N = 78;
+    Input.O = 79;
+    Input.P = 80;
+    Input.Q = 81;
+    Input.R = 82;
+    Input.S = 83;
+    Input.T = 84;
+    Input.U = 85;
+    Input.V = 86;
+    Input.W = 87;
+    Input.X = 88;
+    Input.Y = 89;
+    Input.Z = 90;
+    Input.LEFT_WINDOW_KEY = 91;
+    Input.RIGHT_WINDOW_KEY = 92;
+    Input.SELECT_KEY = 93;
+    Input.NUMPAD_0 = 96;
+    Input.NUMPAD_1 = 97;
+    Input.NUMPAD_2 = 98;
+    Input.NUMPAD_3 = 99;
+    Input.NUMPAD_4 = 100;
+    Input.NUMPAD_5 = 101;
+    Input.NUMPAD_6 = 102;
+    Input.NUMPAD_7 = 103;
+    Input.NUMPAD_8 = 104;
+    Input.NUMPAD_9 = 105;
+    Input.MULTIPLY = 106;
+    Input.ADD = 107;
+    Input.SUBTRACT = 109;
+    Input.DECIMAL_POINT = 110;
+    Input.DIVIDE = 111;
+    Input.F1 = 112;
+    Input.F2 = 113;
+    Input.F3 = 114;
+    Input.F4 = 115;
+    Input.F5 = 116;
+    Input.F6 = 117;
+    Input.F7 = 118;
+    Input.F8 = 119;
+    Input.F9 = 120;
+    Input.F10 = 121;
+    Input.F11 = 122;
+    Input.F12 = 123;
+    Input.NUM_LOCK = 144;
+    Input.SCROLL_LOCK = 145;
+    Input.SEMI_COLON = 186;
+    Input.EQUAL_SIGN = 187;
+    Input.COMMA = 188;
+    Input.DASH = 189;
+    Input.PERIOD = 190;
+    Input.FORWARD_SLASH = 191;
+    Input.GRAVE_ACCENT = 192;
+    Input.OPEN_BRACKET = 219;
+    Input.BACK_SLASH = 220;
+    Input.CLOSE_BRAKET = 221;
+    Input.SINGLE_QUOTE = 222;
 
     
     /************************************************************************************************************/
@@ -267,7 +292,7 @@
         /*
          * Camera Position
          */
-        cameraPosition: new Vector(0, 0),
+        cameraPosition: new Vector(),
         
         /*
          * Max number of frames the game should render per second
@@ -522,10 +547,9 @@
     */
     function GameObject() {
         this.children = [];
-        this.position = new Vector(0, 0);
-        this.velocity = new Vector(0, 0);
-        this.aceleration = new Vector(0, 0);
-        this.size = new Vector(0, 0);
+        this.position = new Vector();
+        this.velocity = new Vector();
+        this.aceleration = new Vector();
     }
 
     GameObject.prototype = {
@@ -537,19 +561,19 @@
         /*
          * The Object Position
          */
-        position: u,
+        position: new Vector(),
         
         /*
          * Objects velocity
          */
-        velocity: u,
+        velocity: new Vector(),
         
         /*
          * Objects aceleration
          */
-        aceleration: u,
+        aceleration: new Vector(),
         
-        size: u,
+        size: new Vector(),
 
         /*
         * Array of children
@@ -642,7 +666,7 @@
                         return false;
                     }
                     
-                    return true;
+                    return true; 
                 });
             }
         }
@@ -655,7 +679,7 @@
     /*
     * Creates a new Image object.
     */
-    function Image(imageData, clipStart, originalSize, scaleSize) {
+    function Image(imageData, clipStart, originalSize, scale) {
         // Calling GameObject Constructor
         GameObject.apply(this);
         
@@ -666,10 +690,9 @@
             this.image = imageData;
         }
         
-        this.clipStart = clipStart;
-        this.originalSize = originalSize;
-        this.scaleSize = scaleSize || originalSize;
-        this.size = scaleSize || originalSize;
+        this.clipStart = new Vector(clipStart);
+        this.originalSize = new Vector(originalSize);
+        this.scale = scale || 1;
     }
 
     Image.prototype = Object.create(GameObject.prototype);
@@ -679,8 +702,172 @@
                           this.clipStart.x, this.clipStart.y,
                           this.originalSize.x, this.originalSize.y,
                           this.absolutePosition.x, this.absolutePosition.y,
-                          this.scaleSize.x, this.scaleSize.y);
+                          this.originalSize.multiply(this.scale).x, this.originalSize.multiply(this.scale).x);
     };
+    
+    Object.defineProperty(Image.prototype, "size", {
+        get: function () {
+            return this.originalSize.multiply(this.scale);
+        }
+    });
+    
+    
+    /***********************************************************************************************************/
+    /******************************************** Animation ****************************************************/
+    /***********************************************************************************************************/
+    
+    /*
+     * Is a set of images which changes over time
+     */
+    function Animation(imageSet, options) {
+        // Calling GameObject Constructor
+        GameObject.apply(this);
+        
+        options = options || {};
+        // An array of images
+        if (Array.isArray(imageSet) && typeof imageSet !== "string") {
+            this.images = Array.prototype.map.call(imageSet, function (rawItem) {
+                var imageToReturn = {}, item, moreindeep;
+                if (typeof rawItem === "string" || rawItem.localName === "image") {
+                    item = rawItem;
+                } else if (typeof rawItem === "object" && rawItem.image) {
+                    item = rawItem.image;
+                    moreindeep = true;
+                } else {
+                    throw new Error("invalid Image definition passed as parameter");
+                }
+                
+                if (typeof item === "string") {
+                    imageToReturn.image = window.document.createElement("img");
+                    imageToReturn.image.src = item;
+                    item = imageToReturn.image;
+                }
+                
+                if (item.localName === "img") {
+                    
+                    imageToReturn.image = item;
+                    
+                    if (imageToReturn.image.complete) {
+                        imageToReturn.originalSize = imageToReturn.size = new Vector(imageToReturn.image.width, imageToReturn.image.height);
+                    } else {
+                        imageToReturn.image.addEventListener("load", function () {
+                            imageToReturn.size = imageToReturn.size || new Vector(imageToReturn.image.width, imageToReturn.image.height);
+                            imageToReturn.originalSize = imageToReturn.originalSize || imageToReturn.size;
+                        });
+                    }
+                    
+                    imageToReturn.clipStart = new Vector();
+                }
+                
+                if (moreindeep) {
+                    imageToReturn.clipStart = rawItem.clipStart ? new Vector(rawItem.clipStart) : imageToReturn.clipStart;
+                    imageToReturn.originalSize = rawItem.originalSize ? new Vector(rawItem.originalSize) : imageToReturn.originalSize;
+                    imageToReturn.size = rawItem.size ? new Vector(rawItem.size) : imageToReturn.originalSize;
+                }
+                
+                return imageToReturn;
+            });
+        } else {
+            var spritesheet, imageSize;
+            if (typeof imageSet === "string") {
+                spritesheet = window.document.createElement("img");
+                spritesheet.src = imageSet;
+                imageSet = spritesheet;
+            }
+
+            if (imageSet.localName === "img") {
+
+                spritesheet = imageSet;
+
+                imageSize = new Vector(spritesheet.width, spritesheet.height);
+
+            }
+            
+            if (!options.spriteSize) {
+                throw new Error("Must specify the sprite size");
+            }
+            
+            this.images = [];
+            
+            options.imageSize = options.imageSize ? new Vector(options.imageSize) : imageSize;
+            options.margin = new Vector(options.margin);
+            options.spriteSize = new Vector(options.spriteSize);
+            
+            var horizontalSprites = Math.floor(options.imageSize.x / (options.margin.x + options.spriteSize.x)),
+                verticalSprites = Math.floor(options.imageSize.y / (options.margin.y +  options.spriteSize.y)),
+                imageNumber = options.imageNumber ||  horizontalSprites * verticalSprites;
+            
+            var i, horizontal, vertical;
+            for (i = 0; i < imageNumber; i++) {
+                horizontal = i % horizontalSprites;
+                vertical = Math.floor(i / horizontalSprites);
+                
+                this.images.push({
+                    image: imageSet,
+                    originalSize: new Vector(options.spriteSize),
+                    scaleSize: new Vector(options.spriteSize),
+                    size: new Vector(options.spriteSize),
+                    clipStart: new Vector(options.margin.x + (horizontal * (options.spriteSize.x + options.margin.x)),
+                                          options.margin.y + (vertical * (options.spriteSize.y + options.margin.y)))
+                });
+            }
+        }
+        
+        this.framesPerSecond = options.framesPerSecond || 10;
+        this.timeSinceChange = 0;
+        this.current = 0;
+        this.scale = options.scale || 1;
+        this.pingpong = false;
+        this.step = 1; 
+    }
+
+    Animation.prototype = Object.create(GameObject.prototype);
+    
+    Animation.prototype.update = function update(delta) {
+        this.timeSinceChange += delta;
+        var framesToChange = Math.floor(this.timeSinceChange / (1000 / this.framesPerSecond));
+        
+        if (framesToChange >= 1) {
+            this.timeSinceChange = 0;
+            this.current += framesToChange * this.step;
+            var excess = this.current - this.images.length;
+            if (excess >= 0) {
+                if (this.pingpong) {
+                    this.current = this.images.length - excess - 1;
+                    this.step = -this.step;
+                } else {
+                    this.current = excess;
+                }
+            } else if (excess <= -this.images.length) {
+                if (this.pingpong) {
+                    this.current = -(this.images.length + excess);
+                    this.step = -this.step;
+                }
+            }
+        }
+    };
+    
+    Animation.prototype.render = function render(context, parentPosition) {
+        if (this.images[this.current]) {
+        context.drawImage(this.images[this.current].image,
+                          this.images[this.current].clipStart.x, this.images[this.current].clipStart.y,
+                          this.images[this.current].originalSize.x, this.images[this.current].originalSize.y,
+                          this.absolutePosition.x, this.absolutePosition.y,
+                          this.images[this.current].originalSize.multiply(this.scale).x, this.images[this.current].originalSize.multiply(this.scale).y);
+        }
+    };
+    
+    Animation.prototype.reverse = function () {
+        this.images = this.images.reverse();
+    };
+    
+    Object.defineProperty(Animation.prototype, "size", {
+        get: function () {
+            return this.images[this.current].originalSize.multiply(this.scale);
+        }
+    });
+    
+    
     
         
     /***********************************************************************************************************/
@@ -688,7 +875,7 @@
     /***********************************************************************************************************/
     
     /*
-    * Creates a new Image object.
+    * Creates a new Text object.
     */
     function Text(text, options) {
         // Calling GameObject Constructor
@@ -747,6 +934,7 @@
     Engine.GameText = Text;
     Engine.Input = Input;
     Engine.Vector = Vector;
+    Engine.Animation = Animation;
     
     window.Engine = Engine;
 
