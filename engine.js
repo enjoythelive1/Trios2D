@@ -270,6 +270,27 @@
 
     
     /************************************************************************************************************/
+    /********************************************** Camera ******************************************************/
+    /************************************************************************************************************/
+
+    /*
+     * Creates a Camera object.
+     * @param position default position
+     */
+    function Camera(position) {
+        this.position = new Vector(position);
+    }
+
+    Camera.prototype = {
+        position: null,
+        get worldPosition() {
+            return this.position.invert();
+        }
+    };
+
+
+
+    /************************************************************************************************************/
     /********************************************** Engine ******************************************************/
     /************************************************************************************************************/
       
@@ -293,14 +314,14 @@
         
         this.children = [];
         this.logic = logic;
-        this.cameraPosition = new Vector()
+        this.camera = new Camera()
     }
 
     Engine.prototype = {
         /*
          * Camera Position
          */
-        cameraPosition: new Vector(),
+        camera: new Camera(),
         
         /*
          * Max number of frames the game should render per second
@@ -430,7 +451,7 @@
             this.logic.render(this.context, this);
             
             torender.forEach(function (item) {
-                item._render(self.context, self.cameraPosition.invert());
+                item._render(self.context, self.camera.worldPosition);
             });
             
             this.postrender(this.context);
@@ -506,8 +527,8 @@
                 y = event.clientY + document.body.scrollTop + document.documentElement.scrollTop;
             }
             
-            x = x - this.canvas.offsetLeft - this.cameraPosition.x;
-            y = y - this.canvas.offsetTop  - this.cameraPosition.y;
+            x = x - this.canvas.offsetLeft + this.camera.position.x;
+            y = y - this.canvas.offsetTop  + this.camera.position.y;
             
             clickPosition = new Vector(x, y);
             
