@@ -96,6 +96,13 @@
          */
         getAbsoluteValue: function getAbsolute() {
             return Math.sqrt(Math.pow(this.x, 2) + Math.pow(this.y, 2));
+        },
+
+        /*
+         * Inverts the values
+         */
+        invert: function invert() {
+            return new Vector(-this.x, -this.y);
         }
     };
     
@@ -286,6 +293,7 @@
         
         this.children = [];
         this.logic = logic;
+        this.cameraPosition = new Vector()
     }
 
     Engine.prototype = {
@@ -422,7 +430,7 @@
             this.logic.render(this.context, this);
             
             torender.forEach(function (item) {
-                item._render(self.context, self.cameraPosition);
+                item._render(self.context, self.cameraPosition.invert());
             });
             
             this.postrender(this.context);
