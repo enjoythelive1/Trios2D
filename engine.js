@@ -103,7 +103,15 @@
          */
         invert: function invert() {
             return new Vector(-this.x, -this.y);
+        },
+
+        /*
+         * Makes a linear transition from one vector to other
+         */
+        lerp: function lerp(other, step) {
+            return this.add(other.sub(this).multiply(step));
         }
+
     };
     
     /************************************************************************************************************/
