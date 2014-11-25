@@ -1,6 +1,6 @@
 (function (window, u) {
     "use strict";
-    
+
     /************************************************************************************************************/
     /********************************************** Misc ******************************************************/
     /************************************************************************************************************/
@@ -13,11 +13,11 @@
             return 0;
         }
     }
-    
+
     /************************************************************************************************************/
     /********************************************** Vector ******************************************************/
     /************************************************************************************************************/
-    
+
     /*
      * Creates a new Vector.
      * @param x the horizontal position
@@ -44,7 +44,7 @@
         add: function add(vector) {
             return new Vector(this.x + vector.x, this.y + vector.y);
         },
-        
+
         /*
          * Substracts to vectors
          * @param vector the vector to sub to
@@ -52,7 +52,7 @@
         sub: function sub(vector) {
             return new Vector(this.x - vector.x, this.y - vector.y);
         },
-        
+
         /*
          * Multiply to vectors
          * @param vector the vector or scalar to Multiply to
@@ -64,7 +64,7 @@
                 return new Vector(this.x * vector, this.y * vector);
             }
         },
-        
+
         /*
          * Divides to vectors
          * @param vector the vector or scalar to divide to
@@ -76,21 +76,21 @@
                 return new Vector(this.x * vector, this.y * vector);
             }
         },
-        
+
         /*
          * check if this vector is between to vectors
          */
         isBetween: function isBetween(vector1, vector2) {
             var isBetweenX = Math.min(vector1.x, vector2.x) <= this.x &&
                 Math.max(vector1.x, vector2.x) >= this.x,
-                
+
                 isBetweenY = Math.min(vector1.y, vector2.y) <= this.y &&
                 Math.max(vector1.y, vector2.y) >= this.y;
-            
+
             return isBetweenX && isBetweenY;
-            
+
         },
-        
+
         /*
          * Gets the verctor absolute value
          */
@@ -113,20 +113,20 @@
         }
 
     };
-    
+
     /************************************************************************************************************/
     /*********************************************** Input ******************************************************/
     /************************************************************************************************************/
-    
+
     /*
      * Contains info about the input for the game
      * @param input reference to the object where the key events are saved
      */
-    
+
     function Input(input) {
         this.kbInput = input;
     }
-    
+
     Input.prototype = {
         /*
          * Chech if the specified key was pressed
@@ -137,7 +137,7 @@
             delete this.kbInput.keypress[keyCode];
             return pressed;
         },
-        
+
         /*
          * Chech if the specified key is down at the moment
          * @param keyCode the key to check
@@ -145,17 +145,17 @@
         isKeyDown: function isKeyDown(keyCode) {
             if (keyCode === Input.ANY) {
                 var prop;
-                
+
                 for (prop in this.kbInput.keydown) {
                     if (this.kbInput.keydown[prop]) {
                         return this.kbInput.keydown[prop];
                     }
                 }
             }
-            
+
             return this.kbInput.keydown[keyCode];
         },
-        
+
         /*
          * Chech if the specified key is going up at the moment
          * @param keyCode the key to check
@@ -163,18 +163,18 @@
         isKeyUp: function isKeyUp(keyCode) {
             if (keyCode === Input.ANY) {
                 var prop;
-                
+
                 for (prop in this.kbInput.keyup) {
                     if (this.kbInput.keyup[prop]) {
                         return this.kbInput.keyup[prop];
                     }
                 }
             }
-            
+
             return this.kbInput.keyup[keyCode];
         }
     };
-    
+
     // Key variables
     Input.ANY = -1;
     Input.BACKSPACE = 8;
@@ -276,7 +276,7 @@
     Input.CLOSE_BRAKET = 221;
     Input.SINGLE_QUOTE = 222;
 
-    
+
     /************************************************************************************************************/
     /********************************************** Camera ******************************************************/
     /************************************************************************************************************/
@@ -301,7 +301,7 @@
     /************************************************************************************************************/
     /********************************************** Engine ******************************************************/
     /************************************************************************************************************/
-      
+
     /*
      * Creates a new game engine.
      * @param canvas is where the game will be rendered
@@ -311,15 +311,15 @@
         if (typeof canvas === "string") {
             canvas = window.document.querySelector(canvas);
         }
-        
+
         if (typeof canvas.getContext !== "function") {
             throw new Error("A valid Canvas must be provided");
         }
-        
+
         this.canvas = canvas;
         canvas.setAttribute("tabindex", 1);
         this.context = canvas.getContext("2d");
-        
+
         this.children = [];
         this.logic = logic;
         this.camera = new Camera()
@@ -330,12 +330,12 @@
          * Camera Position
          */
         camera: new Camera(),
-        
+
         /*
          * Max number of frames the game should render per second
          */
         maxFrameRate: 60,
-        
+
         /*
          * Indicates if every frame must be cleaned before render
          */
@@ -350,7 +350,7 @@
          * Objects involved on the game
          */
         children: u,
-        
+
         /*
          * Stores info about the keyboard input
          */
@@ -359,24 +359,24 @@
              * Stores info about the key pressed
              */
             keypress: {
-                
+
             },
-            
+
             /*
              * Stores info about the keys which are down in the current update
              */
             keydown: {
-                
+
             },
-            
+
             /*
              * Stores info about the key which got up in the current update
              */
             keyup: {
-                
+
             }
         },
-        
+
         /*
          * Adds a game object to it
          * @param object Object to Add
@@ -385,7 +385,7 @@
             object.parent = this;
             this.children.push(object);
         },
-        
+
         /*
          * Removes a game object from it, if it exist
          * @param object Object to remove
@@ -404,11 +404,11 @@
         _init_: function _init_() {
             var self = this;
             this.context.fillStyle = "#ffffff";
-            
+
             if (this.logic.init) {
                 this.logic.init(this);
             }
-            
+
             this.canvas.addEventListener("click", this.click.bind(this));
             this.canvas.addEventListener("keydown", this.keydown.bind(this));
             this.canvas.addEventListener("keypress", this.keypress.bind(this));
@@ -419,13 +419,13 @@
                     self.resume();
                 }
             });
-            
+
             this.canvas.addEventListener("blur", function (e) {
                 if (self.renderInterval) {
                     self.pause();
                 }
             });
-            
+
             this.updateInterval = setInterval(this._update_.bind(this), 1000 / this.maxUpdates);
             this.renderInterval = setInterval(this._render_.bind(this), 1000 / this.maxFrameRate);
         },
@@ -454,14 +454,14 @@
         _render_: function _render_() {
             var self = this,
                 torender = this.children.sort(sortGameObjects);
-            
+
             this.prerender(this.context);
             this.logic.render(this.context, this);
-            
+
             torender.forEach(function (item) {
                 item._render(self.context, self.camera.worldPosition);
             });
-            
+
             this.postrender(this.context);
         },
 
@@ -470,7 +470,7 @@
          * @param delta time in milliseconds since the last render
          */
         preupdate: function preupdate(delta) {
-            
+
         },
 
         /*
@@ -487,20 +487,20 @@
         _update_: function _update_() {
             var startRender = new Date().getTime(),
                 delta = this.lastUpdate ? startRender - this.lastUpdate : 0;
-            
+
             this.lastUpdate = startRender;
-            
+
             this.preupdate(delta);
             this.logic.update(delta, this);
-            
+
             this.children.forEach(function (item) {
                 item._update(delta);
             });
-                
+
             this.postupdate(delta);
-            
+
         },
-        
+
         start: function start() {
             this._init_();
         },
@@ -519,14 +519,14 @@
          * Continues the game
          */
         resume: function resume() {
-            
+
             this.updateInterval = setInterval(this._update_.bind(this), 1000 / this.maxUpdates);
             this.renderInterval = setInterval(this._render_.bind(this), 1000 / this.maxFrameRate);
         },
-        
+
         click: function click(event) {
             var x, y, clickPosition;
-            
+
             if (event.pageX || event.pageY) {
                 x = event.pageX;
                 y = event.pageY;
@@ -534,48 +534,48 @@
                 x = event.clientX + document.body.scrollLeft + document.documentElement.scrollLeft;
                 y = event.clientY + document.body.scrollTop + document.documentElement.scrollTop;
             }
-            
+
             x = x - this.canvas.offsetLeft + this.camera.position.x;
             y = y - this.canvas.offsetTop  + this.camera.position.y;
-            
+
             clickPosition = new Vector(x, y);
-            
+
             this.children.sort(sortGameObjects).reverse().every(function (item) {
                 if (clickPosition.isBetween(item.position, item.position.add(item.size))) {
                     item._click(clickPosition);
                     return false;
                 }
-                
+
                 return true;
             });
-            
+
         },
-        
+
         keydown: function (e) {
             this.kbInput.keydown[e.keyCode || e.which] = true;
             e.preventDefault();
         },
-        
+
         keyup: function (e) {
             this.kbInput.keyup[e.keyCode || e.which] = true;
             this.kbInput.keydown[e.keyCode || e.which] = false;
             e.preventDefault();
-            
-            
+
+
         },
-        
+
         keypress: function (e) {
             this.kbInput.keypress[-1] = true;
             this.kbInput.keypress[e.keyCode || e.which] = true;
             e.preventDefault();
         },
-        
+
         getInput: function getInput() {
             return new Input(this.kbInput);
         }
-        
+
     };
-    
+
     /************************************************************************************************************/
     /******************************************** GameObject ****************************************************/
     /************************************************************************************************************/
@@ -594,29 +594,29 @@
         * Indicates the render position (higher is more in the front)
         */
         renderPosition: 0,
-        
+
         /*
          * The Object Position
          */
         position: new Vector(),
-        
+
         /*
          * Objects velocity
          */
         velocity: new Vector(),
-        
+
         /*
          * Objects aceleration
          */
         aceleration: new Vector(),
-        
+
         size: new Vector(),
 
         /*
         * Array of children
         */
         children: u,
-        
+
         /*
          * Adds a game object to it
          * @param child Object to Add
@@ -625,7 +625,7 @@
             child.parent = this;
             this.children.push(child);
         },
-        
+
         /*
          * Removes a game object from it, if it exist
          * @param child Object to remove
@@ -637,7 +637,7 @@
                 this.children.splice(toDelete, 1);
             }
         },
-        
+
         autoCalcSize: function autoCalcSize() {
             if (this.children.length) {
                 this.size = new Engine.Vector(Math.max.apply(Math, this.children.map(function (item) {
@@ -646,9 +646,9 @@
                     return item.position.y + item.size.y;
                 })));
             }
-            
+
             return this.size;
-                                        
+
         },
 
         /*
@@ -659,19 +659,19 @@
             if (this.aceleration) {
                 this.velocity = this.velocity.add(this.aceleration.multiply(delta / 1000));
             }
-            
+
             if (this.velocity) {
                 this.position = this.position.add(this.velocity.multiply(delta / 1000));
             }
-            
+
             if (typeof this.update === "function") {
                 this.update(delta);
             }
-            
+
             this.children.forEach(function (item) {
                 item._update(delta);
             });
-            
+
         },
 
         /*
@@ -681,298 +681,46 @@
         _render: function (context, parentPosition) {
             var self = this,
                 torender = this.children.sort(sortGameObjects);
-            
+
             this.absolutePosition = parentPosition.add(this.position);
-            
+
             if (typeof this.render === "function") {
                 this.render(context, parentPosition);
             }
-            
+
             torender.forEach(function (item) {
                 item._render(context, self.absolutePosition);
             });
         },
-        
+
         _click: function (clickPosition) {
             var localClick = clickPosition.sub(this.position);
             if (typeof this.click !== "function" || this.click(localClick) !== false) {
-                
+
                 this.children.sort(sortGameObjects).reverse().every(function (item) {
                     if (localClick.isBetween(item.position, item.position.add(item.size))) {
                         item._click(localClick);
                         return false;
                     }
-                    
-                    return true; 
+
+                    return true;
                 });
             }
         }
     };
-    
-    /***********************************************************************************************************/
-    /********************************************** Image ******************************************************/
-    /***********************************************************************************************************/
-    
-    /*
-    * Creates a new Image object.
-    */
-    function Image(imageData, clipStart, originalSize, scale) {
-        // Calling GameObject Constructor
-        GameObject.apply(this);
-        
-        if (typeof imageData === "string") {
-            this.image = window.document.createElement("img");
-            this.image.src = imageData;
-        } else {
-            this.image = imageData;
-        }
-        
-        this.clipStart = new Vector(clipStart);
-        this.originalSize = new Vector(originalSize);
-        this.scale = scale || 1;
-    }
 
-    Image.prototype = Object.create(GameObject.prototype);
-    
-    Image.prototype.render = function render(context, parentPosition) {
-        context.drawImage(this.image,
-                          this.clipStart.x, this.clipStart.y,
-                          this.originalSize.x, this.originalSize.y,
-                          this.absolutePosition.x, this.absolutePosition.y,
-                          this.originalSize.multiply(this.scale).x, this.originalSize.multiply(this.scale).y);
-    };
-    
-    Object.defineProperty(Image.prototype, "size", {
-        get: function () {
-            return this.originalSize.multiply(this.scale);
-        }
-    });
-    
-    
-    /***********************************************************************************************************/
-    /******************************************** Animation ****************************************************/
-    /***********************************************************************************************************/
-    
-    /*
-     * Is a set of images which changes over time
-     */
-    function Animation(imageSet, options) {
-        // Calling GameObject Constructor
-        GameObject.apply(this);
-        
-        options = options || {};
-        // An array of images
-        if (Array.isArray(imageSet) && typeof imageSet !== "string") {
-            this.images = Array.prototype.map.call(imageSet, function (rawItem) {
-                var imageToReturn = {}, item, moreindeep;
-                if (typeof rawItem === "string" || rawItem.localName === "image") {
-                    item = rawItem;
-                } else if (typeof rawItem === "object" && rawItem.image) {
-                    item = rawItem.image;
-                    moreindeep = true;
-                } else {
-                    throw new Error("invalid Image definition passed as parameter");
-                }
-                
-                if (typeof item === "string") {
-                    imageToReturn.image = window.document.createElement("img");
-                    imageToReturn.image.src = item;
-                    item = imageToReturn.image;
-                }
-                
-                if (item.localName === "img") {
-                    
-                    imageToReturn.image = item;
-                    
-                    if (imageToReturn.image.complete) {
-                        imageToReturn.originalSize = imageToReturn.size = new Vector(imageToReturn.image.width, imageToReturn.image.height);
-                    } else {
-                        imageToReturn.image.addEventListener("load", function () {
-                            imageToReturn.size = imageToReturn.size || new Vector(imageToReturn.image.width, imageToReturn.image.height);
-                            imageToReturn.originalSize = imageToReturn.originalSize || imageToReturn.size;
-                        });
-                    }
-                    
-                    imageToReturn.clipStart = new Vector();
-                }
-                
-                if (moreindeep) {
-                    imageToReturn.clipStart = rawItem.clipStart ? new Vector(rawItem.clipStart) : imageToReturn.clipStart;
-                    imageToReturn.originalSize = rawItem.originalSize ? new Vector(rawItem.originalSize) : imageToReturn.originalSize;
-                    imageToReturn.size = rawItem.size ? new Vector(rawItem.size) : imageToReturn.originalSize;
-                }
-                
-                return imageToReturn;
-            });
-        } else {
-            var spritesheet, imageSize;
-            if (typeof imageSet === "string") {
-                spritesheet = window.document.createElement("img");
-                spritesheet.src = imageSet;
-                imageSet = spritesheet;
-            }
 
-            if (imageSet.localName === "img") {
 
-                spritesheet = imageSet;
 
-                imageSize = new Vector(spritesheet.width, spritesheet.height);
 
-            }
-            
-            if (!options.spriteSize) {
-                throw new Error("Must specify the sprite size");
-            }
-            
-            this.images = [];
-            
-            options.imageSize = options.imageSize ? new Vector(options.imageSize) : imageSize;
-            options.margin = new Vector(options.margin);
-            options.spriteSize = new Vector(options.spriteSize);
-            
-            var horizontalSprites = Math.floor(options.imageSize.x / (options.margin.x + options.spriteSize.x)),
-                verticalSprites = Math.floor(options.imageSize.y / (options.margin.y +  options.spriteSize.y)),
-                imageNumber = options.imageNumber ||  horizontalSprites * verticalSprites;
-            
-            var i, horizontal, vertical;
-            for (i = 0; i < imageNumber; i++) {
-                horizontal = i % horizontalSprites;
-                vertical = Math.floor(i / horizontalSprites);
-                
-                this.images.push({
-                    image: imageSet,
-                    originalSize: new Vector(options.spriteSize),
-                    scaleSize: new Vector(options.spriteSize),
-                    size: new Vector(options.spriteSize),
-                    clipStart: new Vector(options.margin.x + (horizontal * (options.spriteSize.x + options.margin.x)),
-                                          options.margin.y + (vertical * (options.spriteSize.y + options.margin.y)))
-                });
-            }
-        }
-        
-        this.framesPerSecond = options.framesPerSecond || 10;
-        this.timeSinceChange = 0;
-        this.current = 0;
-        this.scale = options.scale || 1;
-        this.pingpong = false;
-        this.step = 1; 
-    }
-
-    Animation.prototype = Object.create(GameObject.prototype);
-    
-    Animation.prototype.update = function update(delta) {
-        this.timeSinceChange += delta;
-        var framesToChange = Math.floor(this.timeSinceChange / (1000 / this.framesPerSecond));
-        
-        if (framesToChange >= 1) {
-            this.timeSinceChange = 0;
-            this.current += framesToChange * this.step;
-            var excess = this.current - this.images.length;
-            if (excess >= 0) {
-                if (this.pingpong) {
-                    this.current = this.images.length - excess - 1;
-                    this.step = -this.step;
-                } else {
-                    this.current = excess;
-                }
-            } else if (excess <= -this.images.length) {
-                if (this.pingpong) {
-                    this.current = -(this.images.length + excess);
-                    this.step = -this.step;
-                }
-            }
-        }
-    };
-    
-    Animation.prototype.render = function render(context, parentPosition) {
-        if (this.images[this.current]) {
-        context.drawImage(this.images[this.current].image,
-                          this.images[this.current].clipStart.x, this.images[this.current].clipStart.y,
-                          this.images[this.current].originalSize.x, this.images[this.current].originalSize.y,
-                          this.absolutePosition.x, this.absolutePosition.y,
-                          this.images[this.current].originalSize.multiply(this.scale).x, this.images[this.current].originalSize.multiply(this.scale).y);
-        }
-    };
-    
-    Animation.prototype.reverse = function () {
-        this.images = this.images.reverse();
-    };
-    
-    Object.defineProperty(Animation.prototype, "size", {
-        get: function () {
-            return this.images[this.current].originalSize.multiply(this.scale);
-        }
-    });
-    
-    
-    
-        
-    /***********************************************************************************************************/
-    /********************************************** Text *******************************************************/
-    /***********************************************************************************************************/
-    
-    /*
-    * Creates a new Text object.
-    */
-    function Text(text, options) {
-        // Calling GameObject Constructor
-        GameObject.apply(this);
-        
-        this.text = text;
-        this.size = options.size || 10;
-        this.font_family = options.font_family || "sans-serif";
-        this.font_misc = options.font_misc || "";
-        this.textAlign = options.textAlign || "start";
-        this.baselineAlign = options.baselineAlign || "alphabetic";
-        this.drawMode = options.drawMode || "fill";
-        this.color = options.color;
-        this.lineColor = options.lineColor;
-
-    }
-
-    Text.prototype = Object.create(GameObject.prototype);
-    
-    Text.prototype.render = function render(context, parentPosition) {
-        var defaultFont = context.font,
-            defaultAlign = context.textAlign,
-            defaultBase = context.textBaseline,
-            fillStyle = context.fillStyle,
-            strokeStyle = context.strokeStyle;
-        
-        context.font = this.font_misc + " " + this.size + "px " + this.font_family;
-        context.textAlign = this.textAlign;
-        context.textBaseline = this.baselineAlign;
-        context.fillStyle = this.color || fillStyle;
-        context.strokeStyle = this.lineColor || strokeStyle;
-        
-        if (this.drawMode === "fill" || this.drawMode === "fillNStroke") {
-            context.fillText(this.text, this.absolutePosition.x, this.absolutePosition.y);
-        }
-        
-        if (this.drawMode === "stroke" || this.drawMode === "fillNStroke") {
-            context.strokeText(this.text, this.absolutePosition.x, this.absolutePosition.y);
-        }
-        
-        context.font = defaultFont;
-        context.textAlign = defaultAlign;
-        context.textBaseline = defaultBase;
-        context.fillStyle = fillStyle;
-        context.strokeStyle = strokeStyle;
-        
-    };
-    
-    
     /************************************************************************************************************/
     /***************************************** Exporting Objects ************************************************/
     /************************************************************************************************************/
-    
+
     Engine.GameObject = GameObject;
-    Engine.GameImage = Image;
-    Engine.GameText = Text;
     Engine.Input = Input;
     Engine.Vector = Vector;
-    Engine.Animation = Animation;
-    
-    window.Engine = Engine;
+
+    window.Trios2D = Engine;
 
 }(window));
