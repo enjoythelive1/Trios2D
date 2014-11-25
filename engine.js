@@ -731,7 +731,7 @@
                           this.clipStart.x, this.clipStart.y,
                           this.originalSize.x, this.originalSize.y,
                           this.absolutePosition.x, this.absolutePosition.y,
-                          this.originalSize.multiply(this.scale).x, this.originalSize.multiply(this.scale).x);
+                          this.originalSize.multiply(this.scale).x, this.originalSize.multiply(this.scale).y);
     };
     
     Object.defineProperty(Image.prototype, "size", {
