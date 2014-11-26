@@ -427,15 +427,39 @@ Where options is an object containig information about how to render the text. h
 
 * `font_misc`: Other font properties, separated by spaces. An Example would be `"bold italic"`.
 
+* `textAlign`: See canvas' `textAlign` on [W3Schools](http://www.w3schools.com/tags/canvas_textalign.asp). Default to "start".
+
+* `baselineAlign`: See canvas' `baselineAlign` on [W3Schools](http://www.w3schools.com/tags/canvas_textbaseline.asp). Default to "alphabetic"
+
+* `drawMode`: Specifies if the text will be rendered by filling the text on canvas, stroking the text or both. Posible values are `"fill"`, `"stroke"`, and `"fillNStroke"`, where `"fillNStroke"` first fills the text and then strokes.
+
+* `fillStyle`: Defines the filling color of the text (also everything canvas can). Defaults to the current value setted in the context.
+
+* `strokeStyle`: Defines the stroking color of the text(also everything canvas can). Defaults to the current value setted in the context.
+
+* `strokeWidth`: Defines the width of the stroke . Defaults to the current value setted in the context.
+
+#####Intance Variables
+
+You can chage any of the options at any time changin the value tu the instance. If you change the `text` property, it will be reflected in the next render. Also all the other properties. These properties are almost the same as the optiosn, let's see them.
+
+* `text`: the text which renders in the screen
+
+* `size`: The font size of the text to render. Default to 10.
+
+* `font_family`: The font family of the text to render. Can be set like the css rule `font-family`. Defaults to `"sans-serif"`.
+
+* `font_misc`: Other font properties, separated by spaces. An Example would be `"bold italic"`.
+
 * `textAlign`: See canvas' `textAlign` on [W3Schools](http://www.w3schools.com/tags/canvas_textalign.asp).
 
 * `baselineAlign`: See canvas' `baselineAlign` on [W3Schools](http://www.w3schools.com/tags/canvas_textbaseline.asp).
 
 * `drawMode`: Specifies if the text will be rendered by filling the text on canvas, stroking the text or both. Posible values are `"fill"`, `"stroke"`, and `"fillNStroke"`, where `"fillNStroke"` first fills the text and then strokes.
 
-* `color`: Defines the filling color of the text. Defaults to the current value setted in the context.
+* `fillStyle`: Defines the filling color of the text (also everything canvas can). Defaults to the current value setted in the context.
 
-* `strokeColor`: Defines the stroking color of the text. Defaults to the current value setted in the context.
+* `strokeStyle`: Defines the stroking color of the text(also everything canvas can). Defaults to the current value setted in the context.
 
 * `strokeWidth`: Defines the width of the stroke . Defaults to the current value setted in the context.
 
