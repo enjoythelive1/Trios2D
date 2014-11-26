@@ -364,7 +364,36 @@ To make a new image use `new Trios2D.GameImage(image, size)` where image is an `
 
 If you are working with sprites you can make the `GameImage` this way: `new Trios2D.GameImage(image, clipStart, size)`. Here `clipStart` is where to start trimming the image, and the size is how much to trim. The same as `size`, `clipStart`can be a `Vector` and object or an array.
 
-//TODO: Complete GameImage Documentation and other models as Components
+Heres some examples of using `GameImage` module:
+
+```javascript
+var image1 = new Trios2D.GameImage("/res/images/car.jpg", new Trios2D.Vector(330, 150));
+
+var htmlImage = document.querySelector("img#wheel");
+
+var image2 = new Trios2D.GameImage(htmlImage, [20, 20]);
+
+var image3 = new Trios2D.GameImage("/res/images/spritesheet.png, [10, 200], {x:100, y:100});
+
+image1.addChild(image2); // This is ok since every module is an GameObject too
+
+game.addChild(image1); // Ok because it is a game object, are made for this.
+game.addChild(image3);
+```
+
+All these ways are ok.
+
+#####Intance Variables
+
+* `image`: The `HTMLImage` which is rendered by the `GameImage` module.
+
+* `originalSize`: An `Vector` representig the real size of the image or how much of it will be rendered.
+
+* `clipStart`: An `Vector` representing from where the image will be renderer (where the triming start). If not specified in the constructor it is default to (0,0).
+
+* `scale`: How much scaling the image has when rendering. 1 is normal, 0.1 is 10% of it size and 2 is 2x size. Default to 1.
+
+* `size`: Overwritten from GameObject. Is a get-only property which return the size of the image in the canvas.
 
 ##Components
 
