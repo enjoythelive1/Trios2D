@@ -73,7 +73,7 @@ var game = new Trios2D(canvas, logic);
 
 
 Where `canvas` is a selector, representing an Canvas element, or an Canvas event as it is. Otherwise it will throw an exeption and the game would not be created.
-Then is `logic` and it is an object like this:
+Then is `logic`, which is optional and it is an object like this:
 
 ```javascript
 var logic = {
@@ -92,12 +92,15 @@ var logic = {
 
 ```
 
-* `init`: The begin of the game logic. Here you can set things when the game begins (`#start`).
-* `render`: Here you can render whatever into the context.
-* `update`. here you can update the game logic.
+All three functions in the logic object are optional. If you won't use them, just don't include them.
 
+Here what these functions are for:
 
+* `init`: Is the begining of the game logic. Here you can set things when the game begins and it will be executed just before the game starts (`#start`). You are not limited to do the initialization in here. you can also make it befor you call the `#start` function in your game. The firt parameter is the game itself.
 
+* `update`. here you can update the game logic. If you dont want to do the game by objects interacting you can just put your update logic in here and the rendering in the render function andd there's no problem. The first parameter is the time sice the last update and the second is the game itself.
+
+* `render`: Here you can render whatever into the context. As I said before, if you would make the game like structured, so you render the stuff here. The first patameter is a *Canvas Context* where you draw stuff. More in [W3schools](http://www.w3schools.com/tags/ref_canvas.asp)
 
 
 ##Built-in Objects
