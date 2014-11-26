@@ -486,9 +486,10 @@ Heres some examples of using `Animation` module:
 
 var animation1 = new Trios2D.Animation("/res/images/spritesheet.png", { // The first parameter is an sprite sheet
     spriteSize: [32,32],                                                // and in the options specifies each sprite
-    imageSize: [448, 448]                                               // size and the spritesheet size (optional). 
-});                                                                     // Both can bevector object, an array or an
-                                                                        // simple object
+    imageSize: [448, 448],                                              // size, the spritesheet size (optional) and 
+    imageNumber: 30                                                     // the number of sprites to take. First and 
+});                                                                     // second options can be vector object,
+                                                                        // an array or ansimple object
 
 game.addChild(animation1);
 
@@ -523,23 +524,118 @@ var animation3 = new Trios2D.Animation([
 ]);
 
 
-game.addChild(animation3game);
-
-
-var goku4 = this.goku4 = new Trios2D.Animation(["goku.png","goku.png","goku.png"]);
-
-goku4.addComponent(goku4.physics = new Trios2D.Components.Physics());
-
-goku4.physics.velocity = new Trios2D.Vector(10,0);
-goku4.position = new Trios2D.Vector(0, 20);
-goku4.framesPerSecond = 5;
-goku4.pingpong = false;
-
-// background end
-
-
-engine.addChild(goku4);
+game.addChild(animation3);
 ```
+
+We can see here all the work you can save using this animation module. Just prepare your sprite and set it size.
+
+The options can be:
+
+* `imageSize`: Specify when the first paramether of the constructor is an image. It is the size of the image. If not set, imageNumber neither, and the image haven't been loaded by the navigator, your animation wont render.
+
+* `spriteSize`: Specify when the first paramether of the constructor is an image. It is the size of each sprite that will be rendered. If not specified when the first paramether of the constructor is an image it will throw an error.
+
+* `margin`: Is the space between each sprite in the sprite sheet. Only work when the first paramether of the constructor is an image.
+
+* `imageNumber`: Is the number of sprites to take from the sprite sheet. Only work when the first paramether of the constructor is an image.
+
+* `framesPerSecond`: Indicates how many times per second the current image in the animation will change. Default to 10.
+
+* `scale`: Indicate the initial scale of the animation. Default to 1.
+
+We have seen that you can pass an array of images url, `HTMLImage` objects, or objects containing info about each one of the images with will make the animation. The last mentioned can have these properties:
+
+* `image`: It could be an url, and data url, or an `HTMLImage` object.
+
+* `clipStart`: Optional. It is where to start to trim the image. It can be a `Vector`, an array or a simple object. (0,0) by default. 
+
+* `originalSize`: Optional. It is the size of the image or how much will be trimmed. It can be a Vector, an array or a simple object. If not specified i will take the size from the image specified.
+
+
+#####Instance variables
+
+* `images`: It is an array of all the frames the animation renders. Every frame is an object composed as follows:
+··* `image`: An `HTMLImage` object.
+··* `clipStart`: An `Vector` object representing where to star trimming the image.
+··* `originalSize`: An `Vector` object representing the size of the image or how much is trimmed when rendering. 
+
+* `current`: The index of the current image rendering in the animation.
+
+* `framesPerSecond`: Indicates how many times per second the current image in the animation will change.
+
+* `pingpong`: If `true`, when the animation get to the end it wiil come back like 9 .. 8 .. 7 ...; by default `false`.
+
+* `scale`: Indicate the scale of the animation.
+
+* `size`: Read-only property which return the actual size at the moment that the animation renders on canvas.
+
+#####Methods
+
+* `#reverse()`: Reverses the current animation.
+
+###How To Make my own modules
+
+You can make your own modules and use it within your own proyects or just share them. 
+
+To make a Module you must just make an object  constructor which derives from GameObject. Here is a Template:
+
+```javascript
+(function (window, undefined) { // Autoexecuting anonymous function so anithing
+    "use strict";               // but what you specify be modified outside it.
+                                // Not necesary, but recomended
+                                
+    if (!window.Trios2D)                                                // Just Enshuring that
+        throw new Error("You must include Trios2D in your HTML");       // the engine is defined.
+                                                                        // If not the plugin woul trow more errors
+
+    var Trios2D = window.Trios2D,               // Just taking the engine and other component 
+        Vector = Trios2D.Vector,                // from the window variable, so it's easier 
+        GameObject = Trios2D.GameObject;        // to use them
+
+
+
+    function MyModule(param1, param2) {
+
+        // Calling GameObject Constructor
+        GameObject.apply(this);                      // this is a way to enshure all the initializaions
+                                                     // necesary to make a game object are done. If this
+                                                     // isn't done, the module can behave weird
+                                                     
+        DoCustomInitializationStuff();               // then do every thing to initialize your module
+        
+    }
+
+    MyModule.prototype = Object.create(GameObject.prototype);  // This makes an prototype wich derives from 
+                                                               // the GameObject prototype, so it shares all
+                                                               // the stuff the GameObject prototype has, but wont 
+                                                               // change anything in the GameObject Prototype but 
+                                                               // in MyModule prototype will do.
+
+    
+    MyModule.prototype.update = function update(delta) {                       // Now Implement your custom render and update
+        updateStuff(delta);                                                    // this way. You could also define it in the 
+    };                                                                         // constructor. It won't make a difference
+                                                                                
+    MyModule.prototype.render = function render(context, parentPosition) {     // Both methods are optional
+        renderStuff(context);
+    };
+    
+    
+    MyModule.prototype.customMethod = function customMethod(param1, param2) {
+        // You can make your own custom methods this way or the constructor way.
+        doMoreStuff();
+    };
+
+    window.Trios2D.MyCustomModuleName = MyModule;  // Make it aviable in the Trios2D namespace, if yow want
+                                                   
+    // Otherwise just make it aviable this way:
+    window.MyModule = MyModule;    
+
+}(window));
+
+```
+
+This way you can make object constructors with reutilizable logic just available any time you need. More about `Object.create` [here](https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Object/create).
 
 ##Components
 
