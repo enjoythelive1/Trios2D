@@ -670,11 +670,10 @@
          * @param child Object to Add
          */
         addChild: function addChild(child) {
-            if (!(component instanceof GameObject))
+            if (!(child instanceof GameObject))
                 throw new Error("Invalid GameObject");
 
             child.parent = this;
-            render
             this.children.push(child);
         },
 
