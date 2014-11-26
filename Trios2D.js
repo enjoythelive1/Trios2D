@@ -608,8 +608,6 @@
         this.children = [];
         this.components = [];
         this.position = new Vector();
-        this.velocity = new Vector();
-        this.aceleration = new Vector();
     }
 
     GameObject.prototype = {
@@ -627,16 +625,6 @@
          * GameObject Components
          */
         components: u,
-
-        /*
-         * Objects velocity
-         */
-        velocity: new Vector(),
-
-        /*
-         * Objects aceleration
-         */
-        aceleration: new Vector(),
 
         size: new Vector(),
 
@@ -712,18 +700,11 @@
         * @param delta time in milliseconds since the last render
         */
         _update: function (delta) {
-            if (this.aceleration) {
-                this.velocity = this.velocity.add(this.aceleration.multiply(delta / 1000));
-            }
-
-            if (this.velocity) {
-                this.position = this.position.add(this.velocity.multiply(delta / 1000));
-            }
 
             //components update
             this.components.forEach(function (item) {
                 item._update(delta, this);
-            });
+            }, this);
 
 
             if (typeof this.update === "function") {
@@ -750,7 +731,7 @@
             //components render
             this.components.forEach(function (item) {
                 item._render(context, parentPosition, this);
-            });
+            }, this);
 
             if (typeof this.render === "function") {
                 this.render(context, parentPosition);
@@ -789,6 +770,8 @@
     Engine.GameObject = GameObject;
     Engine.Input = Input;
     Engine.Vector = Vector;
+    Engine.Component = Component;
+    Engine.Components = {};
 
     window.Trios2D = Engine;
 
