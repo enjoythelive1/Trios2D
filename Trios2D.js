@@ -321,7 +321,7 @@
         this.context = canvas.getContext("2d");
 
         this.children = [];
-        this.logic = logic;
+        this.logic = logic || {};
         this.camera = new Camera()
     }
 
