@@ -456,7 +456,9 @@
                 torender = this.children.sort(sortGameObjects);
 
             this.prerender(this.context);
-            this.logic.render(this.context, this);
+
+            if (this.logic.render)
+                this.logic.render(this.context, this);
 
             torender.forEach(function (item) {
                 item._render(self.context, self.camera.worldPosition);
@@ -491,7 +493,8 @@
             this.lastUpdate = startRender;
 
             this.preupdate(delta);
-            this.logic.update(delta, this);
+            if (this.logic.update)
+                this.logic.update(delta, this);
 
             this.children.forEach(function (item) {
                 item._update(delta);
@@ -499,8 +502,7 @@
 
             this.postupdate(delta);
 
-        },
-
+            },
         start: function start() {
             this._init_();
         },
@@ -536,7 +538,7 @@
             }
 
             x = x - this.canvas.offsetLeft + this.camera.position.x;
-            y = y - this.canvas.offsetTop  + this.camera.position.y;
+            y = y - this.canvas.offsetTop + this.camera.position.y;
 
             clickPosition = new Vector(x, y);
 
@@ -602,8 +604,8 @@
     /******************************************** GameObject ****************************************************/
     /************************************************************************************************************/
     /*
-    * Creates a new game object.
-    */
+     * Creates a new game object.
+     */
     function GameObject() {
         this.children = [];
         this.components = [];
@@ -612,8 +614,8 @@
 
     GameObject.prototype = {
         /*
-        * Indicates the render position (higher is more in the front)
-        */
+         * Indicates the render position (higher is more in the front)
+         */
         renderPosition: 0,
 
         /*
@@ -629,8 +631,8 @@
         size: new Vector(),
 
         /*
-        * Array of children
-        */
+         * Array of children
+         */
         children: u,
 
         /*
@@ -638,7 +640,7 @@
          * @param component Object to Add
          */
         addComponent: function addComponent(component) {
-            if(!(component instanceof Component))
+            if (!(component instanceof Component))
                 throw new Error("Invalid Component");
 
             component.gameObject = this;
@@ -663,10 +665,11 @@
          * @param child Object to Add
          */
         addChild: function addChild(child) {
-            if(!(component instanceof GameObject))
+            if (!(component instanceof GameObject))
                 throw new Error("Invalid GameObject");
 
-            child.parent = this;render
+            child.parent = this;
+            render
             this.children.push(child);
         },
 
@@ -696,9 +699,9 @@
         },
 
         /*
-        * What the game object will do in every update
-        * @param delta time in milliseconds since the last render
-        */
+         * What the game object will do in every update
+         * @param delta time in milliseconds since the last render
+         */
         _update: function (delta) {
 
             //components update
@@ -719,9 +722,9 @@
         },
 
         /*
-        * What the game object will do in every render
-        * @param context The canvas context where will be rendered
-        */
+         * What the game object will do in every render
+         * @param context The canvas context where will be rendered
+         */
         _render: function (context, parentPosition) {
             var self = this,
                 torender = this.children.sort(sortGameObjects);
