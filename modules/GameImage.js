@@ -23,8 +23,16 @@
             this.image = imageData;
         }
 
-        this.clipStart = new Vector(clipStart);
-        this.originalSize = new Vector(originalSize);
+        if (arguments.length == 2) {
+            // only image and size was given
+            this.clipStart = new Vector(0);
+            this.originalSize = new Vector(clipStart);
+        } else {
+            // clipStart and size was given
+            this.clipStart = new Vector(clipStart);
+            this.originalSize = new Vector(originalSize);
+        }
+
         this.scale = scale || 1;
     }
 
