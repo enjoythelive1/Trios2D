@@ -22,8 +22,9 @@
         this.textAlign = options.textAlign || "start";
         this.baselineAlign = options.baselineAlign || "alphabetic";
         this.drawMode = options.drawMode || "fill";
-        this.color = options.color;
-        this.lineColor = options.lineColor;
+        this.fillStyle = options.fillStyle;
+        this.strokeStyle = options.strokeStyle;
+        this.strokeWidth = options.strokeWidth;
 
     }
 
@@ -35,8 +36,9 @@
         context.font = this.font_misc + " " + this.font_size + "px " + this.font_family;
         context.textAlign = this.textAlign;
         context.textBaseline = this.baselineAlign;
-        context.fillStyle = this.color || context.fillStyle;
-        context.strokeStyle = this.lineColor || context.fillStyle;
+        context.fillStyle = this.fillStyle || context.fillStyle;
+        context.strokeStyle = this.strokeStyle || context.fillStyle;
+        context.lineWidth = this.strokeWidth || context.lineWidth
 
         if (this.drawMode === "fill" || this.drawMode === "fillNStroke") {
             context.fillText(this.text, this.absolutePosition.x, this.absolutePosition.y);
