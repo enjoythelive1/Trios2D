@@ -586,7 +586,7 @@ To make a Module you must just make an object  constructor which derives from Ga
                                 
     if (!window.Trios2D)                                                // Just Enshuring that
         throw new Error("You must include Trios2D in your HTML");       // the engine is defined.
-                                                                        // If not the plugin woul trow more errors
+                                                                        // If not the plugin would trow more errors
 
     var Trios2D = window.Trios2D,               // Just taking the engine and other component 
         Vector = Trios2D.Vector,                // from the window variable, so it's easier 
@@ -639,4 +639,109 @@ This way you can make object constructors with reutilizable logic just available
 
 ##Components
 
-//TODO: Speak about components
+Components are mede to encapsulate behavior, like player movement or phisycs. All the components must derive from `Trios2D.Component`. To use componets you must add it to a `GameObject` or any derivate, using the `#addComponent` method. To make a blanc component you can do that this way:
+
+```javascript
+var newComp = new Trios2D.Component();
+
+newComp.update = function update(delta, gameObject) {
+    updateGameObject(gameobject);
+};
+
+newComp.render = function render(context, parentPosition, gameObject) {
+    renderGameObject(gameobject);                                           // As you can see, you can do rendering to.
+};
+
+gameObject.addComponent(newComp);
+```
+
+As you can see here the component does things on the game obect itself.
+
+###Components for more than one use.
+
+The idea of a component is to manage some behaviors that some entities share. So kaing the way above is not the best way to do it. With this engine come a set of componets, so developing games could be more easy. All the Trios2D Components are in the `./components/` folder and this is the way to use them.
+
+In the HTML:
+```html
+<script src="js/Trios2D.js"></script>
+...
+<script src="js/components/ComponentName.js"></script>
+```
+
+and in the js: 
+```javascript
+var component = new Trios2D.Components.ComponentName(param);
+
+gameObject.addComponent(component);
+
+gameObject.componentName = component; // This is usefull when you have to acces to a component.
+```
+
+####Phisycs Component
+
+We are currently working on this. This encapsulate the phisycs behavior of a `Gameobject`. It currently only handle the velocity and aceleration of an object.
+
+#####Instance Variables
+
+* `velocity`: indicates the velocity of the `GameObject` the component is subcribed to.
+
+* `aceleration`: indicates the aceleration of the `GameObject` the component is subcribed to.
+
+###Making my Reusable Component
+
+This way you can make the component really reusable:
+
+```javascript
+(function (window, undefined) { // Autoexecuting anonymous function so anithing
+    "use strict";               // but what you specify be modified outside it.
+                                // Not necesary, but recomended
+                                
+    if (!window.Trios2D)                                                // Just Enshuring that
+        throw new Error("You must include Trios2D in your HTML");       // the engine is defined.
+                                                                        // If not the plugin would trow more errors
+
+    var Trios2D = window.Trios2D,               // Just taking the engine and other component 
+        Vector = Trios2D.Vector,                // from the window variable, so it's easier 
+        GameObject = Trios2D.GameObject,        // to use them
+        Component = Trios2D.Component;
+
+
+    function MyComponent() {
+        // Calling Component Constructor
+        Component.apply(this);
+
+        initializeStuff();  
+    }
+
+    MyComponent.prototype = Object.create(Component.prototype); // This makes an prototype wich derives from 
+                                                                // the Component prototype, so it shares all
+                                                                // the stuff the Component prototype has, but wont 
+                                                                // change anything in the Component Prototype but 
+                                                                // in MyComponent prototype will do.
+
+
+    MyComponent.prototype.update = function update(delta, gameObject) {
+        updateStuff();                                              //Do your update stuff here
+    };
+    
+    MyComponent.prototype.render = function render(context, parentPosition, gameObject) {
+        renderStuff();                                              //Do your render stuff here
+    };
+    
+     
+    
+    MyComponent.prototype.customMethod = function customMethod(param1, param2) {
+        // You can make your own custom methods this way or the constructor way.
+        doMoreStuff();
+    };
+
+    window.Trios2D.Components.MyComponentName = MyComponent;  // Make it aviable in the Trios2D.Components namespace, if yow want
+                                                   
+    // Otherwise just make it aviable this way:
+    window.MyComponent = MyComponent;    
+
+}(window));
+
+```
+
+Now your component can be used again and again simply using `new MyCompoent()`. More about `Object.create` [here](https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Object/create).
