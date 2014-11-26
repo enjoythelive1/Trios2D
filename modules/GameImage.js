@@ -13,6 +13,8 @@
      * Creates a new Image object.
      */
     function Image(imageData, clipStart, originalSize, scale) {
+        var self = this;
+
         // Calling GameObject Constructor
         GameObject.apply(this);
 
@@ -23,10 +25,23 @@
             this.image = imageData;
         }
 
-        if (arguments.length == 2) {
+        if (arguments.length <= 2) {
             // only image and size was given
             this.clipStart = new Vector(0);
-            this.originalSize = new Vector(clipStart);
+
+            if (clipStart) {
+                this.originalSize = new Vector(clipStart);
+            } else {
+
+                if (this.image.complete) {
+                    this.originalSize = new Vector(this.image.width, this.image.height);
+                } else {
+                    this.originalSize = new Vector(0);
+                    this.image.addEventListener("load", function () {
+                        self.originalSize = (self.originalSize.x && self.originalSize.y) ? self.originalSize : new Vector(self.image.width, self.image.height);
+                    });
+                }
+            }
         } else {
             // clipStart and size was given
             this.clipStart = new Vector(clipStart);
