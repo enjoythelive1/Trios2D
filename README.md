@@ -56,6 +56,8 @@ for (var wheel in car.wheels) {
    car.addChild(wheel);
 }
 
+car.position = new Trios2D.Vector(100, 200);
+
 game.addClild(car);
 ```
 ___
@@ -352,7 +354,7 @@ Trios2D has modules built in, making easy thing like images managing or animatio
 
 It is a module to manage images. It implements the render and update methods so you just have to specify the image and the size and it will make the work for you.
 
-To include it you must import the `./modules/GameImage.js` script.
+To use it you must import the `./modules/GameImage.js` script.
 
 ```html
 <script src="js/Trios2D.js"></script>
@@ -394,6 +396,49 @@ All these ways are ok.
 * `scale`: How much scaling the image has when rendering. 1 is normal, 0.1 is 10% of it size and 2 is 2x size. Default to 1.
 
 * `size`: Overwritten from GameObject. Is a get-only property which return the size of the image in the canvas.
+
+####GameText
+
+It is a module to manage text rendering. It giives cappabilities to render test with your desired font, size, color, alignment and other thing thar are normaly messi when rendering text on canvas.
+
+To use it you must import the `./modules/GameText.js` script.
+
+```html
+<script src="js/Trios2D.js"></script>
+...
+<script src="js/modules/GameText.js"></script>
+```
+
+Here an example of how to use it:
+
+```javascript
+var text = new Trios2D.GameText("I am rendering :)", options);
+
+text.position = new Trios2D.Vector(20, 20);
+
+game.addChild(text);
+```
+
+Where options is an object containig information about how to render the text. here a list of posible options:
+
+* `size`: The font size of the text to render. Default to 10.
+
+* `font_family`: The font family of the text to render. Can be set like the css rule `font-family`. Defaults to `"sans-serif"`.
+
+* `font_misc`: Other font properties, separated by spaces. An Example would be `"bold italic"`.
+
+* `textAlign`: See canvas' `textAlign` on [W3Schools](http://www.w3schools.com/tags/canvas_textalign.asp).
+
+* `baselineAlign`: See canvas' `baselineAlign` on [W3Schools](http://www.w3schools.com/tags/canvas_textbaseline.asp).
+
+* `drawMode`: Specifies if the text will be rendered by filling the text on canvas, stroking the text or both. Posible values are `"fill"`, `"stroke"`, and `"fillNStroke"`, where `"fillNStroke"` first fills the text and then strokes.
+
+* `color`: Defines the filling color of the text. Defaults to the current value setted in the context.
+
+* `strokeColor`: Defines the stroking color of the text. Defaults to the current value setted in the context.
+
+* `strokeWidth`: Defines the width of the stroke . Defaults to the current value setted in the context.
+
 
 ##Components
 
