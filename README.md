@@ -338,7 +338,9 @@ Available Keys:
 | `SINGLE_QUOTE`     | Single Quote (') key                | 222   |
 
 ###Camera
-//TODO: Complete content
+
+`Camera` object is made to manage the view point pof the game, giving to id a "camera", which you point to a position and in the canvas you can see what the "camera" sees. By default, the camera is seeing at the point (0,0). You can change the position where the `Camera` is by setting the `position` variable to a vector of the new position. 
+
 
 ##Modules
 
