@@ -22,10 +22,6 @@ game.start();
 ```
 Create an Engine object with the canvas where the game will be rendered as the first parameter and an object containing these ther methods:
 
-* `init`: The begin of the game logic. Here you can set things when the game begins (`#start`).
-* `render`: Here you can render whatever into the context.
-* `update`. here you can update the game logic.
-
 Objects can be created to the game and those when added can perform its currents updates and renders independently;
 
 ```javascript
@@ -63,6 +59,46 @@ for (var wheel in car.wheels) {
 game.addClild(car);
 ```
 ___
+
+##Deeper in the Engine
+The Engine is an object which encapsulates some repetitive stuff to make a game in javascript for the mothern browsers and HTML5 apps. You dont have to worry about getting the input or other stuff. With this engine your game can be as easy as objects iteracting.
+
+So to make a new game as said before you should do this:
+
+```javascript
+var game = new Trios2D(canvas, logic);
+
+```
+
+
+
+Where `canvas` is a selector, representing an Canvas element, or an Canvas event as it is. Otherwise it will throw an exeption and the game would not be created.
+Then is `logic` and it is an object like this:
+
+```javascript
+var logic = {
+    init: function (game) {
+        initializeStuff();
+    },
+    
+    update: function (delta, game) {
+        updateStuff();
+    },
+    
+    render: function (context, game) {
+        renderStuff();
+    }
+}
+
+```
+
+* `init`: The begin of the game logic. Here you can set things when the game begins (`#start`).
+* `render`: Here you can render whatever into the context.
+* `update`. here you can update the game logic.
+
+
+
+
 
 ##Built-in Objects
 
