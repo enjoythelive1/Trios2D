@@ -96,12 +96,35 @@ All three functions in the logic object are optional. If you won't use them, jus
 
 Here what these functions are for:
 
-* `init`: Is the begining of the game logic. Here you can set things when the game begins and it will be executed just before the game starts (`#start`). You are not limited to do the initialization in here. you can also make it befor you call the `#start` function in your game. The firt parameter is the game itself.
+* `init`: Is the begining of the game logic. Here you can set things when the game begins and it will be executed just before the game starts ([`#start`](#Engine.start)). You are not limited to do the initialization in here. you can also make it befor you call the `#start` function in your game. The firt parameter is the game itself.
 
 * `update`. here you can update the game logic. If you dont want to do the game by objects interacting you can just put your update logic in here and the rendering in the render function andd there's no problem. The first parameter is the time sice the last update and the second is the game itself.
 
 * `render`: Here you can render whatever into the context. As I said before, if you would make the game like structured, so you render the stuff here. The first patameter is a *Canvas Context* where you draw stuff. More in [W3schools](http://www.w3schools.com/tags/ref_canvas.asp)
 
+###Instance Variables
+
+* `maxFrameRate`: is the max times `render` will be called in a second. It is default to 60, but you can set the framerate you think is better for your game.
+
+* `maxUpdates`: is the max times `update` will be called in a second. It is default to 60, but you can set the framerate you think is better for your game.
+
+* `cleanBeforeRender`: This specifies if the canvas will be cleared every time render is called. It is default to `true`.
+
+* `pauseOnBlur`: This specifies if the game will pause if the canvas lose it's focus. It is default to `true`.
+
+* `camera`: Is an `Camera` object which manages the render perspective. Click [here](#Camera) to se more.
+
+* `childen`: Is an array containing all the `GameObject` objects that are directly in the game (not the `GameObject` children, see `GameObject#children`). **DO NOT MODIFY THIS ARRAY OR SET IT DIRECTLY UNLESS YOU KNOW WHAT YOU ARE DOING!!!**
+
+###Metohds
+
+* `#addChild(child)`: Adds `child` to the game. Every time update and render is called for the engine, `render` and `update` methods will be called for every `children` within the engine. The `child` must be a `GameObject`, a [Module](#Modules), or any object derived from `GameObject` (will be checked using `instaceof`)
+
+* `#removeChild(child)`: Removes `child` from the engine, so it wont *render* or *update* until it is on the engine again.
+
+* <a name="Engine.start"></a>`#start()`: Start the game. 
+
+* `#pause()`: Pauses the game. By default the game pauses when canvas loose focus unless you say no (`game.pauseOnBlur = false`);
 
 ##Built-in Objects
 
@@ -148,7 +171,7 @@ As mentioned before the an `Vector` object has some utility methods. Currents ar
 * `#isBetween(vector1, vector2)`: Returns `true` if the current vector is in between `vector1` and `vector2` coordenates.
 
 
-####GameObjects
+###GameObjects
 
 You read about them above, dey are object made to work togueder in the game and interact. That way you can reduce your game logic to just objects interacting with each other.
 
@@ -157,6 +180,9 @@ A `GameObject` can be made this way: `new Trios2D.GameObject()`.
 A game object has a `position` which is a `Vector` and is relative to the parent.
 
 //TODO: Complete GameObject documentation and then the Engine it self
+
+###Camera
+//TODO: Complete content
 
 ##Modules
 
