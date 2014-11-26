@@ -639,7 +639,7 @@ This way you can make object constructors with reutilizable logic just available
 
 ##Components
 
-Components are mede to encapsulate behavior, like player movement or phisycs. All the components must derive from `Trios2D.Component`. To use componets you must add it to a `GameObject` or any derivate, using the `#addComponent` method. To make a blanc component you can do that this way:
+Components are mede to encapsulate behavior, like player movement or physics. All the components must derive from `Trios2D.Component`. To use componets you must add it to a `GameObject` or any derivate, using the `#addComponent` method. To make a blanc component you can do that this way:
 
 ```javascript
 var newComp = new Trios2D.Component();
@@ -677,9 +677,9 @@ gameObject.addComponent(component);
 gameObject.componentName = component; // This is usefull when you have to acces to a component.
 ```
 
-####Phisycs Component
+####Physics Component
 
-We are currently working on this. This encapsulate the phisycs behavior of a `Gameobject`. It currently only handle the velocity and aceleration of an object.
+We are currently working on this. This encapsulate the physics behavior of a `Gameobject`. It currently only handle the velocity and aceleration of an object.
 
 #####Instance Variables
 
