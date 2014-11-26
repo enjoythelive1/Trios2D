@@ -399,7 +399,7 @@ All these ways are ok.
 
 ####GameText
 
-It is a module to manage text rendering. It giives cappabilities to render test with your desired font, size, color, alignment and other thing thar are normaly messi when rendering text on canvas.
+It is a module to manage text rendering. It giives cappabilities to render test with your desired font, size, color, alignment and other thing thar are normaly messy when rendering text on canvas.
 
 To use it you must import the `./modules/GameText.js` script.
 
@@ -463,6 +463,74 @@ You can chage any of the options at any time changin the value tu the instance. 
 
 * `strokeWidth`: Defines the width of the stroke . Defaults to the current value setted in the context.
 
+####Animation
+
+Animation is module whichmanages and render a set of images which changes every time. It makes easyer thinks like render a walking dog or an jumping player. You can make an animation from several images (url ot `HTMLImage` object), or an spritesheet specifing the spritesheet size, the margin between images and the size of each image. It will calculate how much sprites the sprite sheet has depending of the sizes provided, but you can specify how much images to take.
+
+To use it you must import the `./modules/Animation.js` script.
+
+```html
+<script src="js/Trios2D.js"></script>
+...
+<script src="js/modules/Animation.js"></script>
+```
+
+Heres some examples of using `Animation` module:
+
+```javascript
+
+var animation1 = new Trios2D.Animation("/res/images/spritesheet.png", { // The first parameter is an sprite sheet
+    spriteSize: [32,32],                                                // and in the options specifies each sprite
+    imageSize: [448, 448]                                               // size and the spritesheet size
+});
+
+game.addChild(animation1);
+
+var animation2 = new Trios2D.Animation([
+    "/res/images/player1/1.png",
+    "/res/images/player1/2.png",
+    "/res/images/player1/3.png",
+    "/res/images/player1/4.png"
+]);
+
+var animation2 = new Trios2D.Animation([
+    {
+        image: "goku.png",
+        clipStart: [32,0],
+        originalSize: {x:32, y: 32}
+    },
+
+    {
+        image: "goku.png",
+        clipStart: [32,0],
+        originalSize: {x:32, y: 32}
+    },
+
+    {
+        image: "goku.png",
+        clipStart: [64,0],
+        originalSize: {x:32, y: 32}
+    }
+]);
+
+
+engine.addChild(goku3);
+
+
+var goku4 = this.goku4 = new Trios2D.Animation(["goku.png","goku.png","goku.png"]);
+
+goku4.addComponent(goku4.physics = new Trios2D.Components.Physics());
+
+goku4.physics.velocity = new Trios2D.Vector(10,0);
+goku4.position = new Trios2D.Vector(0, 20);
+goku4.framesPerSecond = 5;
+goku4.pingpong = false;
+
+// background end
+
+
+engine.addChild(goku4);
+```
 
 ##Components
 
