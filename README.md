@@ -124,7 +124,11 @@ Here what these functions are for:
 
 * <a name="Engine.start"></a>`#start()`: Start the game. 
 
-* `#pause()`: Pauses the game. By default the game pauses when canvas loose focus unless you say no (`game.pauseOnBlur = false`);
+* `#pause()`: Pauses the game. By default the game pauses when canvas loose focus unless you say no (`game.pauseOnBlur = false`).
+
+* `#resume()`: Resumes the game.
+
+* `#getInput()`: Return the current input of the user in an [`Input`](#Input) object.
 
 ##Built-in Objects
 
@@ -180,6 +184,9 @@ A `GameObject` can be made this way: `new Trios2D.GameObject()`.
 A game object has a `position` which is a `Vector` and is relative to the parent.
 
 //TODO: Complete GameObject documentation and then the Engine it self
+
+###Input
+//TODO: Complete content
 
 ###Camera
 //TODO: Complete content
