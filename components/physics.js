@@ -11,7 +11,7 @@
 
 
     function Physics() {
-        // Calling GameObject Constructor
+        // Calling Component Constructor
         Component.apply(this);
 
         this.velocity = new Vector();
