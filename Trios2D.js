@@ -352,6 +352,11 @@
         children: u,
 
         /*
+         * specifies if the game pauses when the canvas loose it focus
+         */
+        pauseOnBlur: true,
+
+        /*
          * Stores info about the keyboard input
          */
         kbInput: {
@@ -421,7 +426,7 @@
             });
 
             this.canvas.addEventListener("blur", function (e) {
-                if (self.renderInterval) {
+                if (self.renderInterval && self.pauseOnBlur) {
                     self.pause();
                 }
             });
