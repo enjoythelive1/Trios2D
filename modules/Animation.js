@@ -46,11 +46,12 @@
                     } else {
                         imageToReturn.image.addEventListener("load", function () {
                             imageToReturn.size = imageToReturn.size || new Vector(imageToReturn.image.width, imageToReturn.image.height);
-                            imageToReturn.originalSize = imageToReturn.originalSize || imageToReturn.size;
+                            imageToReturn.originalSize = (imageToReturn.originalSize.x && imageToReturn.originalSize.y) ? imageToReturn.originalSize : imageToReturn.size; imageToReturn.size;
                         });
                     }
 
                     imageToReturn.clipStart = new Vector();
+                    imageToReturn.originalSize = new Vector();
                 }
 
                 if (moreindeep) {
