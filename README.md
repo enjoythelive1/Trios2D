@@ -205,7 +205,7 @@ gameObject.addChild(child);
 
 Here we can se some other things not mentioned in the coment. First the `#addChild` method. This method adds a `GameObject` into a `GameObject`. Second is the `this.absolutePosition`. We will cver it later.
 
-###Instance Variables
+####Instance Variables
 
 * `position`: Is an `Vector` indicating the object position relative to it's parents. If you want to move it right just add to the vector x and thats it.
 
@@ -218,7 +218,7 @@ Here we can se some other things not mentioned in the coment. First the `#addChi
 * `components`: Is an array containing all `Component` (See more about `Component` [here](#components)) which belongs to the `GameObject`. **DO NOT MODIFY THIS ARRAY OR SET IT DIRECTLY UNLESS YOU KNOW WHAT YOU ARE DOING!!!**
 
 
-###Methods
+####Methods
 
 * `#addChild(child)`: Adds `child` to the `GameObject`. Every time update and render is called for the `GameObject`, `render` and `update` methods will be called for every `children` within the object. The `child` must be a `GameObject`, a [Module](#modules), or any object derived from `GameObject` (will be checked using `instaceof`)
 
