@@ -114,7 +114,7 @@ Here what these functions are for:
 
 * `camera`: Is an `Camera` object which manages the render perspective. Click [here](#camera) to se more.
 
-* `childen`: Is an array containing all the `GameObject` objects that are directly in the game (not the `GameObject` children, see `GameObject#children`). **DO NOT MODIFY THIS ARRAY OR SET IT DIRECTLY UNLESS YOU KNOW WHAT YOU ARE DOING!!!**
+* `childen`: Is an array containing all the `GameObject` objects that are directly in the game (not the `GameObject` children, see [`GameObject#children`](#GameObject.children)). **DO NOT MODIFY THIS ARRAY OR SET IT DIRECTLY UNLESS YOU KNOW WHAT YOU ARE DOING!!!**
 
 ###Metohds
 
@@ -177,16 +177,165 @@ As mentioned before the an `Vector` object has some utility methods. Currents ar
 
 ###GameObjects
 
-You read about them above, dey are object made to work togueder in the game and interact. That way you can reduce your game logic to just objects interacting with each other.
+You read about them above, they are object made to work together in the game and interact. That way you can reduce your game logic to just objects interacting with each other. Every time the engine renders and updates, the `GameObject`s children of the engine methods render and update respectively will be called.
 
 A `GameObject` can be made this way: `new Trios2D.GameObject()`.
 
 A game object has a `position` which is a `Vector` and is relative to the parent.
 
-//TODO: Complete GameObject documentation and then the Engine it self
+This is what a `GameObject` looks like:
+
+```javascript
+var gameObject = new Trios2D.GameObject();
+
+gameObject.update = function update(delta) { // Here you put the update logic of your object.
+    updateObject(delta);                     // delta is the time since the last update
+
+};
+
+gameObject.render = function render(context, parentPosition) { // Here you put the render logic of your object.
+    renderObject(context, this.absolutePosition);              // context is the canvas context where you would render
+                                                               // parentPosition is an vector with the position of the parent
+};
+
+gameObject.addChild(child);
+```
+
+Here we can se some other things not mentioned in the coment. First the `#addChild` method. This method adds a `GameObject` into a `GameObject`. Second is the `this.absolutePosition`. We will cver it later.
+
+###Instance Variables
+
+* `position`: Is an `Vector` indicating the object position relative to it's parents. If you want to move it right just add to the vector x and thats it.
+
+* `size`: Is an `Vector` indicating the width (`x`) and height (`y`) of the `GameObject`.
+
+* `renderPosition`: Indicates the render priotity of the `GameObject` and that way if it is in the front or the back. Higher values means that is more on the front. By default 0.
+
+* <a name="GameObject.children"></a>`childen`: Is an array containing all the `GameObject` objects that are children of the `GameObject`. **DO NOT MODIFY THIS ARRAY OR SET IT DIRECTLY UNLESS YOU KNOW WHAT YOU ARE DOING!!!**
+
+* `components`: Is an array containing all `Component` (See more about `Component` [here](#components)) which belongs to the `GameObject`. **DO NOT MODIFY THIS ARRAY OR SET IT DIRECTLY UNLESS YOU KNOW WHAT YOU ARE DOING!!!**
+
+
+###Methods
+
+* `#addChild(child)`: Adds `child` to the `GameObject`. Every time update and render is called for the `GameObject`, `render` and `update` methods will be called for every `children` within the object. The `child` must be a `GameObject`, a [Module](#modules), or any object derived from `GameObject` (will be checked using `instaceof`)
+
+* `#removeChild(child)`: Removes `child` from the `GameObject`, so it wont *render* or *update* until it is on the `GameObject` or the engine directly again.
+
+* `#addComponent(component)`: Adds `component` to the `GameObject`. More in components [here](#components).
+
+* `#removeComponent(component)`: Removes `component` from the `GameObject`. More in components [here](#components).
+
+* `autoCalcSize()`: Calculates, set and return the size of the `GameObject` based on the sizer ans positions of it's childs. Util with collisions boxes when the object has no defined size but it has childs with does.
+
 
 ###Input
-//TODO: Complete content
+
+It is an object that contains the input from the user. To know if a key is down, you must call `#isKeyDown(code)` where code is the key code. It returns true if that key is down, else false.
+
+Other methods are:
+
+* `#isKeyUp(code)`: Returns true if the key was released during the update. Else false.
+
+* `#isKeyUp(code)`: Returns true if the key was pressed. Else false.
+
+####Available keys
+
+For convenience of the programer, key codes are available as variables. You can acces to these key codes like this: `Trios2D.Input.key`.
+
+Available Keys:
+
+| Name               | Description                         | Value |
+| ------------------ | ----------------------------------- | :---: |
+| `ANY`              | Any key                             | -1    |
+| `BACKSPACE`        | Backspace key                       | 8     |
+| `TAB`              | Tab key                             | 9     |
+| `ENTER`            | Enter/Return key                    | 13    |
+| `SHIFT`            | Shift key                           | 16    |
+| `CTRL`             | Control key                         | 17    |
+| `ALT`              | Alt key                             | 18    |
+| `PAUSE`            | Pause/Interrupt key                 | 19    |
+| `CAPS_LOCK`        | Caps Lock key                       | 20    |
+| `ESCAPE`           | Escape (esc) key                    | 27    |
+| `PAGE_UP`          | Page Up key                         | 33    |
+| `PAGE_DOWN`        | Page Down key                       | 34    |
+| `END`              | End key                             | 35    |
+| `HOME`             | Home key                            | 36    |
+| `LEFT_ARROW`       | Left arrow (←) key                  | 37    |
+| `UP_ARROW`         | Up arrow (↑) key                    | 38    |
+| `RIGHT_ARROW`      | Right arrow (→) key                 | 39    |
+| `DOWN_ARROW`       | Down arrow (↓) key                  | 40    |
+| `INSERT`           | Insert key                          | 45    |
+| `DELETE`           | Delete key                          | 46    |
+| `KB_0`             | Normal 0 key                        | 48    |
+| `KB_1`             | Normal 1 key                        | 49    |
+| `KB_2`             | Normal 2 key                        | 50    |
+| `KB_3`             | Normal 3 key                        | 51    |
+| `KB_4`             | Normal 4 key                        | 52    |
+| `KB_5`             | Normal 5 key                        | 53    |
+| `KB_6`             | Normal 6 key                        | 54    |
+| `KB_7`             | Normal 7 key                        | 55    |
+| `KB_8`             | Normal 8 key                        | 56    |
+| `KB_9`             | Normal 9 key                        | 57    |
+| `A`                | A key                               | 65    |
+| `B`                | B key                               | 66    |
+| `C`                | C key                               | 67    |
+| `D`                | D key                               | 68    |
+| `E`                | E key                               | 69    |
+| `F`                | F key                               | 70    |
+| `G`                | G key                               | 71    |
+| `H`                | H key                               | 72    |
+| `I`                | I key                               | 73    |
+| `J`                | J key                               | 74    |
+| `K`                | K key                               | 75    |
+| `L`                | L key                               | 76    |
+| `M`                | M key                               | 77    |
+| `N`                | N key                               | 78    |
+| `O`                | O key                               | 79    |
+| `P`                | P key                               | 80    |
+| `Q`                | Q key                               | 81    |
+| `R`                | R key                               | 82    |
+| `S`                | S key                               | 83    |
+| `T`                | T key                               | 84    |
+| `U`                | U key                               | 85    |
+| `V`                | V key                               | 86    |
+| `W`                | W key                               | 87    |
+| `X`                | X key                               | 88    |
+| `Y`                | Y key                               | 89    |
+| `Z`                | Z key                               | 90    |
+| `LEFT_WINDOW_KEY`  | Right Windows key (if applys)       | 91    |
+| `RIGHT_WINDOW_KEY` | Left Windows key (if applys)        | 92    |
+| `NUMPAD_0`         | Numbad 0 key                        | 96    |
+| `NUMPAD_1`         | Numbad 1 key                        | 97    |
+| `NUMPAD_2`         | Numbad 2 key                        | 98    |
+| `NUMPAD_3`         | Numbad 3 key                        | 99    |
+| `NUMPAD_4`         | Numbad 4 key                        | 100   |
+| `NUMPAD_5`         | Numbad 5 key                        | 101   |
+| `NUMPAD_6`         | Numbad 6 key                        | 102   |
+| `NUMPAD_7`         | Numbad 7 key                        | 103   |
+| `NUMPAD_8`         | Numbad 8 key                        | 104   |
+| `NUMPAD_9`         | Numbad 9 key                        | 105   |
+| `MULTIPLY`         | Multyply key (*) on the numpad      | 106   |
+| `ADD`              | Addition key (+) on the numpad      | 107   |
+| `SUBTRACT`         | Substraction key (-) on the numpad  | 109   |
+| `DECIMAL_POINT`    | Decimal Point key (.) on the numpad | 110   |
+| `DIVIDE`           | Division key (/) on the numpad      | 111   |
+| `F1`               | F1 function key                     | 112   |
+| `F2`               | F2 function key                     | 113   |
+| `F3`               | F3 function key                     | 114   |
+| `F4`               | F4 function key                     | 115   |
+| `F5`               | F5 function key                     | 116   |
+| `F6`               | F6 function key                     | 117   |
+| `F7`               | F7 function key                     | 118   |
+| `F8`               | F8 function key                     | 119   |
+| `F9`               | F9 function key                     | 120   |
+| `F10`              | F10 function key                    | 121   |
+| `F11`              | F11 function key                    | 122   |
+| `F12`              | F12 function key                    | 123   |
+| `COMMA`            | Comma (,) key                       | 188   |
+| `DASH`             | Dash (-) key                        | 189   |
+| `PERIOD`           | Period (.) key                      | 190   |
+| `SINGLE_QUOTE`     | Single Quote (') key                | 222   |
 
 ###Camera
 //TODO: Complete content
@@ -214,3 +363,7 @@ To make a new image use `new Trios2D.GameImage(image, size)` where image is an `
 If you are working with sprites you can make the `GameImage` this way: `new Trios2D.GameImage(image, clipStart, size)`. Here `clipStart` is where to start trimming the image, and the size is how much to trim. The same as `size`, `clipStart`can be a `Vector` and object or an array.
 
 //TODO: Complete GameImage Documentation and other models as Components
+
+##Components
+
+//TODO: Speak about components
