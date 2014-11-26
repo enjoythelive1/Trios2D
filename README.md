@@ -362,7 +362,7 @@ To use it you must import the `./modules/GameImage.js` script.
 <script src="js/modules/GameImage.js"></script>
 ```
 
-To make a new image use `new Trios2D.GameImage(image, size)` where image is an `HTMLImage` Object or a source string. If the browser supports data url GameImage too. The `size` is an `Vector` object, an object containing `{x: 0, y: 0}` or even an array `[x, y]`.
+To make a new image use `new Trios2D.GameImage(image, size)` where image is an `HTMLImage` Object or a source string. If the browser supports data url GameImage too. The `size` is an `Vector` object, an object containing `{x: 0, y: 0}` or even an array `[x, y]`. If size in not secified, it will take the image original size, but while the image isn't loaded in the navigator it will be (0,0).
 
 If you are working with sprites you can make the `GameImage` this way: `new Trios2D.GameImage(image, clipStart, size)`. Here `clipStart` is where to start trimming the image, and the size is how much to trim. The same as `size`, `clipStart`can be a `Vector` and object or an array.
 
@@ -375,12 +375,17 @@ var htmlImage = document.querySelector("img#wheel");
 
 var image2 = new Trios2D.GameImage(htmlImage, [20, 20]);
 
-var image3 = new Trios2D.GameImage("/res/images/spritesheet.png, [10, 200], {x:100, y:100});
+
+var image2 = new Trios2D.GameImage("/res/images/person.jpg"); // without size too :)
+
+
+var image4 = new Trios2D.GameImage("/res/images/spritesheet.png, [10, 200], {x:100, y:100});
 
 image1.addChild(image2); // This is ok since every module is an GameObject too
 
 game.addChild(image1); // Ok because it is a game object, are made for this.
 game.addChild(image3);
+game.addChild(image4);
 ```
 
 All these ways are ok.
@@ -481,40 +486,44 @@ Heres some examples of using `Animation` module:
 
 var animation1 = new Trios2D.Animation("/res/images/spritesheet.png", { // The first parameter is an sprite sheet
     spriteSize: [32,32],                                                // and in the options specifies each sprite
-    imageSize: [448, 448]                                               // size and the spritesheet size
-});
+    imageSize: [448, 448]                                               // size and the spritesheet size (optional). 
+});                                                                     // Both can bevector object, an array or an
+                                                                        // simple object
 
 game.addChild(animation1);
 
-var animation2 = new Trios2D.Animation([
-    "/res/images/player1/1.png",
-    "/res/images/player1/2.png",
-    "/res/images/player1/3.png",
+var animation2 = new Trios2D.Animation([ // here the first paramether is an image url
+    "/res/images/player1/1.png",         // array. It will get the size for each image.
+    "/res/images/player1/2.png",         // If it where HTMLImage Objects ther would be 
+    "/res/images/player1/3.png",         // no problem. This way options are ignored
     "/res/images/player1/4.png"
 ]);
 
-var animation2 = new Trios2D.Animation([
+game.addChild(animation2);
+
+var animation3 = new Trios2D.Animation([
     {
-        image: "goku.png",
-        clipStart: [32,0],
+        image: "/res/images/spritesheet.png", // Here the first parameter specifies
+        clipStart: [32,0],                    // an array of objects containing the
+        originalSize: {x:32, y: 32}           // image url, where to start cliping (optional)
+    },                                        // and the size. Both can bevector object, an 
+                                              // array or an simple object
+
+    {
+        image: "/res/images/spritesheet.png",
+        clipStart: [32,32],
         originalSize: {x:32, y: 32}
     },
 
     {
-        image: "goku.png",
-        clipStart: [32,0],
-        originalSize: {x:32, y: 32}
-    },
-
-    {
-        image: "goku.png",
+        image: "/res/images/spritesheet.png",
         clipStart: [64,0],
         originalSize: {x:32, y: 32}
     }
 ]);
 
 
-engine.addChild(goku3);
+game.addChild(animation3game);
 
 
 var goku4 = this.goku4 = new Trios2D.Animation(["goku.png","goku.png","goku.png"]);
