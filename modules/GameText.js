@@ -35,8 +35,8 @@
         context.font = this.font_misc + " " + this.font_size + "px " + this.font_family;
         context.textAlign = this.textAlign;
         context.textBaseline = this.baselineAlign;
-        context.fillStyle = this.color || fillStyle;
-        context.strokeStyle = this.lineColor || strokeStyle;
+        context.fillStyle = this.color || context.fillStyle;
+        context.strokeStyle = this.lineColor || context.fillStyle;
 
         if (this.drawMode === "fill" || this.drawMode === "fillNStroke") {
             context.fillText(this.text, this.absolutePosition.x, this.absolutePosition.y);
