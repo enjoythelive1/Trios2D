@@ -112,13 +112,13 @@ Here what these functions are for:
 
 * `pauseOnBlur`: This specifies if the game will pause if the canvas lose it's focus. It is default to `true`.
 
-* `camera`: Is an `Camera` object which manages the render perspective. Click [here](#Camera) to se more.
+* `camera`: Is an `Camera` object which manages the render perspective. Click [here](#camera) to se more.
 
 * `childen`: Is an array containing all the `GameObject` objects that are directly in the game (not the `GameObject` children, see `GameObject#children`). **DO NOT MODIFY THIS ARRAY OR SET IT DIRECTLY UNLESS YOU KNOW WHAT YOU ARE DOING!!!**
 
 ###Metohds
 
-* `#addChild(child)`: Adds `child` to the game. Every time update and render is called for the engine, `render` and `update` methods will be called for every `children` within the engine. The `child` must be a `GameObject`, a [Module](#Modules), or any object derived from `GameObject` (will be checked using `instaceof`)
+* `#addChild(child)`: Adds `child` to the game. Every time update and render is called for the engine, `render` and `update` methods will be called for every `children` within the engine. The `child` must be a `GameObject`, a [Module](#modules), or any object derived from `GameObject` (will be checked using `instaceof`)
 
 * `#removeChild(child)`: Removes `child` from the engine, so it wont *render* or *update* until it is on the engine again.
 
@@ -128,7 +128,7 @@ Here what these functions are for:
 
 * `#resume()`: Resumes the game.
 
-* `#getInput()`: Return the current input of the user in an [`Input`](#Input) object.
+* `#getInput()`: Return the current input of the user in an [`Input`](#input) object.
 
 ##Built-in Objects
 
