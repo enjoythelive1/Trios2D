@@ -577,6 +577,28 @@
     };
 
     /************************************************************************************************************/
+    /******************************************** Component ****************************************************/
+    /************************************************************************************************************/
+
+    function Component() {
+
+    }
+
+    Component.prototype = {
+        gameObject: u,
+
+        _render: function _render(context, parentPosition, gameObject) {
+            if (typeof this.render === "function")
+                this.render(context, parentPosition, gameObject);
+        },
+
+        _update: function _update(delta, gameObject) {
+            if (typeof this.update === "function")
+                this.update(delta, gameObject);
+        },
+    }
+
+    /************************************************************************************************************/
     /******************************************** GameObject ****************************************************/
     /************************************************************************************************************/
     /*
@@ -584,6 +606,7 @@
     */
     function GameObject() {
         this.children = [];
+        this.components = [];
         this.position = new Vector();
         this.velocity = new Vector();
         this.aceleration = new Vector();
@@ -599,6 +622,11 @@
          * The Object Position
          */
         position: new Vector(),
+
+        /*
+         * GameObject Components
+         */
+        components: u,
 
         /*
          * Objects velocity
@@ -618,11 +646,39 @@
         children: u,
 
         /*
+         * Adds a component to it
+         * @param component Object to Add
+         */
+        addComponent: function addComponent(component) {
+            if(!(component instanceof Component))
+                throw new Error("Invalid Component");
+
+            component.gameObject = this;
+            this.components.push(component);
+        },
+
+        /*
+         * Removes a component from it, if it exist
+         * @param component Object to remove
+         */
+        removeComponent: function removeComponent(component) {
+            var toDelete = this.components.indexOf(component);
+            if (toDelete !== -1) {
+                component.gameObject = u;
+                this.component.splice(toDelete, 1);
+            }
+        },
+
+
+        /*
          * Adds a game object to it
          * @param child Object to Add
          */
         addChild: function addChild(child) {
-            child.parent = this;
+            if(!(component instanceof GameObject))
+                throw new Error("Invalid GameObject");
+
+            child.parent = this;render
             this.children.push(child);
         },
 
@@ -664,10 +720,17 @@
                 this.position = this.position.add(this.velocity.multiply(delta / 1000));
             }
 
+            //components update
+            this.components.forEach(function (item) {
+                item._update(delta, this);
+            });
+
+
             if (typeof this.update === "function") {
                 this.update(delta);
             }
 
+            //children update
             this.children.forEach(function (item) {
                 item._update(delta);
             });
@@ -684,10 +747,16 @@
 
             this.absolutePosition = parentPosition.add(this.position);
 
+            //components render
+            this.components.forEach(function (item) {
+                item._render(context, parentPosition, this);
+            });
+
             if (typeof this.render === "function") {
                 this.render(context, parentPosition);
             }
 
+            //children render
             torender.forEach(function (item) {
                 item._render(context, self.absolutePosition);
             });
