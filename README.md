@@ -176,7 +176,10 @@ As mentioned before the an `Vector` object has some utility methods. Currents ar
 
 * `#isBetween(vector1, vector2)`: Returns `true` if the current vector is in between `vector1` and `vector2` coordenates.
 
-* `#hasValue`: Return `false` if the `Vector` `x` and `y`  values are equal to zero.
+* `#hasValue()`: Return `false` if the `Vector` `x` and `y`  values are equal to zero.
+
+* `#equal(vector)`: Check if both `Vector`s have the same value.
+
 
 ###Angle
 
@@ -205,6 +208,8 @@ The constructor arguments are `value` and `isDegree`. `value` specfy it values a
 ####Metohds
 
 * `#hasValue()`: Return `true` if the `Angle` value is diferent than zero.
+
+* `#equal(angle)`: Check if both `Angle`s have the same value. If the first argument is a scalar it makes the comparation with this criteria. If the angle is working in degrees, it would make the comparation considering the scalar as degrees. Else it would consider the scalar to be radians. 
 
 * `#add(angle)`: Perform an addition between two angles. If an scalar is passed as paramether would do the addition depending in how the angle is working. It would consither the scalar to be degrees if the angle is working on degrees. Otherwise it would consider the scalar to be in radians.
 
