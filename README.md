@@ -246,23 +246,23 @@ Here we can se some other things not mentioned in the coment. First the `#addChi
 * `rotation`: Is an `Angle` object that indicates the rotation of the object. Every thing rendered by a `GameObject` with an specified rotation will be rotated by the same amount and the childen rotation is relative to the parent.
 
 * `rotationAnchor`: specifies the rotation anchor of an object. Its values can be `Vector` object indicating a point relative to the parent where the rotation will be anchored or some of the following values:
-⋅⋅+ `"top-left"`: ![top-left](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/top-left.png)
+⋅⋅⋅ `"top-left"`: ![top-left](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/top-left.png)
 
-⋅⋅+ `"top-middle"`:  ![top-middle](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/top-middle.png)
+⋅⋅⋅ `"top-middle"`:  ![top-middle](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/top-middle.png)
 
-⋅⋅+ `"top-right"`:  ![top-right](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/top-right.png)
+⋅⋅⋅ `"top-right"`:  ![top-right](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/top-right.png)
 
-⋅⋅+ `"middle-left"`:  ![middle-left](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/middle-left.png)
+⋅⋅⋅ `"middle-left"`:  ![middle-left](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/middle-left.png)
 
-⋅⋅+ `"center"`:  ![center](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/center.png)
+⋅⋅⋅ `"center"`:  ![center](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/center.png)
 
-⋅⋅+ `"middle-right"`:  ![middle-right](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/middle-right.png)
+⋅⋅⋅ `"middle-right"`:  ![middle-right](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/middle-right.png)
 
-⋅⋅+ `"bottom-left"`:  ![bottom-left](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/bottom-left.png)
+⋅⋅⋅ `"bottom-left"`:  ![bottom-left](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/bottom-left.png)
 
-⋅⋅+ `"bottom-middle"`:  ![bottom-middle](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/bottom-middle.png)
+⋅⋅⋅ `"bottom-middle"`:  ![bottom-middle](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/bottom-middle.png)
 
-⋅⋅+ `"bottom-right"`:  ![bottom-right](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/bottom-right.png)
+⋅⋅⋅ `"bottom-right"`:  ![bottom-right](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/bottom-right.png)
 
 
 * <a name="GameObject.children"></a>`childen`: Is an array containing all the `GameObject` objects that are children of the `GameObject`. **DO NOT MODIFY THIS ARRAY OR SET IT DIRECTLY UNLESS YOU KNOW WHAT YOU ARE DOING!!!**
@@ -402,23 +402,24 @@ Available Keys:
 * `rotation`: Is an `Angle` object that indicates the rotation of the camera. When you rotate the camera everything rotates in the other direction from the user perspective (like quen you rotate your phone during a video).
 
 * `rotationAnchor`: specifies the rotation anchor of the camera. Its values can be `Vector` object indicating a point relative to the parent where the rotation will be anchored or some of the following values:
-⋅⋅+ `"top-left"`: ![top-left](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/top-left.png)
 
-⋅⋅+ `"top-middle"`:  ![top-middle](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/top-middle.png)
+⋅⋅⋅ `"top-left"`: ![top-left](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/top-left.png)
 
-⋅⋅+ `"top-right"`:  ![top-right](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/top-right.png)
+⋅⋅⋅ `"top-middle"`:  ![top-middle](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/top-middle.png)
 
-⋅⋅+ `"middle-left"`:  ![middle-left](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/middle-left.png)
+⋅⋅⋅ `"top-right"`:  ![top-right](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/top-right.png)
 
-⋅⋅+ `"center"`:  ![center](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/center.png)
+⋅⋅⋅ `"middle-left"`:  ![middle-left](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/middle-left.png)
 
-⋅⋅+ `"middle-right"`:  ![middle-right](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/middle-right.png)
+⋅⋅⋅ `"center"`:  ![center](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/center.png)
 
-⋅⋅+ `"bottom-left"`:  ![bottom-left](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/bottom-left.png)
+⋅⋅⋅ `"middle-right"`:  ![middle-right](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/middle-right.png)
 
-⋅⋅+ `"bottom-middle"`:  ![bottom-middle](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/bottom-middle.png)
+⋅⋅⋅ `"bottom-left"`:  ![bottom-left](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/bottom-left.png)
 
-⋅⋅+ `"bottom-right"`:  ![bottom-right](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/bottom-right.png)
+⋅⋅⋅ `"bottom-middle"`:  ![bottom-middle](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/bottom-middle.png)
+
+⋅⋅⋅ `"bottom-right"`:  ![bottom-right](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/bottom-right.png)
 
 * `worldPosition`: //TODO: specify
 
@@ -636,9 +637,10 @@ We have seen that you can pass an array of images url, `HTMLImage` objects, or o
 #####Instance variables
 
 * `images`: It is an array of all the frames the animation renders. Every frame is an object composed as follows:
-⋅⋅+ `image`: An `HTMLImage` object.
-⋅⋅+ `clipStart`: An `Vector` object representing where to star trimming the image.
-⋅⋅+ `originalSize`: An `Vector` object representing the size of the image or how much is trimmed when rendering. 
+
+⋅⋅⋅ `image`: An `HTMLImage` object.
+⋅⋅⋅ `clipStart`: An `Vector` object representing where to star trimming the image.
+⋅⋅⋅ `originalSize`: An `Vector` object representing the size of the image or how much is trimmed when rendering. 
 
 * `current`: The index of the current image rendering in the animation.
 
