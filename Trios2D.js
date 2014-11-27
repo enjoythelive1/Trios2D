@@ -221,7 +221,15 @@
             return new Angle(this.isDegree ?
                                  this.degrees / scalar :
                                  this.rads / scalar, this.isDegree);
+        },
+
+        /*
+         * Inverts the angle value
+         */
+        invert: function invert() {
+            return new Angle(this.isDegree? -this.degrees: -this.rads, this.isDegree);
         }
+
 
     };
 
