@@ -40,7 +40,7 @@ Objects can be created to the game and those when added can perform its currents
     } 
 ```
 
-Every object have its own childrens, so an object could be a container. An object which is made from other objects can be easyly done.
+Every object can have its own childrens and all childrens positions are relative to the parent. An object which is made from other objects can be easyly done.
 
 ```javascript
 var car = new Trios2D.GameObject();
