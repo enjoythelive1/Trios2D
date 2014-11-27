@@ -19,46 +19,54 @@
 
     }
 
-    Physics.prototype = Object.create({
-        get position() {
-            if (this.gameObject) {
-                return this.gameObject.position;
+    Physics.prototype = Object.create(Component.prototype, {
+        position: {
+            get: function position() {
+                if (this.gameObject) {
+                    return this.gameObject.position;
+                }
+            },
+
+            set: function position(val) {
+                if (this.gameObject) {
+                    this.gameObject.position = val;
+                }
+            },
+
+            enumerable: true
+        },
+
+        velocity: {
+            get: function velocity() {
+                if (this.position.equal(this._lastPosition)) {
+                    return this._velocity;
+                } else {
+                    // immediat position change would make the velocity increases in the update frame where it was made
+                    return this.position.sub(this._lastPosition).divide(this._lastDelta / 1000);
+                }
+            },
+
+            set: function  velocity(val) {
+                this._velocity = val;
             }
         },
 
-        set position(val) {
-            if (this.gameObject) {
-                this.gameObject.position = val;
+        aceleration: {
+            get: function aceleration() {
+                if (this.velocity.equal(this._lastVelocity)) {
+                    return this._aceleration;
+                } else {
+                    // immediat velocity change would make the aceleration increases in the update frame where it was made
+                    return this.velocity.sub(this._lastVelocity).divide(this._lastDelta / 1000);
+                }
+            },
+
+            set: function aceleration(val) {
+                this._aceleration = val;
             }
-        },
-
-        get velocity() {
-            if (this.position == this._lastPosition) {
-                return this._velocity;
-            } else {
-                // immediat position change would make the velocity increases in the update frame where it was made
-                return this.position.sub(this._lastPosition).divide(this._lastDelta / 1000);
-            }
-        },
-
-        set velocity(val) {
-            this._velocity = val;
-        },
-
-        get aceleration() {
-            if (this.velocity == this._lastVelocity) {
-                return this._aceleration;
-            } else {
-                // immediat velocity change would make the aceleration increases in the update frame where it was made
-                return this.velocity.sub(this._lastVelocity).divide(this._lastDelta / 1000);
-            }
-        },
-
-        set aceleration(val) {
-            this._aceleration = val;
         }
 
-    }, Component.prototype);
+    });
 
     Physics.prototype.update = function update(delta, gameObject) {
 
