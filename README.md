@@ -176,35 +176,47 @@ As mentioned before the an `Vector` object has some utility methods. Currents ar
 
 * `#isBetween(vector1, vector2)`: Returns `true` if the current vector is in between `vector1` and `vector2` coordenates.
 
+* `#hasValue`: Return `false` if the `Vector` `x` and `y`  values are equal to zero.
+
 ###Angle
-//TODO: speak about it
+
+Angle is an utility object to manage angles. This is user to control the rotation and other things that may use angles in the engine. By default it works with radians but you can initialize it to work with degrees. Here is how to insantiate an `Angle` object:
+
+```javascript
+var angle = new Trios2D.Angle(Math.PI / 2); // a π/2 angle or 45º
+
+var angle2 = new Trios2D.Angle(45, true);   // a 45º angle or π/2
+```
+
+This way you can work with rads or degrees with any problem or preocupation. 
+
+The constructor arguments are `value` and `isDegree`. `value` specfy it values and `isDegree` when specified indicate that you passed the value in degrees. If `false` or not defined, `value` is treated as radians.
 
 ####Instance Variables ans Properies
 
-* `value`: //TODO: speak about it
+* `value`: Get or set the angle value. By default when getted or sertted the value is considered to be radians, buf if you specified when you constructed the angle that it should work in degrees (`isDegree` parameter), then you will recive the vaule in radiants. To avoid confussion is recomended that if you want radiants, ask for the `rads` property. If you want degrees use the degrees property.
 
-* `isDegree`: //TODO: speak about it
+* `isDegree`: Indicates if the angle works in rads or degrees.
 
-* `degrees`: //TODO: speak about it
+* `degrees`: Get or sets the value of the angle in degrees.
 
-* `rads`: //TODO: speak about it
-
+* `rads`: Get or sets the value of the angle in radians.
 
 ####Metohds
 
-* `#hasValue()`: //TODO: speak about it
+* `#hasValue()`: Return `true` if the `Angle` value is diferent than zero.
 
-* `#add()`: //TODO: speak about it
+* `#add(angle)`: Perform an addition between two angles. If an scalar is passed as paramether would do the addition depending in how the angle is working. It would consither the scalar to be degrees if the angle is working on degrees. Otherwise it would consider the scalar to be in radians.
 
-* `#sub()`: //TODO: speak about it
+* `#sub(angle)`: Perform an substraction between two angles. If an scalar is passed as paramether would do the substraction depending in how the angle is working. It would consither the scalar to be degrees if the angle is working on degrees. Otherwise it would consider the scalar to be in radians.
 
-* `#multiply()`: //TODO: speak about it
+* `#multiply(angle)`: Perform an multiply between two angles. If an scalar is passed as paramether would do the multiply depending in how the angle is working. It would consither the scalar to be degrees if the angle is working on degrees. Otherwise it would consider the scalar to be in radians.
 
-* `#divide()`: //TODO: speak about it
+* `#divide(angle)`: Perform an divide between two angles. If an scalar is passed as paramether would do the divide depending in how the angle is working. It would consither the scalar to be degrees if the angle is working on degrees. Otherwise it would consider the scalar to be in radians.
 
-* `#invert()`: //TODO: speak about it
+* `#invert()`: Inverts the angle value. (the same as doing `-x`, x being a number).
 
-* `#valueOf()`: //TODO: speak about it
+* `#valueOf()`: Return the angle value in radians.
 
 
 ###GameObjects
@@ -393,7 +405,7 @@ Available Keys:
 
 ####Instance variables and Properties
 
-* `position`: //TODO: specify
+* `position`: Indicates the position of the camera.
 
 * `rotation`: Is an `Angle` object that indicates the rotation of the camera. When you rotate the camera everything rotates in the other direction from the user perspective (like quen you rotate your phone during a video).
 
@@ -412,10 +424,6 @@ Available Keys:
     | `"bottom-left"`    | ![bottom-left](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/bottom-left.png)     |
     | `"bottom-middle"`  | ![bottom-middle](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/bottom-middle.png) |
     | `"bottom-right"`   | ![bottom-right](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/bottom-right.png)   |    
-
-* `worldPosition`: //TODO: specify
-
-* `worldRotation`: //TODO: specify
 
 
 ##Modules
