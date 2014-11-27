@@ -436,7 +436,9 @@
 
         get worldRotation() {
             return this.rotation.invert();
-        }
+        },
+
+        rotationAnchor: "center"
     };
 
 
