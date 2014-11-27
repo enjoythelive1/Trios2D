@@ -134,12 +134,16 @@
     function Angle(initial, isDegree) {
         this.isDegree = isDegree;
 
-        if (isDegree) {
-            this.degrees = initial;
+        if (initial instanceof Angle) {
+            this.rads = initial.rads;
         } else {
-            this.rads = initial;
-        }
 
+            if (isDegree) {
+                this.degrees = initial || 0;
+            } else {
+                this.rads = initial || 0;
+            }
+        }
     }
 
     Vector.prototype = {
@@ -167,7 +171,7 @@
         },
 
         set degrees(val) {
-            this._value = val * Math.PI / 180;
+            this._value = (val||0) * Math.PI / 180;
         },
 
         get rads() {
@@ -175,7 +179,7 @@
         },
 
         set rads(val) {
-            this._value = val;
+            this._value = val || 0;
         },
 
         /*
@@ -419,14 +423,19 @@
      * Creates a Camera object.
      * @param position default position
      */
-    function Camera(position) {
+    function Camera(position, rotation) {
         this.position = new Vector(position);
+        this.rotation = new Angle(rotation);
     }
 
     Camera.prototype = {
         position: null,
         get worldPosition() {
             return this.position.invert();
+        },
+
+        get worldRotation() {
+            return this.rotation.invert();
         }
     };
 
