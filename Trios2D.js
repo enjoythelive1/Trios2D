@@ -588,11 +588,43 @@
                 context.clearRect(0, 0, this.canvas.width, this.canvas.height);
             }
 
+            context.save();
+
             if (this.camera.rotation.hasValue()) {
-                this._rotatedAngles = this.worldRotation.rads
-                context.rotate(this._rotatedAngles);
-            } else {
-                this._rotatedAngles = 0;
+
+                if (this.camera.rotationAnchor == "center") {
+
+                    context.translate(this.canvas.width/2, this.canvas.height/2);
+                    context.rotate(this.camera.worldRotation.rads);
+                    context.translate(-this.canvas.width/2, -this.canvas.height/2);
+
+                } else if (this.camera.rotationAnchor == "top-right") {
+
+                    context.translate(this.canvas.width, 0);
+                    context.rotate(this.camera.worldRotation.rads);
+                    context.translate(-this.canvas.width, 0);
+
+                } else if (this.camera.rotationAnchor == "bottom-right") {
+
+                    context.translate(this.canvas.width, this.canvas.height);
+                    context.rotate(this.camera.worldRotation.rads);
+                    context.translate(-this.canvas.width, -this.canvas.height);
+
+                } else if (this.camera.rotationAnchor == "bottom-left") {
+
+                    context.translate(0, this.canvas.height);
+                    context.rotate(this.camera.worldRotation.rads);
+                    context.translate(0, -this.canvas.height);
+
+                } else if (this.camera.rotationAnchor instanceof Vector) {
+                    context.translate(this.camera.rotationAnchor.x, this.camera.rotationAnchor.y);
+                    context.rotate(this.camera.worldRotation.rads);
+                    context.translate(-this.camera.rotationAnchor.x, -this.camera.rotationAnchor.y);
+                } else {
+                    // "top-left" anchor
+                    context.rotate(this.camera.worldRotation.rads);
+                }
+
             }
         },
 
@@ -601,9 +633,7 @@
          * @param context The canvas context where will be rendered
          */
         postrender: function postrender(context) {
-             if (this._rotatedAngles) {
-                context.rotate(-this._rotatedAngles);
-            }
+            context.restore();
         },
 
         /*
