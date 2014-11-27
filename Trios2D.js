@@ -41,7 +41,7 @@
         /*
          * Return true if the vector has a value
          */
-        hasValue: function hasValue(){
+        hasValue: function hasValue() {
             return !!(this.x || this.y);
         },
 
@@ -81,7 +81,7 @@
             if (vector instanceof Vector) {
                 return new Error("Not Implemented");
             } else {
-                return new Vector(this.x * vector, this.y * vector);
+                return new Vector(this.x / vector, this.y / vector);
             }
         },
 
@@ -159,7 +159,7 @@
         },
 
         get value() {
-            return isDegree? this.degrees : this.rads;
+            return isDegree ? this.degrees : this.rads;
         },
 
         valueOf: function valueOf() {
@@ -171,7 +171,7 @@
         },
 
         set degrees(val) {
-            this._value = (val||0) * Math.PI / 180;
+            this._value = (val || 0) * Math.PI / 180;
         },
 
         get rads() {
@@ -185,7 +185,7 @@
         /*
          * Return true if the angle has a value
          */
-        hasValue: function hasValue(){
+        hasValue: function hasValue() {
             return !!(this._value);
         },
 
@@ -196,12 +196,12 @@
         add: function add(angle) {
             if (angle instanceof Angle) {
                 return new Angle(this.isDegree ?
-                                 this.degrees + angle.degrees :
-                                 this.rads +  angle.rads, this.isDegree);
+                    this.degrees + angle.degrees :
+                    this.rads + angle.rads, this.isDegree);
             } else {
                 return new Angle(this.isDegree ?
-                                 this.degrees + angle :
-                                 this.rads +  angle, this.isDegree);
+                    this.degrees + angle :
+                    this.rads + angle, this.isDegree);
             }
         },
 
@@ -212,12 +212,12 @@
         sub: function sub(angle) {
             if (angle instanceof Angle) {
                 return new Angle(this.isDegree ?
-                                 this.degrees - angle.degrees :
-                                 this.rads -  angle.rads, this.isDegree);
+                    this.degrees - angle.degrees :
+                    this.rads - angle.rads, this.isDegree);
             } else {
                 return new Angle(this.isDegree ?
-                                 this.degrees - angle :
-                                 this.rads -  angle, this.isDegree);
+                    this.degrees - angle :
+                    this.rads - angle, this.isDegree);
             }
         },
 
@@ -227,8 +227,8 @@
          */
         multiply: function multiply(scalar) {
             return new Angle(this.isDegree ?
-                                 this.degrees * scalar :
-                                 this.rads *  scalar, this.isDegree);
+                this.degrees * scalar :
+                this.rads * scalar, this.isDegree);
 
         },
 
@@ -238,15 +238,15 @@
          */
         divide: function divide(scalar) {
             return new Angle(this.isDegree ?
-                                 this.degrees / scalar :
-                                 this.rads / scalar, this.isDegree);
+                this.degrees / scalar :
+                this.rads / scalar, this.isDegree);
         },
 
         /*
          * Inverts the angle value
          */
         invert: function invert() {
-            return new Angle(this.isDegree? -this.degrees: -this.rads, this.isDegree);
+            return new Angle(this.isDegree ? -this.degrees : -this.rads, this.isDegree);
         }
 
 
@@ -592,38 +592,60 @@
 
             if (this.camera.rotation.hasValue()) {
 
+                var anchor = new Vector(0);
+
                 if (this.camera.rotationAnchor == "center") {
 
-                    context.translate(this.canvas.width/2, this.canvas.height/2);
-                    context.rotate(this.camera.worldRotation.rads);
-                    context.translate(-this.canvas.width/2, -this.canvas.height/2);
+                    anchor.x = this.canvas.width / 2;
+                    anchor.y = this.canvas.height / 2;
 
                 } else if (this.camera.rotationAnchor == "top-right") {
 
-                    context.translate(this.canvas.width, 0);
-                    context.rotate(this.camera.worldRotation.rads);
-                    context.translate(-this.canvas.width, 0);
+                    anchor.x = this.canvas.width;
+                    anchor.y = 0;
 
                 } else if (this.camera.rotationAnchor == "bottom-right") {
 
-                    context.translate(this.canvas.width, this.canvas.height);
-                    context.rotate(this.camera.worldRotation.rads);
-                    context.translate(-this.canvas.width, -this.canvas.height);
+                    anchor.x = this.canvas.width;
+                    anchor.y = this.canvas.height;
 
                 } else if (this.camera.rotationAnchor == "bottom-left") {
 
-                    context.translate(0, this.canvas.height);
-                    context.rotate(this.camera.worldRotation.rads);
-                    context.translate(0, -this.canvas.height);
+                    anchor.x = 0;
+                    anchor.y = this.canvas.height;
 
-                } else if (this.camera.rotationAnchor instanceof Vector) {
-                    context.translate(this.camera.rotationAnchor.x, this.camera.rotationAnchor.y);
-                    context.rotate(this.camera.worldRotation.rads);
-                    context.translate(-this.camera.rotationAnchor.x, -this.camera.rotationAnchor.y);
+                } else if (this.camera.rotationAnchor == "top-middle") {
+
+                    anchor.x = this.canvas.width / 2;
+                    anchor.y = 0;
+
+                } else if (this.camera.rotationAnchor == "middle-left") {
+
+                    anchor.x = 0;
+                    anchor.y = this.canvas.height / 2;
+
+                } else if (this.camera.rotationAnchor == "middle-right") {
+
+                    anchor.x = this.canvas.width;
+                    anchor.y = this.canvas.height / 2;
+
+                } else if (this.camera.rotationAnchor == "bottom-middle") {
+
+                    anchor.x = this.canvas.width / 2;
+                    anchor.y = this.canvas.height;
+
+                }  else if (this.camera.rotationAnchor instanceof Vector) {
+                    anchor.x = this.camera.rotationAnchor.x;
+                    anchor.y = this.camera.rotationAnchor.y;
                 } else {
                     // "top-left" anchor
-                    context.rotate(this.camera.worldRotation.rads);
+                    anchor.x = 0;
+                    anchor.y = 0;
                 }
+
+                context.translate(anchor.x, anchor.y);
+                context.rotate(this.camera.worldRotation.rads);
+                context.translate(-anchor.x, -anchor.y);
 
             }
         },
@@ -691,7 +713,7 @@
 
             this.postupdate(delta);
 
-            },
+        },
         start: function start() {
             this._init_();
         },
@@ -799,6 +821,7 @@
         this.children = [];
         this.components = [];
         this.position = new Vector();
+        this.rotation = new Angle(0);
     }
 
     GameObject.prototype = {
@@ -811,6 +834,16 @@
          * The Object Position
          */
         position: new Vector(),
+
+        /*
+         * Current object Rotation
+         */
+        rotation: new Angle(0),
+
+        /*
+         * The rotation anchor
+         */
+        rotationAnchor: "top-left",
 
         /*
          * GameObject Components
@@ -919,6 +952,8 @@
 
             this.absolutePosition = parentPosition.add(this.position);
 
+            this._prerender(context, parentPosition);
+
             //components render
             this.components.forEach(function (item) {
                 item._render(context, parentPosition, this);
@@ -932,6 +967,67 @@
             torender.forEach(function (item) {
                 item._render(context, self.absolutePosition);
             });
+
+            this._postrender(context, parentPosition);
+
+        },
+
+        _prerender: function _prerender(context, parentPosition) {
+            context.save();
+
+            if (this.rotation.hasValue()) {
+
+                var anchor = new Vector(0);
+
+                if (this.rotationAnchor == "center") {
+
+                    anchor = this.absolutePosition.add(this.size.divide(2));
+
+                } else if (this.rotationAnchor == "top-right") {
+
+                    anchor = this.absolutePosition.add({x: this.size.x, y: 0});
+                } else if (this.rotationAnchor == "bottom-right") {
+
+                    anchor = this.absolutePosition.add({x: this.size.x, y: this.size.y});
+
+                } else if (this.rotationAnchor == "bottom-left") {
+
+                    anchor = this.absolutePosition.add({x: 0, y: this.size.y});
+
+                } else if (this.rotationAnchor == "top-middle") {
+
+                    anchor = this.absolutePosition.add({x: this.size.x/2, y: 0});
+
+                } else if (this.rotationAnchor == "middle-left") {
+
+                    anchor = this.absolutePosition.add({x: 0, y: this.size.y / 2});
+
+                } else if (this.rotationAnchor == "middle-right") {
+
+                    anchor = this.absolutePosition.add({x: this.size.x, y: this.size.y / 2});
+
+                } else if (this.rotationAnchor == "bottom-middle") {
+
+                    anchor = this.absolutePosition.add({x: this.size.x / 2 , y: this.size.y});
+
+                } else if (this.rotationAnchor instanceof Vector) {
+
+                    anchor = this.absolutePosition.add(this.rotationAnchor);
+                } else {
+                    // "top-left" anchor
+
+                    anchor = this.absolutePosition;
+                }
+
+                context.translate(anchor.x, anchor.y);
+                context.rotate(this.rotation.rads);
+                context.translate(-anchor.x, -anchor.y);
+
+            }
+        },
+
+        _postrender: function _postrender(context, parentPosition) {
+            context.restore();
         },
 
         _click: function (clickPosition) {
