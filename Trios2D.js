@@ -46,6 +46,13 @@
         },
 
         /*
+         * Check if two vectors has the same value
+         */
+        equal: function equal(vector) {
+            return this.x == vector.x && this.y == vector.y;
+        },
+
+        /*
          * Adds to vectors
          * @param vector the vector to sum to
          */
@@ -187,6 +194,17 @@
          */
         hasValue: function hasValue() {
             return !!(this._value);
+        },
+
+        /*
+         * Check if two angles has the same value
+         */
+        equal: function equal(angle) {
+            if (angle instanceof Angle) {
+                return this.rads == angle.rads;
+            } else {
+                return this.isDegree ? this.degrees == angle : this.rads == angle;
+            }
         },
 
         /*
