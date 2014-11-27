@@ -176,6 +176,36 @@ As mentioned before the an `Vector` object has some utility methods. Currents ar
 
 * `#isBetween(vector1, vector2)`: Returns `true` if the current vector is in between `vector1` and `vector2` coordenates.
 
+###Angle
+//TODO: speak about it
+
+####Instance Variables ans Properies
+
+* `value`: //TODO: speak about it
+
+* `isDegree`: //TODO: speak about it
+
+* `degrees`: //TODO: speak about it
+
+* `rads`: //TODO: speak about it
+
+
+####Metohds
+
+* `#hasValue()`: //TODO: speak about it
+
+* `#add()`: //TODO: speak about it
+
+* `#sub()`: //TODO: speak about it
+
+* `#multiply()`: //TODO: speak about it
+
+* `#divide()`: //TODO: speak about it
+
+* `#invert()`: //TODO: speak about it
+
+* `#valueOf()`: //TODO: speak about it
+
 
 ###GameObjects
 
@@ -212,6 +242,19 @@ Here we can se some other things not mentioned in the coment. First the `#addChi
 * `size`: Is an `Vector` indicating the width (`x`) and height (`y`) of the `GameObject`.
 
 * `renderPosition`: Indicates the render priotity of the `GameObject` and that way if it is in the front or the back. Higher values means that is more on the front. By default 0.
+
+* `rotation`: Is an `Angle` object that indicates the rotation of the object. Every thing rendered by a `GameObject` with an specified rotation will be rotated by the same amount and the childen rotation is relative to the parent.
+
+* `rotationAnchor`: specifies the rotation anchor of an object. Its values can be `Vector` object indicating a point relative to the parent where the rotation will be anchored or some of the following values:
+··* `"top-left"`: 
+··* `"top-middle"`: 
+··* `"top-right"`:
+··* `"middle-left"`:
+··* `"center"`:
+··* `"middle-right"`:
+··* `"bottom-left"`:
+··* `"bottom-middle"`:
+··* `"bottom-right"`:
 
 * <a name="GameObject.children"></a>`childen`: Is an array containing all the `GameObject` objects that are children of the `GameObject`. **DO NOT MODIFY THIS ARRAY OR SET IT DIRECTLY UNLESS YOU KNOW WHAT YOU ARE DOING!!!**
 
@@ -342,6 +385,27 @@ Available Keys:
 ###Camera
 
 `Camera` object is made to manage the view point pof the game, giving to id a "camera", which you point to a position and in the canvas you can see what the "camera" sees. By default, the camera is seeing at the point (0,0). You can change the position where the `Camera` is by setting the `position` variable to a vector of the new position. 
+
+####Instance variables and Properties
+
+* `position`: //TODO: specify
+
+* `rotation`: Is an `Angle` object that indicates the rotation of the camera. When you rotate the camera everything rotates in the other direction from the user perspective (like quen you rotate your phone during a video).
+
+* `rotationAnchor`: specifies the rotation anchor of the camera. Its values can be `Vector` object indicating a point relative to the parent where the rotation will be anchored or some of the following values:
+··* `"top-left"`: 
+··* `"top-middle"`: 
+··* `"top-right"`:
+··* `"middle-left"`:
+··* `"center"`:
+··* `"middle-right"`:
+··* `"bottom-left"`:
+··* `"bottom-middle"`:
+··* `"bottom-right"`:
+
+* `worldPosition`: //TODO: specify
+
+* `worldRotation`: //TODO: specify
 
 
 ##Modules
