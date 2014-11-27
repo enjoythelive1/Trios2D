@@ -151,7 +151,7 @@
         isDegree: false,
 
         set value(val) {
-            if (isDegree) {
+            if (this.isDegree) {
                 this.degrees = val;
             } else {
                 this.rads = val;
