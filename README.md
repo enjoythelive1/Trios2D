@@ -246,23 +246,24 @@ Here we can se some other things not mentioned in the coment. First the `#addChi
 * `rotation`: Is an `Angle` object that indicates the rotation of the object. Every thing rendered by a `GameObject` with an specified rotation will be rotated by the same amount and the childen rotation is relative to the parent.
 
 * `rotationAnchor`: specifies the rotation anchor of an object. Its values can be `Vector` object indicating a point relative to the parent where the rotation will be anchored or some of the following values:
-    ⋅⋅1. `"top-left"`: ![top-left](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/top-left.png)
 
-    ⋅⋅2. `"top-middle"`:  ![top-middle](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/top-middle.png)
+    * `"top-left"`: ![top-left](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/top-left.png)
 
-    ⋅⋅3. `"top-right"`:  ![top-right](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/top-right.png)
+    * `"top-middle"`:  ![top-middle](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/top-middle.png)
 
-    ⋅⋅4. `"middle-left"`:  ![middle-left](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/middle-left.png)
+    * `"top-right"`:  ![top-right](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/top-right.png)
 
-    ⋅⋅5. `"center"`:  ![center](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/center.png)
+    * `"middle-left"`:  ![middle-left](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/middle-left.png)
 
-    ⋅⋅6. `"middle-right"`:  ![middle-right](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/middle-right.png)
+    * `"center"`:  ![center](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/center.png)
 
-    ⋅⋅7. `"bottom-left"`:  ![bottom-left](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/bottom-left.png)
+    * `"middle-right"`:  ![middle-right](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/middle-right.png)
 
-    ⋅⋅8. `"bottom-middle"`:  ![bottom-middle](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/bottom-middle.png)
+    * `"bottom-left"`:  ![bottom-left](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/bottom-left.png)
 
-    ⋅⋅9. `"bottom-right"`:  ![bottom-right](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/bottom-right.png)
+    * `"bottom-middle"`:  ![bottom-middle](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/bottom-middle.png)
+
+    * `"bottom-right"`:  ![bottom-right](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/bottom-right.png)
 
 
 * <a name="GameObject.children"></a>`childen`: Is an array containing all the `GameObject` objects that are children of the `GameObject`. **DO NOT MODIFY THIS ARRAY OR SET IT DIRECTLY UNLESS YOU KNOW WHAT YOU ARE DOING!!!**
