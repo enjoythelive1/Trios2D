@@ -118,7 +118,7 @@ Here what these functions are for:
 
 * `childen`: Is an array containing all the `GameObject` objects that are directly in the game (not the `GameObject` children, see [`GameObject#children`](#GameObject.children)). **DO NOT MODIFY THIS ARRAY OR SET IT DIRECTLY UNLESS YOU KNOW WHAT YOU ARE DOING!!!**
 
-###Metohds
+###Methods
 
 * `#addChild(child)`: Adds `child` to the game. Every time update and render is called for the engine, `render` and `update` methods will be called for every `children` within the engine. The `child` must be a `GameObject`, a [Module](#modules), or any object derived from `GameObject` (will be checked using `instaceof`)
 
