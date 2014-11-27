@@ -587,6 +587,10 @@
             if (this.cleanBeforeRender) {
                 context.clearRect(0, 0, this.canvas.width, this.canvas.height);
             }
+
+            if (this.camera.rotation.hasValue()) {
+                context.rotate(this.worldRotation.rads);
+            }
         },
 
         /*
@@ -594,7 +598,9 @@
          * @param context The canvas context where will be rendered
          */
         postrender: function postrender(context) {
-
+             if (this.camera.rotation.hasValue()) {
+                context.rotate(-this.worldRotation.rads);
+            }
         },
 
         /*
