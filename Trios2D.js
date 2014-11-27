@@ -408,7 +408,7 @@
          */
         _init_: function _init_() {
             var self = this;
-            this.context.fillStyle = "#ffffff";
+            //this.context.fillStyle = "#ffffff";
 
             if (this.logic.init) {
                 this.logic.init(this);
@@ -440,7 +440,7 @@
          */
         prerender: function prerender(context) {
             if (this.cleanBeforeRender) {
-                context.fillRect(0, 0, this.canvas.width, this.canvas.height);
+                context.clearRect(0, 0, this.canvas.width, this.canvas.height);
             }
         },
 
