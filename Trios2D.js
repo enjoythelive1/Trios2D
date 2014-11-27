@@ -589,7 +589,10 @@
             }
 
             if (this.camera.rotation.hasValue()) {
-                context.rotate(this.worldRotation.rads);
+                this._rotatedAngles = this.worldRotation.rads
+                context.rotate(this._rotatedAngles);
+            } else {
+                this._rotatedAngles = 0;
             }
         },
 
@@ -598,8 +601,8 @@
          * @param context The canvas context where will be rendered
          */
         postrender: function postrender(context) {
-             if (this.camera.rotation.hasValue()) {
-                context.rotate(-this.worldRotation.rads);
+             if (this._rotatedAngles) {
+                context.rotate(-this._rotatedAngles);
             }
         },
 
