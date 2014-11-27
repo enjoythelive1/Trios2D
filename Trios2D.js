@@ -37,6 +37,14 @@
     }
 
     Vector.prototype = {
+
+        /*
+         * Return true if the vector has a value
+         */
+        hasValue: function hasValue(){
+            return !!(this.x || this.y);
+        },
+
         /*
          * Adds to vectors
          * @param vector the vector to sum to
@@ -169,6 +177,13 @@
         set rads(val) {
             this._value = val;
         },
+
+        /*
+         * Return true if the angle has a value
+         */
+        hasValue: function hasValue(){
+            return !!(this._value);
+        }
 
         /*
          * Adds to angles
