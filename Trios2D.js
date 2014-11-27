@@ -146,7 +146,7 @@
         }
     }
 
-    Vector.prototype = {
+    Angle.prototype = {
 
         isDegree: false,
 
@@ -187,7 +187,7 @@
          */
         hasValue: function hasValue(){
             return !!(this._value);
-        }
+        },
 
         /*
          * Adds to angles
