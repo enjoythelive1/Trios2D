@@ -115,6 +115,117 @@
     };
 
     /************************************************************************************************************/
+    /********************************************** Angle ******************************************************/
+    /************************************************************************************************************/
+
+    /*
+     * Creates a new Angle.
+     * @param initial the initial value
+     * @param isDegree ndicate if the angle works in degrees or rad
+     */
+    function Angle(initial, isDegree) {
+        this.isDegree = isDegree;
+
+        if (isDegree) {
+            this.degrees = initial;
+        } else {
+            this.rads = initial;
+        }
+
+    }
+
+    Vector.prototype = {
+
+        isDegree: false,
+
+        set value(val) {
+            if (isDegree) {
+                this.degrees = val;
+            } else {
+                this.rads = val;
+            }
+        },
+
+        get value() {
+            return isDegree? this.degrees : this.rads;
+        },
+
+        valueOf: function valueOf() {
+            return this.rads;
+        },
+
+        get degrees() {
+            this._value / Math.PI * 180
+        },
+
+        set degrees(val) {
+            this._value = val * Math.PI / 180;
+        },
+
+        get rads() {
+            return this._value;
+        },
+
+        set rads(val) {
+            this._value = val;
+        },
+
+        /*
+         * Adds to angles
+         * @param angle the the angle to sum to
+         */
+        add: function add(angle) {
+            if (angle instanceof Angle) {
+                return new Angle(this.isDegree ?
+                                 this.degrees + angle.degrees :
+                                 this.rads +  angle.rads, this.isDegree);
+            } else {
+                return new Angle(this.isDegree ?
+                                 this.degrees + angle :
+                                 this.rads +  angle, this.isDegree);
+            }
+        },
+
+        /*
+         * Substracts to angles
+         * @param angle the angle to sub to
+         */
+        sub: function sub(angle) {
+            if (angle instanceof Angle) {
+                return new Angle(this.isDegree ?
+                                 this.degrees - angle.degrees :
+                                 this.rads -  angle.rads, this.isDegree);
+            } else {
+                return new Angle(this.isDegree ?
+                                 this.degrees - angle :
+                                 this.rads -  angle, this.isDegree);
+            }
+        },
+
+        /*
+         * Multiply to scalar
+         * @param scalar the scalar to Multiply to
+         */
+        multiply: function multiply(scalar) {
+            return new Angle(this.isDegree ?
+                                 this.degrees * scalar :
+                                 this.rads *  scalar, this.isDegree);
+
+        },
+
+        /*
+         * Divides to scalar
+         * @param scalar to divide to
+         */
+        divide: function divide(scalar) {
+            return new Angle(this.isDegree ?
+                                 this.degrees / scalar :
+                                 this.rads / scalar, this.isDegree);
+        }
+
+    };
+
+    /************************************************************************************************************/
     /*********************************************** Input ******************************************************/
     /************************************************************************************************************/
 
@@ -777,6 +888,7 @@
     Engine.GameObject = GameObject;
     Engine.Input = Input;
     Engine.Vector = Vector;
+    Engine.Angle = Angle;
     Engine.Component = Component;
     Engine.Components = {};
 
