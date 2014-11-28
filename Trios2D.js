@@ -771,6 +771,10 @@
             clearInterval(this.renderInterval);
             delete this.updateInterval;
             delete this.renderInterval;
+
+            this.children.forEach(function (item) {
+                item._pause();
+            });
         },
 
         /*
@@ -780,6 +784,10 @@
 
             this.updateInterval = setInterval(this._update_.bind(this), 1000 / this.maxUpdates);
             this.renderInterval = setInterval(this._render_.bind(this), 1000 / this.maxFrameRate);
+
+            this.children.forEach(function (item) {
+                item._resume();
+            });
         },
 
         click: function click(event) {
@@ -1111,7 +1119,27 @@
                     return true;
                 });
             }
+        },
+
+        _pause: function _pause() {
+            if (typeof this.pause === "function")
+                this.pause();
+
+            this.children.forEach(function (item) {
+                item._pause();
+            });
+        },
+
+        _resume: function _resume() {
+            if (typeof this.resume === "function")
+                this.resume();
+
+            this.children.forEach(function (item) {
+                item._resume();
+            });
         }
+
+
     };
 
 
