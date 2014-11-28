@@ -17,6 +17,8 @@
         this._velocity = new Vector();
         this._aceleration = new Vector();
 
+        this._lastVelocity = this._velocity;
+
     }
 
     Physics.prototype = Object.create(Component.prototype, {
@@ -38,7 +40,7 @@
 
         velocity: {
             get: function velocity() {
-                if (this.position.equal(this._lastPosition)) {
+                if (this.position.equal(this._lastPosition || this.position)) {
                     return this._velocity;
                 } else {
                     // immediat position change would make the velocity increases in the update frame where it was made
@@ -79,8 +81,8 @@
         }
 
 
+        this._lastVelocity = this.velocity;
         this._lastPosition = this.position;
-        this._lastVelocity = this._velocity;
         this._lastDelta = delta;
     };
 
