@@ -562,7 +562,7 @@ You can chage any of the options at any time changin the value tu the instance. 
 
 ####Animation
 
-Animation is module whichmanages and render a set of images which changes every time. It makes easyer thinks like render a walking dog or an jumping player. You can make an animation from several images (url ot `HTMLImage` object), or an spritesheet specifing the spritesheet size, the margin between images and the size of each image. It will calculate how much sprites the sprite sheet has depending of the sizes provided, but you can specify how much images to take.
+Animation is module which manages and render a set of images which changes every time. It makes easyer thinks like render a walking dog or an jumping player. You can make an animation from several images (url ot `HTMLImage` object), or an spritesheet specifing the spritesheet size, the margin between images and the size of each image. It will calculate how much sprites the sprite sheet has depending of the sizes provided, but you can specify how much images to take.
 
 To use it you must import the `./modules/Animation.js` script.
 
@@ -665,6 +665,57 @@ We have seen that you can pass an array of images url, `HTMLImage` objects, or o
 #####Methods
 
 * `#reverse()`: Reverses the current animation.
+
+####GameSound
+
+This is a module wich simplify the audio management in your game. It internaly works using the `<audio>` HTML5 element.
+
+To use it you must import the `./modules/GameSound.js` script.
+
+```html
+<script src="js/Trios2D.js"></script>
+...
+<script src="js/modules/GameSound.js"></script>
+```
+
+Here an example of how to use it:
+
+```javascript
+var sound = new Trios2D.GameSound(audio);
+
+sound.play();
+
+game.addChild(sound);
+```
+
+Here `audio` could be the audio file url or an `<audio>` HTML element.
+
+Some of the utilities about this object is that the audio starts to load inmediatly you create it, in difference to the `<audio>` element, and the fact that the audio automaticly pauses when the game is paused.
+
+#####Instance Variablesa and properties
+
+* `currentTime`: Property proxy to the `<audio>`'s property `currentTime`. See more about this property in [W3Schools](http://www.w3schools.com/tags/av_prop_currenttime.asp).
+
+* `duration`: Property proxy to the `<audio>`'s property `duration`. See more about this property in [W3Schools](http://www.w3schools.com/tags/av_prop_duration.asp).
+
+* `ended`: Property proxy to the `<audio>`'s property `ended`. See more about this property in [W3Schools](http://www.w3schools.com/tags/av_prop_ended.asp).
+
+* `loop`: Property proxy to the `<audio>`'s property `loop`. See more about this property in [W3Schools](http://www.w3schools.com/tags/av_prop_loop.asp).
+
+* `paused`: Property proxy to the `<audio>`'s property `paused`. See more about this property in [W3Schools](http://www.w3schools.com/tags/av_prop_paused.asp).
+
+* `volume`: Property proxy to the `<audio>`'s property `volume`. See more about this property in [W3Schools](http://www.w3schools.com/tags/av_prop_volume.asp).
+
+#####Methods
+
+* `#play()`: Plays the sound. If the audio is currently playing, it start to play the sound again from the begining. If paused, the sound reproduction just resumes.
+
+* `#resume()`: Resumens the sound playing if it is paused. Otherwise it does nothing.
+
+* `#pause()`: Pauses the sound reproduction.
+
+* `#stop()`: Stops the sound reproduction and the the next time the sound plays, it will start from the begining.
+
 
 ###How To Make my own modules
 
