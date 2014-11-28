@@ -285,6 +285,8 @@ Here we can se some other things not mentioned in the coment. First the `#addChi
 
 * `components`: Is an array containing all `Component` (See more about `Component` [here](#components)) which belongs to the `GameObject`. **DO NOT MODIFY THIS ARRAY OR SET IT DIRECTLY UNLESS YOU KNOW WHAT YOU ARE DOING!!!**
 
+* `engine`: Returns the engine the `GameObject` is subscrided to.
+
 
 ####Methods
 
