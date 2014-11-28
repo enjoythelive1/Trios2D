@@ -44,12 +44,13 @@
                     return this._velocity;
                 } else {
                     // immediat position change would make the velocity increases in the update frame where it was made
-                    return this.position.sub(this._lastPosition).divide(this._lastDelta / 1000);
+                    return this.position.sub(this._lastPosition).divide(this._lastDelta / 1000).round(5);
                 }
             },
 
             set: function  velocity(val) {
                 this._velocity = val;
+                this._lastPosition = undefined;
             }
         },
 
@@ -59,12 +60,14 @@
                     return this._aceleration;
                 } else {
                     // immediat velocity change would make the aceleration increases in the update frame where it was made
-                    return this.velocity.sub(this._lastVelocity).divide(this._lastDelta / 1000);
+                    return this.velocity.sub(this._lastVelocity).divide(this._lastDelta / 1000).round(5);
                 }
             },
 
             set: function aceleration(val) {
                 this._aceleration = val;
+                this._lastVelocity = this._velocity;
+
             }
         }
 
@@ -80,10 +83,21 @@
             this.position = this.position.add(this._velocity.multiply(delta / 1000));
         }
 
+//
+////        this._lastPosition = this.position;
+//        this._lastVelocity = this.velocity;
+//        this._lastPosition = this.position;
+//
+        this._lastDelta = delta;
+    };
 
+    Physics.prototype.postupdate = function postupdate(delta, gameObject) {
+
+//        this._lastPosition = this.position;
         this._lastVelocity = this.velocity;
         this._lastPosition = this.position;
-        this._lastDelta = delta;
+
+//        this._lastDelta = delta;
     };
 
 
