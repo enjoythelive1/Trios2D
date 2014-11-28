@@ -180,6 +180,7 @@ As mentioned before the an `Vector` object has some utility methods. Currents ar
 
 * `#equal(vector)`: Check if both `Vector`s have the same value.
 
+* `#round(precision)`: Return a copy of the `Vector` with rounded values by `precision`.
 
 ###Angle
 
@@ -220,6 +221,8 @@ The constructor arguments are `value` and `isDegree`. `value` specfy it values a
 * `#divide(angle)`: Perform an divide between two angles. If an scalar is passed as paramether would do the divide depending in how the angle is working. It would consither the scalar to be degrees if the angle is working on degrees. Otherwise it would consider the scalar to be in radians.
 
 * `#invert()`: Inverts the angle value. (the same as doing `-x`, x being a number).
+
+* `#round(precision)`: Return a copy of the `Angle` with rounded value by `precision`.
 
 * `#valueOf()`: Return the angle value in radians.
 
@@ -814,6 +817,14 @@ This way you can make the component really reusable:
     
     MyComponent.prototype.render = function render(context, parentPosition, gameObject) {
         renderStuff();                                              //Do your render stuff here
+    };
+    
+    MyComponent.prototype.postupdate = function postupdate(delta, gameObject) {
+        updateStuff();                                              // If you need to do logic after the game object updates, you can do it in here 
+    };
+    
+    MyComponent.prototype.postrender = function postrender(context, parentPosition, gameObject) {
+        renderStuff();                                              //If you need to render things after the game object renders, you can do it in here 
     };
     
      
