@@ -138,6 +138,13 @@
          */
         lerp: function lerp(other, step) {
             return this.add(other.sub(this).multiply(step));
+        },
+
+        /*
+         * Round the vector
+         */
+        round: function round(digits) {
+            return new Vector(Math.round(this.x, digits), Math.round(this.y, digits));
         }
 
     };
@@ -278,6 +285,13 @@
          */
         invert: function invert() {
             return new Angle(this.isDegree ? -this.degrees : -this.rads, this.isDegree);
+        },
+
+        /*
+         * Round the angle
+         */
+        round: function round(digits) {
+            return new Angle(Math.round(this.isDegree ? this.degrees : -this.rads, digits), this.isDegree);
         }
 
 
@@ -694,7 +708,7 @@
          */
         _render_: function _render_() {
             var self = this,
-                torender = this.children.sort(sortGameObjects);
+                torender = this.children.concat().sort(sortGameObjects);
 
             this.prerender(this.context);
 
@@ -784,7 +798,7 @@
 
             clickPosition = new Vector(x, y);
 
-            this.children.sort(sortGameObjects).reverse().every(function (item) {
+            this.children.concat().sort(sortGameObjects).reverse().every(function (item) {
                 if (clickPosition.isBetween(item.position, item.position.add(item.size))) {
                     item._click(clickPosition);
                     return false;
@@ -839,9 +853,19 @@
                 this.render(context, parentPosition, gameObject);
         },
 
+        _postrender: function _postrender(context, parentPosition, gameObject) {
+            if (typeof this.postrender === "function")
+                this.postrender(context, parentPosition, gameObject);
+        },
+
         _update: function _update(delta, gameObject) {
             if (typeof this.update === "function")
                 this.update(delta, gameObject);
+        },
+
+        _postupdate: function _postupdate(delta, gameObject) {
+            if (typeof this.postupdate === "function")
+                this.postupdate(delta, gameObject);
         },
     }
 
@@ -974,6 +998,11 @@
                 item._update(delta);
             });
 
+            //components postupdate
+            this.components.forEach(function (item) {
+                item._postupdate(delta, this);
+            }, this);
+
         },
 
         /*
@@ -982,7 +1011,7 @@
          */
         _render: function (context, parentPosition) {
             var self = this,
-                torender = this.children.sort(sortGameObjects);
+                torender = this.children.concat().sort(sortGameObjects);
 
             this.absolutePosition = parentPosition.add(this.position);
 
@@ -1001,6 +1030,11 @@
             torender.forEach(function (item) {
                 item._render(context, self.absolutePosition);
             });
+
+            //components render
+            this.components.forEach(function (item) {
+                item._postrender(context, parentPosition, this);
+            }, this);
 
             this._postrender(context, parentPosition);
 
@@ -1068,7 +1102,7 @@
             var localClick = clickPosition.sub(this.position);
             if (typeof this.click !== "function" || this.click(localClick) !== false) {
 
-                this.children.sort(sortGameObjects).reverse().every(function (item) {
+                this.children.concat().sort(sortGameObjects).reverse().every(function (item) {
                     if (localClick.isBetween(item.position, item.position.add(item.size))) {
                         item._click(localClick);
                         return false;
