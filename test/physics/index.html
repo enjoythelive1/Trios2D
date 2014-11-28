@@ -413,7 +413,7 @@
 
                     // physic object --------------------------------------------------------------------------------------------------------------
 
-                    this.angularMom = new Engine.Angle(Math.PI / 4);
+                    this.angularMom = new Engine.Angle(Math.PI / 2);
 
                     this.left = new Engine.Vector(-100, 0);
                     this.right = new Engine.Vector(100, 0);
@@ -431,7 +431,7 @@
                     rectangle.position = new Engine.Vector(30, 30);
                     //rectangle.physics.aceleration = new Engine.Vector(3, 0);
 
-                    //rectangle.rotationAnchor = "center";
+                    rectangle.rotationAnchor = "center";
 
                     rectangle.size = new Engine.Vector(30, 30);
 
@@ -549,7 +549,13 @@
                 },
 
                 update: function update(delta, engine) {
+                    var input = engine.getInput();
 
+                    if (input.isKeyDown(Engine.Input.NUMPAD_8)) {
+                        engine.camera.rotation = engine.camera.rotation.add(this.angularMom.multiply(delta / 1000.0));
+                    } else if (input.isKeyDown(Engine.Input.NUMPAD_2)) {
+                        engine.camera.rotation = engine.camera.rotation.sub(this.angularMom.multiply(delta / 1000.0));
+                    }
                 },
 
                 render: function render(context, engine) {

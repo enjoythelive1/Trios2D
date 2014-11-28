@@ -593,6 +593,11 @@
             }
         },
 
+
+        get engine() {
+            return this;
+        },
+
         /*
          * Initialization of the engine
          */
@@ -970,6 +975,13 @@
                 child.parent = u;
                 this.children.splice(toDelete, 1);
             }
+        },
+
+        /*
+         * Get the engine which the object is subscribed
+         */
+        get engine() {
+            return this.parent.engine;
         },
 
         autoCalcSize: function autoCalcSize() {
