@@ -14,6 +14,19 @@
         }
     }
 
+    function clone(object) {
+        var theClone = {}, prop;
+        for (prop in object) {
+            if (typeof object[prop] !== "object") {
+                theClone[prop] = object[prop];
+            } else {
+                theClone[prop] = clone(object[prop]);
+            }
+        }
+
+        return theClone;
+    }
+
     /************************************************************************************************************/
     /********************************************** Vector ******************************************************/
     /************************************************************************************************************/
@@ -280,7 +293,7 @@
      */
 
     function Input(input) {
-        this.kbInput = input;
+        this.kbInput = clone(input);
     }
 
     Input.prototype = {
@@ -579,7 +592,6 @@
 
             this.canvas.addEventListener("click", this.click.bind(this));
             this.canvas.addEventListener("keydown", this.keydown.bind(this));
-            this.canvas.addEventListener("keypress", this.keypress.bind(this));
             this.canvas.addEventListener("keyup", this.keyup.bind(this));
             this.canvas.addEventListener("focusin", function (e) {
                 if (!self.renderInterval) {
@@ -710,6 +722,7 @@
          */
         postupdate: function postupdate(delta) {
             this.kbInput.keyup = {};
+            this.kbInput.keypress = {};
         },
 
         /*
@@ -789,7 +802,10 @@
 
         keyup: function (e) {
             this.kbInput.keyup[e.keyCode || e.which] = true;
-            this.kbInput.keydown[e.keyCode || e.which] = false;
+            if (this.kbInput.keydown[e.keyCode || e.which]) {
+                this.kbInput.keydown[e.keyCode || e.which] = false;
+                this.keypress(e);
+            }
             e.preventDefault();
 
 
