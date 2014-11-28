@@ -317,7 +317,7 @@
          */
         isKeyPressed: function isKeyPressed(keyCode) {
             var pressed = this.kbInput.keypress[keyCode];
-            delete this.kbInput.keypress[keyCode];
+            //delete this.kbInput.keypress[keyCode];
             return pressed;
         },
 
