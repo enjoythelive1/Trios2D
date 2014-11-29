@@ -134,7 +134,9 @@
 
             if (this.loaded / this.total >= 1)
                 this.trigger("load", {
-                    resources: this.toLoad.map(function (item) {
+                    resources: this.toLoad.filter(function (item) {
+                        return item.loaded;
+                    }).map(function (item) {
                         return item.resource;
                     })
                 });
