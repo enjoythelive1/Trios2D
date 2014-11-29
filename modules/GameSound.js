@@ -26,7 +26,7 @@
         }
 
         this._audio = sound;
-        this._audio.preload = true;
+        this._audio.preload = "auto";
         this._audio.style.display = "none";
         this.playFromBegining = true;
 
