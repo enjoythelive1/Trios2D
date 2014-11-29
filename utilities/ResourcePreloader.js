@@ -100,12 +100,24 @@
 
     function ResourcePreloader() {
         Trios2D.Utilities.EventManager.makeEmmitter(this);
-        this.loaded = 0;
-        this.total = 0;
+        this._loaded = 0;
+        this._total = 0;
         this.toLoad = [];
     }
 
     ResourcePreloader.prototype = {
+        get loaded() {
+            return this._loaded;
+        },
+
+        get total() {
+            return this._total;
+        },
+
+        get progress() {
+            return this.loaded / this.total;
+        },
+
         set onprogress(listener) {
             this.on("progress", listener);
         },
@@ -125,14 +137,14 @@
 
         _elementLoaded: function _elementLoaded(element) {
             element.loaded = true;
-            this.loaded++;
+            this._loaded++;
 
             this.trigger("progress", {
                 resource: element.resource,
-                progress: this.loaded / this.total
+                progress: this.progress
             });
 
-            if (this.loaded / this.total >= 1)
+            if (this._loaded / this._total >= 1)
                 this.trigger("load", {
                     resources: this.toLoad.filter(function (item) {
                         return item.loaded;
@@ -145,7 +157,7 @@
 
         _errorLoading: function _errorLoading(element) {
             element.error = true;
-            this.total--;
+            this._total--;
             this.trigger("error", element);
         },
 
@@ -159,7 +171,7 @@
             };
 
             this.toLoad.push(element);
-            this.total++;
+            this._total++;
 
             if (element.resource.complete) {
                 setTimeout(this._elementLoaded.bind(this, element), 1);
@@ -181,7 +193,7 @@
             };
 
             this.toLoad.push(element);
-            this.total++;
+            this._total++;
 
             element.resource.addEventListener("canplaythrough", this._elementLoaded.bind(this, element));
 
