@@ -897,3 +897,88 @@ This way you can make the component really reusable:
 ```
 
 Now your component can be used again and again simply using `new MyCompoent()`. More about `Object.create` [here](https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Object/create).
+
+##Utilities
+
+**Trios2D** game engine bring some utilities. Those utilities are in the `./utilities/` folder and are registered unther the `Trios2D.Utilities` namespace. 
+
+Depending of the engine it will need you to import the `Trios2d.js` script or not.
+
+###ResourcePreloader utility
+
+This is an utility to help you to preload you game resources as images and sounds. It provides also *events* so your code can know when all content is loaded, the preload progress and error in them.
+
+To use this utility you must import the `./utilities/ResourcePreloader.js` script to use it. **NOTE:** If you import this script and then you import the `Trios2D.js` script, the `Trios2D` namespace would be overwritten and `Trios2D.Utilities.ResourcePreloader` won't be available. 
+
+Here is how to use it:
+
+```javascript
+var preloader = new Trios2D.Utilities.ResourcePreloader();
+
+preloader.on("progress", function (event) {
+    console.log((event.progress * 100).toString() + "%");
+});
+
+preloader.onload = function (event) {
+    console.log(event.resources); // event.resources is a list of all loaded items
+};
+
+preloader.addEventListener("error", function (event) {
+    console.log(event.resource.src + " failed to load"); // event resource is the element that failed loading
+});
+
+
+preloader.preloadImage("/images/p1sprite.png"); // preload an image
+
+preloader.preloadSound("/sounds/hurt.mp3"); // preload an audio file
+
+```
+
+####Instance Variables and Properties
+
+* `loaded`: Gets the number of loaded elements.
+
+* `total`: Get the total number of object registered to load.
+
+* `progress`: Get the current progress of the preloading.
+
+* `onprogress`: Sets a new event listener to the progress event. See [`progress`](#Preloader.events.progress) event.
+
+* `onload`: Sets a new event listener to the load event. See [`load`](#Preloader.events.load) event.
+
+* `oncomplete`: Alias of `onload`.
+
+* `onerror`: Sets a new event listener to the error event. See [`error`](#Preloader.events.error) event
+
+####Metohds
+
+* `#preloadImage(imageUrl)`: Preloads the image specified by the url. 
+
+* `#preloadSound(soundUrl)`: Preloads the sound specified by the url.
+
+* `#on(eventName, listener)`: Subcribe an event listener for an event.
+
+* `#addEventListener(eventName, listener)`: Subcribe an event listener for an event.
+
+
+####Events
+
+As we can see, the `ResourcePreloader` object supports 3 events: 
+
+* `progress`: <a name="Preloader.events.progress"></a>
+
+    Triggers when one of the items preloaded id fully loaded. The event object used as argument of the `progress` event listener contains these variables:
+
+    + `resource`: An HTML element of the loaded element.
+
+    + `progress`: The current progress on loading the resources.
+
+* `load`: <a name="Preloader.events.load"></a>
+
+    Triggers when all elements are loaded. The event object used as argument of the `load` event listener contains the variable `resources` wich contains all the resources fully loaded.
+    
+* `error`: <a name="Preloader.events.error"></a>
+    
+    Triggers each time an resource fails to load. The event object contain the element `resource` which is the non loaded element.
+
+You can use tu subcribe an event listener the methods `#on(eventName, listener)` and `#addEventListener(eventName, listener)`, as well as **on`eventName`** property. 
