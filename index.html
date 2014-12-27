@@ -1,0 +1,1421 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset='utf-8'>
+    <meta http-equiv="X-UA-Compatible" content="chrome=1">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <link href='https://fonts.googleapis.com/css?family=Architects+Daughter' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" type="text/css" href="stylesheets/stylesheet.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/pygment_trac.css" media="screen">
+    <link rel="stylesheet" type="text/css" href="stylesheets/print.css" media="print">
+
+    <!--[if lt IE 9]>
+    <script src="//html5shiv.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+
+    <title>Trios2d by enjoythelive1</title>
+  </head>
+
+  <body>
+    <header>
+      <div class="inner">
+        <h1>Trios2d</h1>
+        <h2>It is a simple, lightweight HTML5 game engine for the web working over canvas</h2>
+        <a href="https://github.com/enjoythelive1/Trios2D" class="button"><small>View project on</small> GitHub</a>
+      </div>
+    </header>
+
+    <div id="content-wrapper">
+      <div class="inner clearfix">
+        <section id="main-content">
+          <h1>
+<a id="how-to-use" class="anchor" href="#how-to-use" aria-hidden="true"><span class="octicon octicon-link"></span></a>How to Use</h1>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> game <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Trios2D</span>(<span class="pl-s1"><span class="pl-pds">"</span>selector<span class="pl-pds">"</span></span>, {
+    <span class="pl-en">init</span>: <span class="pl-st">function</span> () {
+        ...
+    },
+    <span class="pl-en">render</span>: <span class="pl-st">function</span> (<span class="pl-vpf">canvasContext</span>) {
+        ...
+    },
+    <span class="pl-en">update</span>: <span class="pl-st">function</span> (<span class="pl-vpf">delta</span>) {
+        ...
+    }
+});
+
+game.<span class="pl-sc">start</span>();</pre></div>
+
+<p>Create an Engine object with the canvas where the game will be rendered as the first parameter and an object containing these ther methods:</p>
+
+<p>Objects can be created to the game and those when added can perform its currents updates and renders independently;</p>
+
+<div class="highlight highlight-javascript"><pre>    <span class="pl-en">init</span>: <span class="pl-st">function</span> (<span class="pl-vpf">engine</span>) {
+        <span class="pl-s">var</span> independentObject <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Trios2D.GameObject</span>();
+        independentObject.position <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Trios2D.Vector</span>(<span class="pl-c1">30</span>,<span class="pl-c1">15</span>);
+        <span class="pl-s3">independentObject</span>.<span class="pl-en">update</span> <span class="pl-k">=</span> <span class="pl-st">function</span> (<span class="pl-vpf">delta</span>) {
+            ...
+        };
+        <span class="pl-s3">independentObject</span>.<span class="pl-en">render</span> <span class="pl-k">=</span> <span class="pl-st">function</span> (<span class="pl-vpf">context</span>) {
+            renderthings(context, <span class="pl-v">this</span>.absolutePosition.<span class="pl-sc">x</span>, <span class="pl-v">this</span>.absolutePosition.<span class="pl-sc">y</span>);
+            ...
+        };
+
+        engine.addChild(independentObject);
+    } </pre></div>
+
+<p>Every object can have its own childrens and all childrens positions are relative to the parent. An object which is made from other objects can be easyly done.</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> car <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Trios2D.GameObject</span>();
+
+car.wheels <span class="pl-k">=</span> [];
+
+car.wheels[<span class="pl-c1">0</span>] <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Trios2D.GameObject</span>();
+car.wheels[<span class="pl-c1">1</span>] <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Trios2D.GameObject</span>();
+car.wheels[<span class="pl-c1">2</span>] <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Trios2D.GameObject</span>();
+car.wheels[<span class="pl-c1">3</span>] <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Trios2D.GameObject</span>();
+
+<span class="pl-k">for</span> (<span class="pl-s">var</span> wheel <span class="pl-k">in</span> car.wheels) {
+   car.addChild(wheel);
+}
+
+car.position <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Trios2D.Vector</span>(<span class="pl-c1">100</span>, <span class="pl-c1">200</span>);
+
+game.addClild(car);</pre></div>
+
+<hr>
+
+<h2>
+<a id="deeper-in-the-engine" class="anchor" href="#deeper-in-the-engine" aria-hidden="true"><span class="octicon octicon-link"></span></a>Deeper in the Engine</h2>
+
+<p>The Engine is an object which encapsulates some repetitive stuff to make a game in javascript for the mothern browsers and HTML5 apps. You dont have to worry about getting the input or other stuff. With this engine your game can be as easy as objects iteracting.</p>
+
+<p>So to make a new game as said before you should do this:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> game <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Trios2D</span>(canvas, logic);
+</pre></div>
+
+<p>Where <code>canvas</code> is a selector, representing an Canvas element, or an Canvas event as it is. Otherwise it will throw an exeption and the game would not be created.
+Then is <code>logic</code>, which is optional and it is an object like this:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> logic <span class="pl-k">=</span> {
+    <span class="pl-en">init</span>: <span class="pl-st">function</span> (<span class="pl-vpf">game</span>) {
+        initializeStuff();
+    },
+
+    <span class="pl-en">update</span>: <span class="pl-st">function</span> (<span class="pl-vpf">delta</span>, <span class="pl-vpf">game</span>) {
+        updateStuff();
+    },
+
+    <span class="pl-en">render</span>: <span class="pl-st">function</span> (<span class="pl-vpf">context</span>, <span class="pl-vpf">game</span>) {
+        renderStuff();
+    }
+}
+</pre></div>
+
+<p>All three functions in the logic object are optional. If you won't use them, just don't include them.</p>
+
+<p>Here what these functions are for:</p>
+
+<ul>
+<li><p><code>init</code>: Is the begining of the game logic. Here you can set things when the game begins and it will be executed just before the game starts (<a href="#Engine.start"><code>#start</code></a>). You are not limited to do the initialization in here. you can also make it befor you call the <code>#start</code> function in your game. The firt parameter is the game itself.</p></li>
+<li><p><code>update</code>. here you can update the game logic. If you dont want to do the game by objects interacting you can just put your update logic in here and the rendering in the render function andd there's no problem. The first parameter is the time sice the last update and the second is the game itself.</p></li>
+<li><p><code>render</code>: Here you can render whatever into the context. As I said before, if you would make the game like structured, so you render the stuff here. The first patameter is a <em>Canvas Context</em> where you draw stuff. More in <a href="http://www.w3schools.com/tags/ref_canvas.asp">W3schools</a></p></li>
+</ul>
+
+<h3>
+<a id="instance-variables" class="anchor" href="#instance-variables" aria-hidden="true"><span class="octicon octicon-link"></span></a>Instance Variables</h3>
+
+<ul>
+<li><p><code>maxFrameRate</code>: is the max times <code>render</code> will be called in a second. It is default to 60, but you can set the framerate you think is better for your game.</p></li>
+<li><p><code>maxUpdates</code>: is the max times <code>update</code> will be called in a second. It is default to 60, but you can set the framerate you think is better for your game.</p></li>
+<li><p><code>cleanBeforeRender</code>: This specifies if the canvas will be cleared every time render is called. It is default to <code>true</code>.</p></li>
+<li><p><code>pauseOnBlur</code>: This specifies if the game will pause if the canvas lose it's focus. It is default to <code>true</code>.</p></li>
+<li><p><code>camera</code>: Is an <code>Camera</code> object which manages the render perspective. Click <a href="#camera">here</a> to se more.</p></li>
+<li><p><code>childen</code>: Is an array containing all the <code>GameObject</code> objects that are directly in the game (not the <code>GameObject</code> children, see <a href="#GameObject.children"><code>GameObject#children</code></a>). <strong>DO NOT MODIFY THIS ARRAY OR SET IT DIRECTLY UNLESS YOU KNOW WHAT YOU ARE DOING!!!</strong></p></li>
+</ul>
+
+<h3>
+<a id="methods" class="anchor" href="#methods" aria-hidden="true"><span class="octicon octicon-link"></span></a>Methods</h3>
+
+<ul>
+<li><p><code>#addChild(child)</code>: Adds <code>child</code> to the game. Every time update and render is called for the engine, <code>render</code> and <code>update</code> methods will be called for every <code>children</code> within the engine. The <code>child</code> must be a <code>GameObject</code>, a <a href="#modules">Module</a>, or any object derived from <code>GameObject</code> (will be checked using <code>instaceof</code>)</p></li>
+<li><p><code>#removeChild(child)</code>: Removes <code>child</code> from the engine, so it wont <em>render</em> or <em>update</em> until it is on the engine again.</p></li>
+<li><p><a name="Engine.start"></a><code>#start()</code>: Start the game. </p></li>
+<li><p><code>#pause()</code>: Pauses the game. By default the game pauses when canvas loose focus unless you say no (<code>game.pauseOnBlur = false</code>).</p></li>
+<li><p><code>#resume()</code>: Resumes the game.</p></li>
+<li><p><code>#getInput()</code>: Return the current input of the user in an <a href="#input"><code>Input</code></a> object.</p></li>
+</ul>
+
+<h2>
+<a id="built-in-objects" class="anchor" href="#built-in-objects" aria-hidden="true"><span class="octicon octicon-link"></span></a>Built-in Objects</h2>
+
+<p>Trios2D has some objects to work with the engine, some of them are:</p>
+
+<h3>
+<a id="vector" class="anchor" href="#vector" aria-hidden="true"><span class="octicon octicon-link"></span></a>Vector</h3>
+
+<p>A <code>Vector</code> is simply a vector. It encapsulates <em>x</em> and <em>y</em> values and offer a set of methods to make math with them as other utitlity methods.</p>
+
+<p>To make a new <code>Vector</code> just call <code>new Trios2D.Vector(x, y)</code>, where <code>x</code> and <code>y</code> are the coordenates. You can also do it these other ways:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> coords <span class="pl-k">=</span> [x, y];
+<span class="pl-s">var</span> vec1 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Trios2D.Vector</span>(coords); <span class="pl-c">// it can take an array as parameter.</span>
+                                       <span class="pl-c">// this way coors[0] is x and coors[1]</span>
+                                       <span class="pl-c">// is y.</span></pre></div>
+
+<p>And this way:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> coords <span class="pl-k">=</span> {x<span class="pl-k">:</span> <span class="pl-c1">0</span>, y<span class="pl-k">:</span> <span class="pl-c1">0</span>};
+<span class="pl-s">var</span> vec1 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Trios2D.Vector</span>(coords); <span class="pl-c">// Here coords.x is x and coords.y is y</span></pre></div>
+
+<h4>
+<a id="methods-1" class="anchor" href="#methods-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Methods</h4>
+
+<p>As mentioned before the an <code>Vector</code> object has some utility methods. Currents are:</p>
+
+<ul>
+<li><p><code>#add(otherVector)</code>: This method return a new vector made by the addition of these two vectors.</p></li>
+<li><p><code>#sub(otherVector)</code>: This method return a new vector made by the substraction of these two vectors.</p></li>
+<li><p><code>#multiply(scalar)</code>: This method return a new vector made by the product of this vector and an scalar.</p></li>
+<li><p><code>#divide(scalar)</code>: This method return a new vector made by the quotient of this vector and an scalar.</p></li>
+<li><p><code>#invert()</code>: Return an inverted vector (<code>x</code> and <code>y</code> values are inverted).</p></li>
+<li><p><code>#getAbsoluteValue()</code>: returns the absolute value from the vector (obtained by the pythagorean theorem).</p></li>
+<li><p><code>#lerp(to, by)</code>: Linear interpolation. Return an interpolated vector from the current <code>Vector</code>object to the <code>to</code> vector by the <code>by</code> fraction.</p></li>
+<li><p><code>#isBetween(vector1, vector2)</code>: Returns <code>true</code> if the current vector is in between <code>vector1</code> and <code>vector2</code> coordenates.</p></li>
+<li><p><code>#hasValue()</code>: Return <code>false</code> if the <code>Vector</code> <code>x</code> and <code>y</code>  values are equal to zero.</p></li>
+<li><p><code>#equal(vector)</code>: Check if both <code>Vector</code>s have the same value.</p></li>
+<li><p><code>#round(precision)</code>: Return a copy of the <code>Vector</code> with rounded values by <code>precision</code>.</p></li>
+</ul>
+
+<h3>
+<a id="angle" class="anchor" href="#angle" aria-hidden="true"><span class="octicon octicon-link"></span></a>Angle</h3>
+
+<p>Angle is an utility object to manage angles. This is user to control the rotation and other things that may use angles in the engine. By default it works with radians but you can initialize it to work with degrees. Here is how to insantiate an <code>Angle</code> object:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> angle <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Trios2D.Angle</span>(<span class="pl-s3">Math</span>.<span class="pl-sc">PI</span> / <span class="pl-c1">2</span>); <span class="pl-c">// a π/2 angle or 45º</span>
+
+<span class="pl-s">var</span> angle2 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Trios2D.Angle</span>(<span class="pl-c1">45</span>, <span class="pl-c1">true</span>);   <span class="pl-c">// a 45º angle or π/2</span></pre></div>
+
+<p>This way you can work with rads or degrees with any problem or preocupation. </p>
+
+<p>The constructor arguments are <code>value</code> and <code>isDegree</code>. <code>value</code> specfy it values and <code>isDegree</code> when specified indicate that you passed the value in degrees. If <code>false</code> or not defined, <code>value</code> is treated as radians.</p>
+
+<h4>
+<a id="instance-variables-ans-properies" class="anchor" href="#instance-variables-ans-properies" aria-hidden="true"><span class="octicon octicon-link"></span></a>Instance Variables ans Properies</h4>
+
+<ul>
+<li><p><code>value</code>: Get or set the angle value. By default when getted or sertted the value is considered to be radians, buf if you specified when you constructed the angle that it should work in degrees (<code>isDegree</code> parameter), then you will recive the vaule in radiants. To avoid confussion is recomended that if you want radiants, ask for the <code>rads</code> property. If you want degrees use the degrees property.</p></li>
+<li><p><code>isDegree</code>: Indicates if the angle works in rads or degrees.</p></li>
+<li><p><code>degrees</code>: Get or sets the value of the angle in degrees.</p></li>
+<li><p><code>rads</code>: Get or sets the value of the angle in radians.</p></li>
+</ul>
+
+<h4>
+<a id="metohds" class="anchor" href="#metohds" aria-hidden="true"><span class="octicon octicon-link"></span></a>Metohds</h4>
+
+<ul>
+<li><p><code>#hasValue()</code>: Return <code>true</code> if the <code>Angle</code> value is diferent than zero.</p></li>
+<li><p><code>#equal(angle)</code>: Check if both <code>Angle</code>s have the same value. If the first argument is a scalar it makes the comparation with this criteria. If the angle is working in degrees, it would make the comparation considering the scalar as degrees. Else it would consider the scalar to be radians. </p></li>
+<li><p><code>#add(angle)</code>: Perform an addition between two angles. If an scalar is passed as paramether would do the addition depending in how the angle is working. It would consither the scalar to be degrees if the angle is working on degrees. Otherwise it would consider the scalar to be in radians.</p></li>
+<li><p><code>#sub(angle)</code>: Perform an substraction between two angles. If an scalar is passed as paramether would do the substraction depending in how the angle is working. It would consither the scalar to be degrees if the angle is working on degrees. Otherwise it would consider the scalar to be in radians.</p></li>
+<li><p><code>#multiply(angle)</code>: Perform an multiply between two angles. If an scalar is passed as paramether would do the multiply depending in how the angle is working. It would consither the scalar to be degrees if the angle is working on degrees. Otherwise it would consider the scalar to be in radians.</p></li>
+<li><p><code>#divide(angle)</code>: Perform an divide between two angles. If an scalar is passed as paramether would do the divide depending in how the angle is working. It would consither the scalar to be degrees if the angle is working on degrees. Otherwise it would consider the scalar to be in radians.</p></li>
+<li><p><code>#invert()</code>: Inverts the angle value. (the same as doing <code>-x</code>, x being a number).</p></li>
+<li><p><code>#round(precision)</code>: Return a copy of the <code>Angle</code> with rounded value by <code>precision</code>.</p></li>
+<li><p><code>#valueOf()</code>: Return the angle value in radians.</p></li>
+</ul>
+
+<h3>
+<a id="gameobjects" class="anchor" href="#gameobjects" aria-hidden="true"><span class="octicon octicon-link"></span></a>GameObjects</h3>
+
+<p>You read about them above, they are object made to work together in the game and interact. That way you can reduce your game logic to just objects interacting with each other. Every time the engine renders and updates, the <code>GameObject</code>s children of the engine methods render and update respectively will be called.</p>
+
+<p>A <code>GameObject</code> can be made this way: <code>new Trios2D.GameObject()</code>.</p>
+
+<p>A game object has a <code>position</code> which is a <code>Vector</code> and is relative to the parent.</p>
+
+<p>This is what a <code>GameObject</code> looks like:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> gameObject <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Trios2D.GameObject</span>();
+
+gameObject.update <span class="pl-k">=</span> <span class="pl-st">function</span> <span class="pl-en">update</span>(<span class="pl-vpf">delta</span>) { <span class="pl-c">// Here you put the update logic of your object.</span>
+    updateObject(delta);                     <span class="pl-c">// delta is the time since the last update</span>
+
+};
+
+gameObject.render <span class="pl-k">=</span> <span class="pl-st">function</span> <span class="pl-en">render</span>(<span class="pl-vpf">context</span>, <span class="pl-vpf">parentPosition</span>) { <span class="pl-c">// Here you put the render logic of your object.</span>
+    renderObject(context, <span class="pl-v">this</span>.absolutePosition);              <span class="pl-c">// context is the canvas context where you would render</span>
+                                                               <span class="pl-c">// parentPosition is an vector with the position of the parent</span>
+};
+
+gameObject.addChild(child);</pre></div>
+
+<p>Here we can se some other things not mentioned in the coment. First the <code>#addChild</code> method. This method adds a <code>GameObject</code> into a <code>GameObject</code>. Second is the <code>this.absolutePosition</code>. We will cver it later.</p>
+
+<h4>
+<a id="instance-variables-1" class="anchor" href="#instance-variables-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Instance Variables</h4>
+
+<ul>
+<li><p><code>position</code>: Is an <code>Vector</code> indicating the object position relative to it's parents. If you want to move it right just add to the vector x and thats it.</p></li>
+<li><p><code>size</code>: Is an <code>Vector</code> indicating the width (<code>x</code>) and height (<code>y</code>) of the <code>GameObject</code>.</p></li>
+<li><p><code>renderPosition</code>: Indicates the render priotity of the <code>GameObject</code> and that way if it is in the front or the back. Higher values means that is more on the front. By default 0.</p></li>
+<li><p><code>rotation</code>: Is an <code>Angle</code> object that indicates the rotation of the object. Every thing rendered by a <code>GameObject</code> with an specified rotation will be rotated by the same amount and the childen rotation is relative to the parent.</p></li>
+<li>
+<p><code>rotationAnchor</code>: specifies the rotation anchor of an object. Its values can be <code>Vector</code> object indicating a point relative to the parent where the rotation will be anchored or some of the following values:</p>
+
+<p>Here a list of the keywords and the rotation anchor for them. The red dot is the anchor.</p>
+
+<table>
+<thead>
+<tr>
+<th align="right">Keyword</th>
+<th align="center">Anchor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right"><code>"top-left"</code></td>
+<td align="center"><img src="https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/top-left.png" alt="top-left"></td>
+</tr>
+<tr>
+<td align="right"><code>"top-middle"</code></td>
+<td align="center"><img src="https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/top-middle.png" alt="top-middle"></td>
+</tr>
+<tr>
+<td align="right"><code>"top-right"</code></td>
+<td align="center"><img src="https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/top-right.png" alt="top-right"></td>
+</tr>
+<tr>
+<td align="right"><code>"middle-left"</code></td>
+<td align="center"><img src="https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/middle-left.png" alt="middle-left"></td>
+</tr>
+<tr>
+<td align="right"><code>"center"</code></td>
+<td align="center"><img src="https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/center.png" alt="center"></td>
+</tr>
+<tr>
+<td align="right"><code>"middle-right"</code></td>
+<td align="center"><img src="https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/middle-right.png" alt="middle-right"></td>
+</tr>
+<tr>
+<td align="right"><code>"bottom-left"</code></td>
+<td align="center"><img src="https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/bottom-left.png" alt="bottom-left"></td>
+</tr>
+<tr>
+<td align="right"><code>"bottom-middle"</code></td>
+<td align="center"><img src="https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/bottom-middle.png" alt="bottom-middle"></td>
+</tr>
+<tr>
+<td align="right"><code>"bottom-right"</code></td>
+<td align="center"><img src="https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/bottom-right.png" alt="bottom-right"></td>
+</tr>
+</tbody>
+</table>
+</li>
+<li><p><a name="GameObject.children"></a><code>childen</code>: Is an array containing all the <code>GameObject</code> objects that are children of the <code>GameObject</code>. <strong>DO NOT MODIFY THIS ARRAY OR SET IT DIRECTLY UNLESS YOU KNOW WHAT YOU ARE DOING!!!</strong></p></li>
+<li><p><code>components</code>: Is an array containing all <code>Component</code> (See more about <code>Component</code> <a href="#components">here</a>) which belongs to the <code>GameObject</code>. <strong>DO NOT MODIFY THIS ARRAY OR SET IT DIRECTLY UNLESS YOU KNOW WHAT YOU ARE DOING!!!</strong></p></li>
+<li><p><code>engine</code>: Returns the engine the <code>GameObject</code> is subscrided to.</p></li>
+</ul>
+
+<h4>
+<a id="methods-2" class="anchor" href="#methods-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>Methods</h4>
+
+<ul>
+<li><p><code>#addChild(child)</code>: Adds <code>child</code> to the <code>GameObject</code>. Every time update and render is called for the <code>GameObject</code>, <code>render</code> and <code>update</code> methods will be called for every <code>children</code> within the object. The <code>child</code> must be a <code>GameObject</code>, a <a href="#modules">Module</a>, or any object derived from <code>GameObject</code> (will be checked using <code>instaceof</code>)</p></li>
+<li><p><code>#removeChild(child)</code>: Removes <code>child</code> from the <code>GameObject</code>, so it wont <em>render</em> or <em>update</em> until it is on the <code>GameObject</code> or the engine directly again.</p></li>
+<li><p><code>#addComponent(component)</code>: Adds <code>component</code> to the <code>GameObject</code>. More in components <a href="#components">here</a>.</p></li>
+<li><p><code>#removeComponent(component)</code>: Removes <code>component</code> from the <code>GameObject</code>. More in components <a href="#components">here</a>.</p></li>
+<li><p><code>autoCalcSize()</code>: Calculates, set and return the size of the <code>GameObject</code> based on the sizer ans positions of it's childs. Util with collisions boxes when the object has no defined size but it has childs with does.</p></li>
+</ul>
+
+<h3>
+<a id="input" class="anchor" href="#input" aria-hidden="true"><span class="octicon octicon-link"></span></a>Input</h3>
+
+<p>It is an object that contains the input from the user. To know if a key is down, you must call <code>#isKeyDown(code)</code> where code is the key code. It returns true if that key is down, else false.</p>
+
+<p>Other methods are:</p>
+
+<ul>
+<li><p><code>#isKeyUp(code)</code>: Returns true if the key was released during the update. Else false.</p></li>
+<li><p><code>#isKeyUp(code)</code>: Returns true if the key was pressed. Else false.</p></li>
+</ul>
+
+<h4>
+<a id="available-keys" class="anchor" href="#available-keys" aria-hidden="true"><span class="octicon octicon-link"></span></a>Available keys</h4>
+
+<p>For convenience of the programer, key codes are available as variables. You can acces to these key codes like this: <code>Trios2D.Input.key</code>.</p>
+
+<p>Available Keys:</p>
+
+<table>
+<thead>
+<tr>
+<th>Name</th>
+<th>Description</th>
+<th align="center">Value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ANY</code></td>
+<td>Any key</td>
+<td align="center">-1</td>
+</tr>
+<tr>
+<td><code>BACKSPACE</code></td>
+<td>Backspace key</td>
+<td align="center">8</td>
+</tr>
+<tr>
+<td><code>TAB</code></td>
+<td>Tab key</td>
+<td align="center">9</td>
+</tr>
+<tr>
+<td><code>ENTER</code></td>
+<td>Enter/Return key</td>
+<td align="center">13</td>
+</tr>
+<tr>
+<td><code>SHIFT</code></td>
+<td>Shift key</td>
+<td align="center">16</td>
+</tr>
+<tr>
+<td><code>CTRL</code></td>
+<td>Control key</td>
+<td align="center">17</td>
+</tr>
+<tr>
+<td><code>ALT</code></td>
+<td>Alt key</td>
+<td align="center">18</td>
+</tr>
+<tr>
+<td><code>PAUSE</code></td>
+<td>Pause/Interrupt key</td>
+<td align="center">19</td>
+</tr>
+<tr>
+<td><code>CAPS_LOCK</code></td>
+<td>Caps Lock key</td>
+<td align="center">20</td>
+</tr>
+<tr>
+<td><code>ESCAPE</code></td>
+<td>Escape (esc) key</td>
+<td align="center">27</td>
+</tr>
+<tr>
+<td><code>PAGE_UP</code></td>
+<td>Page Up key</td>
+<td align="center">33</td>
+</tr>
+<tr>
+<td><code>PAGE_DOWN</code></td>
+<td>Page Down key</td>
+<td align="center">34</td>
+</tr>
+<tr>
+<td><code>END</code></td>
+<td>End key</td>
+<td align="center">35</td>
+</tr>
+<tr>
+<td><code>HOME</code></td>
+<td>Home key</td>
+<td align="center">36</td>
+</tr>
+<tr>
+<td><code>LEFT_ARROW</code></td>
+<td>Left arrow (←) key</td>
+<td align="center">37</td>
+</tr>
+<tr>
+<td><code>UP_ARROW</code></td>
+<td>Up arrow (↑) key</td>
+<td align="center">38</td>
+</tr>
+<tr>
+<td><code>RIGHT_ARROW</code></td>
+<td>Right arrow (→) key</td>
+<td align="center">39</td>
+</tr>
+<tr>
+<td><code>DOWN_ARROW</code></td>
+<td>Down arrow (↓) key</td>
+<td align="center">40</td>
+</tr>
+<tr>
+<td><code>INSERT</code></td>
+<td>Insert key</td>
+<td align="center">45</td>
+</tr>
+<tr>
+<td><code>DELETE</code></td>
+<td>Delete key</td>
+<td align="center">46</td>
+</tr>
+<tr>
+<td><code>KB_0</code></td>
+<td>Normal 0 key</td>
+<td align="center">48</td>
+</tr>
+<tr>
+<td><code>KB_1</code></td>
+<td>Normal 1 key</td>
+<td align="center">49</td>
+</tr>
+<tr>
+<td><code>KB_2</code></td>
+<td>Normal 2 key</td>
+<td align="center">50</td>
+</tr>
+<tr>
+<td><code>KB_3</code></td>
+<td>Normal 3 key</td>
+<td align="center">51</td>
+</tr>
+<tr>
+<td><code>KB_4</code></td>
+<td>Normal 4 key</td>
+<td align="center">52</td>
+</tr>
+<tr>
+<td><code>KB_5</code></td>
+<td>Normal 5 key</td>
+<td align="center">53</td>
+</tr>
+<tr>
+<td><code>KB_6</code></td>
+<td>Normal 6 key</td>
+<td align="center">54</td>
+</tr>
+<tr>
+<td><code>KB_7</code></td>
+<td>Normal 7 key</td>
+<td align="center">55</td>
+</tr>
+<tr>
+<td><code>KB_8</code></td>
+<td>Normal 8 key</td>
+<td align="center">56</td>
+</tr>
+<tr>
+<td><code>KB_9</code></td>
+<td>Normal 9 key</td>
+<td align="center">57</td>
+</tr>
+<tr>
+<td><code>A</code></td>
+<td>A key</td>
+<td align="center">65</td>
+</tr>
+<tr>
+<td><code>B</code></td>
+<td>B key</td>
+<td align="center">66</td>
+</tr>
+<tr>
+<td><code>C</code></td>
+<td>C key</td>
+<td align="center">67</td>
+</tr>
+<tr>
+<td><code>D</code></td>
+<td>D key</td>
+<td align="center">68</td>
+</tr>
+<tr>
+<td><code>E</code></td>
+<td>E key</td>
+<td align="center">69</td>
+</tr>
+<tr>
+<td><code>F</code></td>
+<td>F key</td>
+<td align="center">70</td>
+</tr>
+<tr>
+<td><code>G</code></td>
+<td>G key</td>
+<td align="center">71</td>
+</tr>
+<tr>
+<td><code>H</code></td>
+<td>H key</td>
+<td align="center">72</td>
+</tr>
+<tr>
+<td><code>I</code></td>
+<td>I key</td>
+<td align="center">73</td>
+</tr>
+<tr>
+<td><code>J</code></td>
+<td>J key</td>
+<td align="center">74</td>
+</tr>
+<tr>
+<td><code>K</code></td>
+<td>K key</td>
+<td align="center">75</td>
+</tr>
+<tr>
+<td><code>L</code></td>
+<td>L key</td>
+<td align="center">76</td>
+</tr>
+<tr>
+<td><code>M</code></td>
+<td>M key</td>
+<td align="center">77</td>
+</tr>
+<tr>
+<td><code>N</code></td>
+<td>N key</td>
+<td align="center">78</td>
+</tr>
+<tr>
+<td><code>O</code></td>
+<td>O key</td>
+<td align="center">79</td>
+</tr>
+<tr>
+<td><code>P</code></td>
+<td>P key</td>
+<td align="center">80</td>
+</tr>
+<tr>
+<td><code>Q</code></td>
+<td>Q key</td>
+<td align="center">81</td>
+</tr>
+<tr>
+<td><code>R</code></td>
+<td>R key</td>
+<td align="center">82</td>
+</tr>
+<tr>
+<td><code>S</code></td>
+<td>S key</td>
+<td align="center">83</td>
+</tr>
+<tr>
+<td><code>T</code></td>
+<td>T key</td>
+<td align="center">84</td>
+</tr>
+<tr>
+<td><code>U</code></td>
+<td>U key</td>
+<td align="center">85</td>
+</tr>
+<tr>
+<td><code>V</code></td>
+<td>V key</td>
+<td align="center">86</td>
+</tr>
+<tr>
+<td><code>W</code></td>
+<td>W key</td>
+<td align="center">87</td>
+</tr>
+<tr>
+<td><code>X</code></td>
+<td>X key</td>
+<td align="center">88</td>
+</tr>
+<tr>
+<td><code>Y</code></td>
+<td>Y key</td>
+<td align="center">89</td>
+</tr>
+<tr>
+<td><code>Z</code></td>
+<td>Z key</td>
+<td align="center">90</td>
+</tr>
+<tr>
+<td><code>LEFT_WINDOW_KEY</code></td>
+<td>Right Windows key (if applys)</td>
+<td align="center">91</td>
+</tr>
+<tr>
+<td><code>RIGHT_WINDOW_KEY</code></td>
+<td>Left Windows key (if applys)</td>
+<td align="center">92</td>
+</tr>
+<tr>
+<td><code>NUMPAD_0</code></td>
+<td>Numbad 0 key</td>
+<td align="center">96</td>
+</tr>
+<tr>
+<td><code>NUMPAD_1</code></td>
+<td>Numbad 1 key</td>
+<td align="center">97</td>
+</tr>
+<tr>
+<td><code>NUMPAD_2</code></td>
+<td>Numbad 2 key</td>
+<td align="center">98</td>
+</tr>
+<tr>
+<td><code>NUMPAD_3</code></td>
+<td>Numbad 3 key</td>
+<td align="center">99</td>
+</tr>
+<tr>
+<td><code>NUMPAD_4</code></td>
+<td>Numbad 4 key</td>
+<td align="center">100</td>
+</tr>
+<tr>
+<td><code>NUMPAD_5</code></td>
+<td>Numbad 5 key</td>
+<td align="center">101</td>
+</tr>
+<tr>
+<td><code>NUMPAD_6</code></td>
+<td>Numbad 6 key</td>
+<td align="center">102</td>
+</tr>
+<tr>
+<td><code>NUMPAD_7</code></td>
+<td>Numbad 7 key</td>
+<td align="center">103</td>
+</tr>
+<tr>
+<td><code>NUMPAD_8</code></td>
+<td>Numbad 8 key</td>
+<td align="center">104</td>
+</tr>
+<tr>
+<td><code>NUMPAD_9</code></td>
+<td>Numbad 9 key</td>
+<td align="center">105</td>
+</tr>
+<tr>
+<td><code>MULTIPLY</code></td>
+<td>Multyply key (*) on the numpad</td>
+<td align="center">106</td>
+</tr>
+<tr>
+<td><code>ADD</code></td>
+<td>Addition key (+) on the numpad</td>
+<td align="center">107</td>
+</tr>
+<tr>
+<td><code>SUBTRACT</code></td>
+<td>Substraction key (-) on the numpad</td>
+<td align="center">109</td>
+</tr>
+<tr>
+<td><code>DECIMAL_POINT</code></td>
+<td>Decimal Point key (.) on the numpad</td>
+<td align="center">110</td>
+</tr>
+<tr>
+<td><code>DIVIDE</code></td>
+<td>Division key (/) on the numpad</td>
+<td align="center">111</td>
+</tr>
+<tr>
+<td><code>F1</code></td>
+<td>F1 function key</td>
+<td align="center">112</td>
+</tr>
+<tr>
+<td><code>F2</code></td>
+<td>F2 function key</td>
+<td align="center">113</td>
+</tr>
+<tr>
+<td><code>F3</code></td>
+<td>F3 function key</td>
+<td align="center">114</td>
+</tr>
+<tr>
+<td><code>F4</code></td>
+<td>F4 function key</td>
+<td align="center">115</td>
+</tr>
+<tr>
+<td><code>F5</code></td>
+<td>F5 function key</td>
+<td align="center">116</td>
+</tr>
+<tr>
+<td><code>F6</code></td>
+<td>F6 function key</td>
+<td align="center">117</td>
+</tr>
+<tr>
+<td><code>F7</code></td>
+<td>F7 function key</td>
+<td align="center">118</td>
+</tr>
+<tr>
+<td><code>F8</code></td>
+<td>F8 function key</td>
+<td align="center">119</td>
+</tr>
+<tr>
+<td><code>F9</code></td>
+<td>F9 function key</td>
+<td align="center">120</td>
+</tr>
+<tr>
+<td><code>F10</code></td>
+<td>F10 function key</td>
+<td align="center">121</td>
+</tr>
+<tr>
+<td><code>F11</code></td>
+<td>F11 function key</td>
+<td align="center">122</td>
+</tr>
+<tr>
+<td><code>F12</code></td>
+<td>F12 function key</td>
+<td align="center">123</td>
+</tr>
+<tr>
+<td><code>COMMA</code></td>
+<td>Comma (,) key</td>
+<td align="center">188</td>
+</tr>
+<tr>
+<td><code>DASH</code></td>
+<td>Dash (-) key</td>
+<td align="center">189</td>
+</tr>
+<tr>
+<td><code>PERIOD</code></td>
+<td>Period (.) key</td>
+<td align="center">190</td>
+</tr>
+<tr>
+<td><code>SINGLE_QUOTE</code></td>
+<td>Single Quote (') key</td>
+<td align="center">222</td>
+</tr>
+</tbody>
+</table>
+
+<h3>
+<a id="camera" class="anchor" href="#camera" aria-hidden="true"><span class="octicon octicon-link"></span></a>Camera</h3>
+
+<p><code>Camera</code> object is made to manage the view point pof the game, giving to id a "camera", which you point to a position and in the canvas you can see what the "camera" sees. By default, the camera is seeing at the point (0,0). You can change the position where the <code>Camera</code> is by setting the <code>position</code> variable to a vector of the new position. </p>
+
+<h4>
+<a id="instance-variables-and-properties" class="anchor" href="#instance-variables-and-properties" aria-hidden="true"><span class="octicon octicon-link"></span></a>Instance variables and Properties</h4>
+
+<ul>
+<li><p><code>position</code>: Indicates the position of the camera.</p></li>
+<li><p><code>rotation</code>: Is an <code>Angle</code> object that indicates the rotation of the camera. When you rotate the camera everything rotates in the other direction from the user perspective (like quen you rotate your phone during a video).</p></li>
+<li>
+<p><code>rotationAnchor</code>: specifies the rotation anchor of the camera. Its values can be <code>Vector</code> object indicating a point relative to the parent where the rotation will be anchored or some of the following values:</p>
+
+<p>Here a list of the keywords and the rotation anchor for them. The red dot is the anchor.</p>
+
+<table>
+<thead>
+<tr>
+<th align="right">Keyword</th>
+<th align="center">Anchor</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td align="right"><code>"top-left"</code></td>
+<td align="center"><img src="https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/top-left.png" alt="top-left"></td>
+</tr>
+<tr>
+<td align="right"><code>"top-middle"</code></td>
+<td align="center"><img src="https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/top-middle.png" alt="top-middle"></td>
+</tr>
+<tr>
+<td align="right"><code>"top-right"</code></td>
+<td align="center"><img src="https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/top-right.png" alt="top-right"></td>
+</tr>
+<tr>
+<td align="right"><code>"middle-left"</code></td>
+<td align="center"><img src="https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/middle-left.png" alt="middle-left"></td>
+</tr>
+<tr>
+<td align="right"><code>"center"</code></td>
+<td align="center"><img src="https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/center.png" alt="center"></td>
+</tr>
+<tr>
+<td align="right"><code>"middle-right"</code></td>
+<td align="center"><img src="https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/middle-right.png" alt="middle-right"></td>
+</tr>
+<tr>
+<td align="right"><code>"bottom-left"</code></td>
+<td align="center"><img src="https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/bottom-left.png" alt="bottom-left"></td>
+</tr>
+<tr>
+<td align="right"><code>"bottom-middle"</code></td>
+<td align="center"><img src="https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/bottom-middle.png" alt="bottom-middle"></td>
+</tr>
+<tr>
+<td align="right"><code>"bottom-right"</code></td>
+<td align="center"><img src="https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/bottom-right.png" alt="bottom-right"></td>
+</tr>
+</tbody>
+</table>
+</li>
+</ul>
+
+<h2>
+<a id="modules" class="anchor" href="#modules" aria-hidden="true"><span class="octicon octicon-link"></span></a>Modules</h2>
+
+<p>Trios2D has modules built in, making easy thing like images managing or animations. It isn't very complete yet, but it is growing. All the modules are Game Objects and you can treat them as it. Modules are in the <code>./modules</code> folder.</p>
+
+<h3>
+<a id="some-modules" class="anchor" href="#some-modules" aria-hidden="true"><span class="octicon octicon-link"></span></a>Some Modules</h3>
+
+<h4>
+<a id="gameimage" class="anchor" href="#gameimage" aria-hidden="true"><span class="octicon octicon-link"></span></a>GameImage</h4>
+
+<p>It is a module to manage images. It implements the render and update methods so you just have to specify the image and the size and it will make the work for you.</p>
+
+<p>To use it you must import the <code>./modules/GameImage.js</code> script.</p>
+
+<div class="highlight highlight-html"><pre>&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s1"><span class="pl-pds">"</span>js/Trios2D.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;
+...
+&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s1"><span class="pl-pds">"</span>js/modules/GameImage.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</pre></div>
+
+<p>To make a new image use <code>new Trios2D.GameImage(image, size)</code> where image is an <code>HTMLImage</code> Object or a source string. If the browser supports data url GameImage too. The <code>size</code> is an <code>Vector</code> object, an object containing <code>{x: 0, y: 0}</code> or even an array <code>[x, y]</code>. If size in not secified, it will take the image original size, but while the image isn't loaded in the navigator it will be (0,0).</p>
+
+<p>If you are working with sprites you can make the <code>GameImage</code> this way: <code>new Trios2D.GameImage(image, clipStart, size)</code>. Here <code>clipStart</code> is where to start trimming the image, and the size is how much to trim. The same as <code>size</code>, <code>clipStart</code>can be a <code>Vector</code> and object or an array.</p>
+
+<p>Heres some examples of using <code>GameImage</code> module:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> image1 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Trios2D.GameImage</span>(<span class="pl-s1"><span class="pl-pds">"</span>/res/images/car.jpg<span class="pl-pds">"</span></span>, <span class="pl-k">new</span> <span class="pl-en">Trios2D.Vector</span>(<span class="pl-c1">330</span>, <span class="pl-c1">150</span>));
+
+<span class="pl-s">var</span> htmlImage <span class="pl-k">=</span> <span class="pl-s3">document</span>.querySelector(<span class="pl-s1"><span class="pl-pds">"</span>img#wheel<span class="pl-pds">"</span></span>);
+
+<span class="pl-s">var</span> image2 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Trios2D.GameImage</span>(htmlImage, [<span class="pl-c1">20</span>, <span class="pl-c1">20</span>]);
+
+
+<span class="pl-s">var</span> image2 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Trios2D.GameImage</span>(<span class="pl-s1"><span class="pl-pds">"</span>/res/images/person.jpg<span class="pl-pds">"</span></span>); <span class="pl-c">// without size too :)</span>
+
+
+<span class="pl-s">var</span> image4 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Trios2D.GameImage</span>(<span class="pl-s1"><span class="pl-pds">"</span>/res/images/spritesheet.png, [10, 200], {x:100, y:100});</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">image1.addChild(image2); // This is ok since every module is an GameObject too</span>
+<span class="pl-s1"></span>
+<span class="pl-s1">game.addChild(image1); // Ok because it is a game object, are made for this.</span>
+<span class="pl-s1">game.addChild(image3);</span>
+<span class="pl-s1">game.addChild(image4);</span></pre></div>
+
+<p>All these ways are ok.</p>
+
+<h5>
+<a id="intance-variables" class="anchor" href="#intance-variables" aria-hidden="true"><span class="octicon octicon-link"></span></a>Intance Variables</h5>
+
+<ul>
+<li><p><code>image</code>: The <code>HTMLImage</code> which is rendered by the <code>GameImage</code> module.</p></li>
+<li><p><code>originalSize</code>: An <code>Vector</code> representig the real size of the image or how much of it will be rendered.</p></li>
+<li><p><code>clipStart</code>: An <code>Vector</code> representing from where the image will be renderer (where the triming start). If not specified in the constructor it is default to (0,0).</p></li>
+<li><p><code>scale</code>: How much scaling the image has when rendering. 1 is normal, 0.1 is 10% of it size and 2 is 2x size. Default to 1.</p></li>
+<li><p><code>size</code>: Overwritten from GameObject. Is a get-only property which return the size of the image in the canvas.</p></li>
+</ul>
+
+<h4>
+<a id="gametext" class="anchor" href="#gametext" aria-hidden="true"><span class="octicon octicon-link"></span></a>GameText</h4>
+
+<p>It is a module to manage text rendering. It giives cappabilities to render test with your desired font, size, color, alignment and other thing thar are normaly messy when rendering text on canvas.</p>
+
+<p>To use it you must import the <code>./modules/GameText.js</code> script.</p>
+
+<div class="highlight highlight-html"><pre>&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s1"><span class="pl-pds">"</span>js/Trios2D.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;
+...
+&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s1"><span class="pl-pds">"</span>js/modules/GameText.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</pre></div>
+
+<p>Here an example of how to use it:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> text <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Trios2D.GameText</span>(<span class="pl-s1"><span class="pl-pds">"</span>I am rendering :)<span class="pl-pds">"</span></span>, options);
+
+text.position <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Trios2D.Vector</span>(<span class="pl-c1">20</span>, <span class="pl-c1">20</span>);
+
+game.addChild(text);</pre></div>
+
+<p>Where options is an object containig information about how to render the text. here a list of posible options:</p>
+
+<ul>
+<li><p><code>size</code>: The font size of the text to render. Default to 10.</p></li>
+<li><p><code>font_family</code>: The font family of the text to render. Can be set like the css rule <code>font-family</code>. Defaults to <code>"sans-serif"</code>.</p></li>
+<li><p><code>font_misc</code>: Other font properties, separated by spaces. An Example would be <code>"bold italic"</code>.</p></li>
+<li><p><code>textAlign</code>: See canvas' <code>textAlign</code> on <a href="http://www.w3schools.com/tags/canvas_textalign.asp">W3Schools</a>. Default to "start".</p></li>
+<li><p><code>baselineAlign</code>: See canvas' <code>baselineAlign</code> on <a href="http://www.w3schools.com/tags/canvas_textbaseline.asp">W3Schools</a>. Default to "alphabetic"</p></li>
+<li><p><code>drawMode</code>: Specifies if the text will be rendered by filling the text on canvas, stroking the text or both. Posible values are <code>"fill"</code>, <code>"stroke"</code>, and <code>"fillNStroke"</code>, where <code>"fillNStroke"</code> first fills the text and then strokes.</p></li>
+<li><p><code>fillStyle</code>: Defines the filling color of the text (also everything canvas can). Defaults to the current value setted in the context.</p></li>
+<li><p><code>strokeStyle</code>: Defines the stroking color of the text(also everything canvas can). Defaults to the current value setted in the context.</p></li>
+<li><p><code>strokeWidth</code>: Defines the width of the stroke . Defaults to the current value setted in the context.</p></li>
+</ul>
+
+<h5>
+<a id="intance-variables-1" class="anchor" href="#intance-variables-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Intance Variables</h5>
+
+<p>You can chage any of the options at any time changin the value tu the instance. If you change the <code>text</code> property, it will be reflected in the next render. Also all the other properties. These properties are almost the same as the optiosn, let's see them.</p>
+
+<ul>
+<li><p><code>text</code>: the text which renders in the screen</p></li>
+<li><p><code>size</code>: The font size of the text to render. Default to 10.</p></li>
+<li><p><code>font_family</code>: The font family of the text to render. Can be set like the css rule <code>font-family</code>. Defaults to <code>"sans-serif"</code>.</p></li>
+<li><p><code>font_misc</code>: Other font properties, separated by spaces. An Example would be <code>"bold italic"</code>.</p></li>
+<li><p><code>textAlign</code>: See canvas' <code>textAlign</code> on <a href="http://www.w3schools.com/tags/canvas_textalign.asp">W3Schools</a>.</p></li>
+<li><p><code>baselineAlign</code>: See canvas' <code>baselineAlign</code> on <a href="http://www.w3schools.com/tags/canvas_textbaseline.asp">W3Schools</a>.</p></li>
+<li><p><code>drawMode</code>: Specifies if the text will be rendered by filling the text on canvas, stroking the text or both. Posible values are <code>"fill"</code>, <code>"stroke"</code>, and <code>"fillNStroke"</code>, where <code>"fillNStroke"</code> first fills the text and then strokes.</p></li>
+<li><p><code>fillStyle</code>: Defines the filling color of the text (also everything canvas can). Defaults to the current value setted in the context.</p></li>
+<li><p><code>strokeStyle</code>: Defines the stroking color of the text(also everything canvas can). Defaults to the current value setted in the context.</p></li>
+<li><p><code>strokeWidth</code>: Defines the width of the stroke . Defaults to the current value setted in the context.</p></li>
+</ul>
+
+<h4>
+<a id="animation" class="anchor" href="#animation" aria-hidden="true"><span class="octicon octicon-link"></span></a>Animation</h4>
+
+<p>Animation is module which manages and render a set of images which changes every time. It makes easyer thinks like render a walking dog or an jumping player. You can make an animation from several images (url ot <code>HTMLImage</code> object), or an spritesheet specifing the spritesheet size, the margin between images and the size of each image. It will calculate how much sprites the sprite sheet has depending of the sizes provided, but you can specify how much images to take.</p>
+
+<p>To use it you must import the <code>./modules/Animation.js</code> script.</p>
+
+<div class="highlight highlight-html"><pre>&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s1"><span class="pl-pds">"</span>js/Trios2D.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;
+...
+&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s1"><span class="pl-pds">"</span>js/modules/Animation.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</pre></div>
+
+<p>Heres some examples of using <code>Animation</code> module:</p>
+
+<div class="highlight highlight-javascript"><pre>
+<span class="pl-s">var</span> animation1 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Trios2D.Animation</span>(<span class="pl-s1"><span class="pl-pds">"</span>/res/images/spritesheet.png<span class="pl-pds">"</span></span>, { <span class="pl-c">// The first parameter is an sprite sheet</span>
+    spriteSize<span class="pl-k">:</span> [<span class="pl-c1">32</span>,<span class="pl-c1">32</span>],                                                <span class="pl-c">// and in the options specifies each sprite</span>
+    imageSize<span class="pl-k">:</span> [<span class="pl-c1">448</span>, <span class="pl-c1">448</span>],                                              <span class="pl-c">// size, the spritesheet size (optional) and </span>
+    imageNumber<span class="pl-k">:</span> <span class="pl-c1">30</span>                                                     <span class="pl-c">// the number of sprites to take. First and </span>
+});                                                                     <span class="pl-c">// second options can be vector object,</span>
+                                                                        <span class="pl-c">// an array or ansimple object</span>
+
+game.addChild(animation1);
+
+<span class="pl-s">var</span> animation2 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Trios2D.Animation</span>([ <span class="pl-c">// here the first paramether is an image url</span>
+    <span class="pl-s1"><span class="pl-pds">"</span>/res/images/player1/1.png<span class="pl-pds">"</span></span>,         <span class="pl-c">// array. It will get the size for each image.</span>
+    <span class="pl-s1"><span class="pl-pds">"</span>/res/images/player1/2.png<span class="pl-pds">"</span></span>,         <span class="pl-c">// If it where HTMLImage Objects ther would be </span>
+    <span class="pl-s1"><span class="pl-pds">"</span>/res/images/player1/3.png<span class="pl-pds">"</span></span>,         <span class="pl-c">// no problem. This way options are ignored</span>
+    <span class="pl-s1"><span class="pl-pds">"</span>/res/images/player1/4.png<span class="pl-pds">"</span></span>
+]);
+
+game.addChild(animation2);
+
+<span class="pl-s">var</span> animation3 <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Trios2D.Animation</span>([
+    {
+        image<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">"</span>/res/images/spritesheet.png<span class="pl-pds">"</span></span>, <span class="pl-c">// Here the first parameter specifies</span>
+        clipStart<span class="pl-k">:</span> [<span class="pl-c1">32</span>,<span class="pl-c1">0</span>],                    <span class="pl-c">// an array of objects containing the</span>
+        originalSize<span class="pl-k">:</span> {x<span class="pl-k">:</span><span class="pl-c1">32</span>, y<span class="pl-k">:</span> <span class="pl-c1">32</span>}           <span class="pl-c">// image url, where to start cliping (optional)</span>
+    },                                        <span class="pl-c">// and the size. Both can bevector object, an </span>
+                                              <span class="pl-c">// array or an simple object</span>
+
+    {
+        image<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">"</span>/res/images/spritesheet.png<span class="pl-pds">"</span></span>,
+        clipStart<span class="pl-k">:</span> [<span class="pl-c1">32</span>,<span class="pl-c1">32</span>],
+        originalSize<span class="pl-k">:</span> {x<span class="pl-k">:</span><span class="pl-c1">32</span>, y<span class="pl-k">:</span> <span class="pl-c1">32</span>}
+    },
+
+    {
+        image<span class="pl-k">:</span> <span class="pl-s1"><span class="pl-pds">"</span>/res/images/spritesheet.png<span class="pl-pds">"</span></span>,
+        clipStart<span class="pl-k">:</span> [<span class="pl-c1">64</span>,<span class="pl-c1">0</span>],
+        originalSize<span class="pl-k">:</span> {x<span class="pl-k">:</span><span class="pl-c1">32</span>, y<span class="pl-k">:</span> <span class="pl-c1">32</span>}
+    }
+]);
+
+
+game.addChild(animation3);</pre></div>
+
+<p>We can see here all the work you can save using this animation module. Just prepare your sprite and set it size.</p>
+
+<p>The options can be:</p>
+
+<ul>
+<li><p><code>imageSize</code>: Specify when the first paramether of the constructor is an image. It is the size of the image. If not set, imageNumber neither, and the image haven't been loaded by the navigator, your animation wont render.</p></li>
+<li><p><code>spriteSize</code>: Specify when the first paramether of the constructor is an image. It is the size of each sprite that will be rendered. If not specified when the first paramether of the constructor is an image it will throw an error.</p></li>
+<li><p><code>margin</code>: Is the space between each sprite in the sprite sheet. Only work when the first paramether of the constructor is an image.</p></li>
+<li><p><code>imageNumber</code>: Is the number of sprites to take from the sprite sheet. Only work when the first paramether of the constructor is an image.</p></li>
+<li><p><code>framesPerSecond</code>: Indicates how many times per second the current image in the animation will change. Default to 10.</p></li>
+<li><p><code>scale</code>: Indicate the initial scale of the animation. Default to 1.</p></li>
+</ul>
+
+<p>We have seen that you can pass an array of images url, <code>HTMLImage</code> objects, or objects containing info about each one of the images with will make the animation. The last mentioned can have these properties:</p>
+
+<ul>
+<li><p><code>image</code>: It could be an url, and data url, or an <code>HTMLImage</code> object.</p></li>
+<li><p><code>clipStart</code>: Optional. It is where to start to trim the image. It can be a <code>Vector</code>, an array or a simple object. (0,0) by default. </p></li>
+<li><p><code>originalSize</code>: Optional. It is the size of the image or how much will be trimmed. It can be a Vector, an array or a simple object. If not specified i will take the size from the image specified.</p></li>
+</ul>
+
+<h5>
+<a id="instance-variables-2" class="anchor" href="#instance-variables-2" aria-hidden="true"><span class="octicon octicon-link"></span></a>Instance variables</h5>
+
+<ul>
+<li>
+<p><code>images</code>: It is an array of all the frames the animation renders. Every frame is an object composed as follows:</p>
+
+<ul>
+<li>
+<code>image</code>: An <code>HTMLImage</code> object.</li>
+<li>
+<code>clipStart</code>: An <code>Vector</code> object representing where to star trimming the image.</li>
+<li>
+<code>originalSize</code>: An <code>Vector</code> object representing the size of the image or how much is trimmed when rendering. </li>
+</ul>
+</li>
+<li><p><code>current</code>: The index of the current image rendering in the animation.</p></li>
+<li><p><code>framesPerSecond</code>: Indicates how many times per second the current image in the animation will change.</p></li>
+<li><p><code>pingpong</code>: If <code>true</code>, when the animation get to the end it wiil come back like 9 .. 8 .. 7 ...; by default <code>false</code>.</p></li>
+<li><p><code>scale</code>: Indicate the scale of the animation.</p></li>
+<li><p><code>size</code>: Read-only property which return the actual size at the moment that the animation renders on canvas.</p></li>
+</ul>
+
+<h5>
+<a id="methods-3" class="anchor" href="#methods-3" aria-hidden="true"><span class="octicon octicon-link"></span></a>Methods</h5>
+
+<ul>
+<li>
+<code>#reverse()</code>: Reverses the current animation.</li>
+</ul>
+
+<h4>
+<a id="gamesound" class="anchor" href="#gamesound" aria-hidden="true"><span class="octicon octicon-link"></span></a>GameSound</h4>
+
+<p>This is a module wich simplify the audio management in your game. It internaly works using the <code>&lt;audio&gt;</code> HTML5 element.</p>
+
+<p>To use it you must import the <code>./modules/GameSound.js</code> script.</p>
+
+<div class="highlight highlight-html"><pre>&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s1"><span class="pl-pds">"</span>js/Trios2D.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;
+...
+&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s1"><span class="pl-pds">"</span>js/modules/GameSound.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</pre></div>
+
+<p>Here an example of how to use it:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> sound <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Trios2D.GameSound</span>(audio);
+
+sound.play();
+
+game.addChild(sound);</pre></div>
+
+<p>Here <code>audio</code> could be the audio file url or an <code>&lt;audio&gt;</code> HTML element.</p>
+
+<p>Some of the utilities about this object is that the audio starts to load inmediatly you create it, in difference to the <code>&lt;audio&gt;</code> element, and the fact that the audio automaticly pauses when the game is paused.</p>
+
+<h5>
+<a id="instance-variablesa-and-properties" class="anchor" href="#instance-variablesa-and-properties" aria-hidden="true"><span class="octicon octicon-link"></span></a>Instance Variablesa and properties</h5>
+
+<ul>
+<li><p><code>currentTime</code>: Property proxy to the <code>&lt;audio&gt;</code>'s property <code>currentTime</code>. See more about this property in <a href="http://www.w3schools.com/tags/av_prop_currenttime.asp">W3Schools</a>.</p></li>
+<li><p><code>duration</code>: Property proxy to the <code>&lt;audio&gt;</code>'s property <code>duration</code>. See more about this property in <a href="http://www.w3schools.com/tags/av_prop_duration.asp">W3Schools</a>.</p></li>
+<li><p><code>ended</code>: Property proxy to the <code>&lt;audio&gt;</code>'s property <code>ended</code>. See more about this property in <a href="http://www.w3schools.com/tags/av_prop_ended.asp">W3Schools</a>.</p></li>
+<li><p><code>loop</code>: Property proxy to the <code>&lt;audio&gt;</code>'s property <code>loop</code>. See more about this property in <a href="http://www.w3schools.com/tags/av_prop_loop.asp">W3Schools</a>.</p></li>
+<li><p><code>paused</code>: Property proxy to the <code>&lt;audio&gt;</code>'s property <code>paused</code>. See more about this property in <a href="http://www.w3schools.com/tags/av_prop_paused.asp">W3Schools</a>.</p></li>
+<li><p><code>volume</code>: Property proxy to the <code>&lt;audio&gt;</code>'s property <code>volume</code>. See more about this property in <a href="http://www.w3schools.com/tags/av_prop_volume.asp">W3Schools</a>.</p></li>
+</ul>
+
+<h5>
+<a id="methods-4" class="anchor" href="#methods-4" aria-hidden="true"><span class="octicon octicon-link"></span></a>Methods</h5>
+
+<ul>
+<li><p><code>#play()</code>: Plays the sound. If the audio is currently playing, it start to play the sound again from the begining. If paused, the sound reproduction just resumes.</p></li>
+<li><p><code>#resume()</code>: Resumens the sound playing if it is paused. Otherwise it does nothing.</p></li>
+<li><p><code>#pause()</code>: Pauses the sound reproduction.</p></li>
+<li><p><code>#stop()</code>: Stops the sound reproduction and the the next time the sound plays, it will start from the begining.</p></li>
+</ul>
+
+<h3>
+<a id="how-to-make-my-own-modules" class="anchor" href="#how-to-make-my-own-modules" aria-hidden="true"><span class="octicon octicon-link"></span></a>How To Make my own modules</h3>
+
+<p>You can make your own modules and use it within your own proyects or just share them. </p>
+
+<p>To make a Module you must just make an object  constructor which derives from GameObject. Here is a Template:</p>
+
+<div class="highlight highlight-javascript"><pre>(<span class="pl-st">function</span> (<span class="pl-vpf">window</span>, <span class="pl-vpf">undefined</span>) { <span class="pl-c">// Autoexecuting anonymous function so anithing</span>
+    <span class="pl-s1"><span class="pl-pds">"</span>use strict<span class="pl-pds">"</span></span>;               <span class="pl-c">// but what you specify be modified outside it.</span>
+                                <span class="pl-c">// Not necesary, but recomended</span>
+
+    <span class="pl-k">if</span> (<span class="pl-k">!</span><span class="pl-s3">window</span>.Trios2D)                                                <span class="pl-c">// Just Enshuring that</span>
+        <span class="pl-k">throw</span> <span class="pl-k">new</span> <span class="pl-en">Error</span>(<span class="pl-s1"><span class="pl-pds">"</span>You must include Trios2D in your HTML<span class="pl-pds">"</span></span>);       <span class="pl-c">// the engine is defined.</span>
+                                                                        <span class="pl-c">// If not the plugin would trow more errors</span>
+
+    <span class="pl-s">var</span> Trios2D <span class="pl-k">=</span> <span class="pl-s3">window</span>.Trios2D,               <span class="pl-c">// Just taking the engine and other component </span>
+        Vector <span class="pl-k">=</span> Trios2D.Vector,                <span class="pl-c">// from the window variable, so it's easier </span>
+        GameObject <span class="pl-k">=</span> Trios2D.GameObject;        <span class="pl-c">// to use them</span>
+
+
+
+    <span class="pl-st">function</span> <span class="pl-en">MyModule</span>(<span class="pl-vpf">param1</span>, <span class="pl-vpf">param2</span>) {
+
+        <span class="pl-c">// Calling GameObject Constructor</span>
+        GameObject.<span class="pl-s3">apply</span>(<span class="pl-v">this</span>);                      <span class="pl-c">// this is a way to enshure all the initializaions</span>
+                                                     <span class="pl-c">// necesary to make a game object are done. If this</span>
+                                                     <span class="pl-c">// isn't done, the module can behave weird</span>
+
+        DoCustomInitializationStuff();               <span class="pl-c">// then do every thing to initialize your module</span>
+
+    }
+
+    <span class="pl-s3">MyModule</span>.<span class="pl-sc">prototype</span> <span class="pl-k">=</span> <span class="pl-s3">Object</span>.create(GameObject.<span class="pl-sc">prototype</span>);  <span class="pl-c">// This makes an prototype wich derives from </span>
+                                                               <span class="pl-c">// the GameObject prototype, so it shares all</span>
+                                                               <span class="pl-c">// the stuff the GameObject prototype has, but wont </span>
+                                                               <span class="pl-c">// change anything in the GameObject Prototype but </span>
+                                                               <span class="pl-c">// in MyModule prototype will do.</span>
+
+
+    <span class="pl-s3">MyModule</span>.<span class="pl-sc">prototype</span>.<span class="pl-en">update</span> <span class="pl-k">=</span> <span class="pl-st">function</span> <span class="pl-en">update</span>(<span class="pl-vpf">delta</span>) {                       <span class="pl-c">// Now Implement your custom render and update</span>
+        updateStuff(delta);                                                    <span class="pl-c">// this way. You could also define it in the </span>
+    };                                                                         <span class="pl-c">// constructor. It won't make a difference</span>
+
+    <span class="pl-s3">MyModule</span>.<span class="pl-sc">prototype</span>.<span class="pl-en">render</span> <span class="pl-k">=</span> <span class="pl-st">function</span> <span class="pl-en">render</span>(<span class="pl-vpf">context</span>, <span class="pl-vpf">parentPosition</span>) {     <span class="pl-c">// Both methods are optional</span>
+        renderStuff(context);
+    };
+
+
+    <span class="pl-s3">MyModule</span>.<span class="pl-sc">prototype</span>.<span class="pl-en">customMethod</span> <span class="pl-k">=</span> <span class="pl-st">function</span> <span class="pl-en">customMethod</span>(<span class="pl-vpf">param1</span>, <span class="pl-vpf">param2</span>) {
+        <span class="pl-c">// You can make your own custom methods this way or the constructor way.</span>
+        doMoreStuff();
+    };
+
+    <span class="pl-s3">window</span>.Trios2D.MyCustomModuleName <span class="pl-k">=</span> MyModule;  <span class="pl-c">// Make it aviable in the Trios2D namespace, if yow want</span>
+
+    <span class="pl-c">// Otherwise just make it aviable this way:</span>
+    <span class="pl-s3">window</span>.MyModule <span class="pl-k">=</span> MyModule;    
+
+}(<span class="pl-s3">window</span>));
+</pre></div>
+
+<p>This way you can make object constructors with reutilizable logic just available any time you need. More about <code>Object.create</code> <a href="https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Object/create">here</a>.</p>
+
+<h2>
+<a id="components" class="anchor" href="#components" aria-hidden="true"><span class="octicon octicon-link"></span></a>Components</h2>
+
+<p>Components are mede to encapsulate behavior, like player movement or physics. All the components must derive from <code>Trios2D.Component</code>. To use componets you must add it to a <code>GameObject</code> or any derivate, using the <code>#addComponent</code> method. To make a blanc component you can do that this way:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> newComp <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Trios2D.Component</span>();
+
+newComp.update <span class="pl-k">=</span> <span class="pl-st">function</span> <span class="pl-en">update</span>(<span class="pl-vpf">delta</span>, <span class="pl-vpf">gameObject</span>) {
+    updateGameObject(gameobject);
+};
+
+newComp.render <span class="pl-k">=</span> <span class="pl-st">function</span> <span class="pl-en">render</span>(<span class="pl-vpf">context</span>, <span class="pl-vpf">parentPosition</span>, <span class="pl-vpf">gameObject</span>) {
+    renderGameObject(gameobject);                                           <span class="pl-c">// As you can see, you can do rendering to.</span>
+};
+
+gameObject.addComponent(newComp);</pre></div>
+
+<p>As you can see here the component does things on the game obect itself.</p>
+
+<h3>
+<a id="components-for-more-than-one-use" class="anchor" href="#components-for-more-than-one-use" aria-hidden="true"><span class="octicon octicon-link"></span></a>Components for more than one use.</h3>
+
+<p>The idea of a component is to manage some behaviors that some entities share. So kaing the way above is not the best way to do it. With this engine come a set of componets, so developing games could be more easy. All the Trios2D Components are in the <code>./components/</code> folder and this is the way to use them.</p>
+
+<p>In the HTML:</p>
+
+<div class="highlight highlight-html"><pre>&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s1"><span class="pl-pds">"</span>js/Trios2D.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;
+...
+&lt;<span class="pl-ent">script</span> <span class="pl-e">src</span>=<span class="pl-s1"><span class="pl-pds">"</span>js/components/ComponentName.js<span class="pl-pds">"</span></span>&gt;&lt;/<span class="pl-ent">script</span>&gt;</pre></div>
+
+<p>and in the js: </p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> component <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Trios2D.Components</span>.ComponentName(param);
+
+gameObject.addComponent(component);
+
+gameObject.componentName <span class="pl-k">=</span> component; <span class="pl-c">// This is usefull when you have to acces to a component.</span></pre></div>
+
+<h4>
+<a id="physics-component" class="anchor" href="#physics-component" aria-hidden="true"><span class="octicon octicon-link"></span></a>Physics Component</h4>
+
+<p>We are currently working on this. This encapsulate the physics behavior of a <code>Gameobject</code>. It currently only handle the velocity and aceleration of an object.</p>
+
+<h5>
+<a id="instance-variables-3" class="anchor" href="#instance-variables-3" aria-hidden="true"><span class="octicon octicon-link"></span></a>Instance Variables</h5>
+
+<ul>
+<li><p><code>velocity</code>: indicates the velocity of the <code>GameObject</code> the component is subcribed to.</p></li>
+<li><p><code>aceleration</code>: indicates the aceleration of the <code>GameObject</code> the component is subcribed to.</p></li>
+</ul>
+
+<h3>
+<a id="making-my-reusable-component" class="anchor" href="#making-my-reusable-component" aria-hidden="true"><span class="octicon octicon-link"></span></a>Making my Reusable Component</h3>
+
+<p>This way you can make the component really reusable:</p>
+
+<div class="highlight highlight-javascript"><pre>(<span class="pl-st">function</span> (<span class="pl-vpf">window</span>, <span class="pl-vpf">undefined</span>) { <span class="pl-c">// Autoexecuting anonymous function so anithing</span>
+    <span class="pl-s1"><span class="pl-pds">"</span>use strict<span class="pl-pds">"</span></span>;               <span class="pl-c">// but what you specify be modified outside it.</span>
+                                <span class="pl-c">// Not necesary, but recomended</span>
+
+    <span class="pl-k">if</span> (<span class="pl-k">!</span><span class="pl-s3">window</span>.Trios2D)                                                <span class="pl-c">// Just Enshuring that</span>
+        <span class="pl-k">throw</span> <span class="pl-k">new</span> <span class="pl-en">Error</span>(<span class="pl-s1"><span class="pl-pds">"</span>You must include Trios2D in your HTML<span class="pl-pds">"</span></span>);       <span class="pl-c">// the engine is defined.</span>
+                                                                        <span class="pl-c">// If not the plugin would trow more errors</span>
+
+    <span class="pl-s">var</span> Trios2D <span class="pl-k">=</span> <span class="pl-s3">window</span>.Trios2D,               <span class="pl-c">// Just taking the engine and other component </span>
+        Vector <span class="pl-k">=</span> Trios2D.Vector,                <span class="pl-c">// from the window variable, so it's easier </span>
+        GameObject <span class="pl-k">=</span> Trios2D.GameObject,        <span class="pl-c">// to use them</span>
+        Component <span class="pl-k">=</span> Trios2D.Component;
+
+
+    <span class="pl-st">function</span> <span class="pl-en">MyComponent</span>() {
+        <span class="pl-c">// Calling Component Constructor</span>
+        Component.<span class="pl-s3">apply</span>(<span class="pl-v">this</span>);
+
+        initializeStuff();  
+    }
+
+    <span class="pl-s3">MyComponent</span>.<span class="pl-sc">prototype</span> <span class="pl-k">=</span> <span class="pl-s3">Object</span>.create(Component.<span class="pl-sc">prototype</span>); <span class="pl-c">// This makes an prototype wich derives from </span>
+                                                                <span class="pl-c">// the Component prototype, so it shares all</span>
+                                                                <span class="pl-c">// the stuff the Component prototype has, but wont </span>
+                                                                <span class="pl-c">// change anything in the Component Prototype but </span>
+                                                                <span class="pl-c">// in MyComponent prototype will do.</span>
+
+
+    <span class="pl-s3">MyComponent</span>.<span class="pl-sc">prototype</span>.<span class="pl-en">update</span> <span class="pl-k">=</span> <span class="pl-st">function</span> <span class="pl-en">update</span>(<span class="pl-vpf">delta</span>, <span class="pl-vpf">gameObject</span>) {
+        updateStuff();                                              <span class="pl-c">//Do your update stuff here</span>
+    };
+
+    <span class="pl-s3">MyComponent</span>.<span class="pl-sc">prototype</span>.<span class="pl-en">render</span> <span class="pl-k">=</span> <span class="pl-st">function</span> <span class="pl-en">render</span>(<span class="pl-vpf">context</span>, <span class="pl-vpf">parentPosition</span>, <span class="pl-vpf">gameObject</span>) {
+        renderStuff();                                              <span class="pl-c">//Do your render stuff here</span>
+    };
+
+    <span class="pl-s3">MyComponent</span>.<span class="pl-sc">prototype</span>.<span class="pl-en">postupdate</span> <span class="pl-k">=</span> <span class="pl-st">function</span> <span class="pl-en">postupdate</span>(<span class="pl-vpf">delta</span>, <span class="pl-vpf">gameObject</span>) {
+        updateStuff();                                              <span class="pl-c">// If you need to do logic after the game object updates, you can do it in here </span>
+    };
+
+    <span class="pl-s3">MyComponent</span>.<span class="pl-sc">prototype</span>.<span class="pl-en">postrender</span> <span class="pl-k">=</span> <span class="pl-st">function</span> <span class="pl-en">postrender</span>(<span class="pl-vpf">context</span>, <span class="pl-vpf">parentPosition</span>, <span class="pl-vpf">gameObject</span>) {
+        renderStuff();                                              <span class="pl-c">//If you need to render things after the game object renders, you can do it in here </span>
+    };
+
+
+
+    <span class="pl-s3">MyComponent</span>.<span class="pl-sc">prototype</span>.<span class="pl-en">customMethod</span> <span class="pl-k">=</span> <span class="pl-st">function</span> <span class="pl-en">customMethod</span>(<span class="pl-vpf">param1</span>, <span class="pl-vpf">param2</span>) {
+        <span class="pl-c">// You can make your own custom methods this way or the constructor way.</span>
+        doMoreStuff();
+    };
+
+    <span class="pl-s3">window</span>.Trios2D.Components.MyComponentName <span class="pl-k">=</span> MyComponent;  <span class="pl-c">// Make it aviable in the Trios2D.Components namespace, if yow want</span>
+
+    <span class="pl-c">// Otherwise just make it aviable this way:</span>
+    <span class="pl-s3">window</span>.MyComponent <span class="pl-k">=</span> MyComponent;    
+
+}(<span class="pl-s3">window</span>));
+</pre></div>
+
+<p>Now your component can be used again and again simply using <code>new MyCompoent()</code>. More about <code>Object.create</code> <a href="https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Object/create">here</a>.</p>
+
+<h2>
+<a id="utilities" class="anchor" href="#utilities" aria-hidden="true"><span class="octicon octicon-link"></span></a>Utilities</h2>
+
+<p><strong>Trios2D</strong> game engine bring some utilities. Those utilities are in the <code>./utilities/</code> folder and are registered unther the <code>Trios2D.Utilities</code> namespace. </p>
+
+<p>Depending of the engine it will need you to import the <code>Trios2d.js</code> script or not.</p>
+
+<h3>
+<a id="resourcepreloader-utility" class="anchor" href="#resourcepreloader-utility" aria-hidden="true"><span class="octicon octicon-link"></span></a>ResourcePreloader utility</h3>
+
+<p>This is an utility to help you to preload you game resources as images and sounds. It provides also <em>events</em> so your code can know when all content is loaded, the preload progress and error in them.</p>
+
+<p>To use this utility you must import the <code>./utilities/ResourcePreloader.js</code> script to use it. <strong>NOTE:</strong> If you import this script and then you import the <code>Trios2D.js</code> script, the <code>Trios2D</code> namespace would be overwritten and <code>Trios2D.Utilities.ResourcePreloader</code> won't be available. </p>
+
+<p>Here is how to use it:</p>
+
+<div class="highlight highlight-javascript"><pre><span class="pl-s">var</span> preloader <span class="pl-k">=</span> <span class="pl-k">new</span> <span class="pl-en">Trios2D.Utilities</span>.ResourcePreloader();
+
+preloader.on(<span class="pl-s1"><span class="pl-pds">"</span>progress<span class="pl-pds">"</span></span>, <span class="pl-st">function</span> (<span class="pl-vpf">event</span>) {
+    <span class="pl-en">console</span><span class="pl-s3">.log</span>((<span class="pl-s3">event</span>.progress <span class="pl-k">*</span> <span class="pl-c1">100</span>).<span class="pl-s3">toString</span>() <span class="pl-k">+</span> <span class="pl-s1"><span class="pl-pds">"</span>%<span class="pl-pds">"</span></span>);
+});
+
+<span class="pl-s3">preloader</span>.<span class="pl-en">onload</span> <span class="pl-k">=</span> <span class="pl-st">function</span> (<span class="pl-vpf">event</span>) {
+    <span class="pl-en">console</span><span class="pl-s3">.log</span>(<span class="pl-s3">event</span>.resources); <span class="pl-c">// event.resources is a list of all loaded items</span>
+};
+
+preloader.addEventListener(<span class="pl-s1"><span class="pl-pds">"</span>error<span class="pl-pds">"</span></span>, <span class="pl-st">function</span> (<span class="pl-vpf">event</span>) {
+    <span class="pl-en">console</span><span class="pl-s3">.log</span>(<span class="pl-s3">event</span>.resource.<span class="pl-sc">src</span> <span class="pl-k">+</span> <span class="pl-s1"><span class="pl-pds">"</span> failed to load<span class="pl-pds">"</span></span>); <span class="pl-c">// event resource is the element that failed loading</span>
+});
+
+
+preloader.preloadImage(<span class="pl-s1"><span class="pl-pds">"</span>/images/p1sprite.png<span class="pl-pds">"</span></span>); <span class="pl-c">// preload an image</span>
+
+preloader.preloadSound(<span class="pl-s1"><span class="pl-pds">"</span>/sounds/hurt.mp3<span class="pl-pds">"</span></span>); <span class="pl-c">// preload an audio file</span>
+</pre></div>
+
+<h4>
+<a id="instance-variables-and-properties-1" class="anchor" href="#instance-variables-and-properties-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Instance Variables and Properties</h4>
+
+<ul>
+<li><p><code>loaded</code>: Gets the number of loaded elements.</p></li>
+<li><p><code>total</code>: Get the total number of object registered to load.</p></li>
+<li><p><code>progress</code>: Get the current progress of the preloading.</p></li>
+<li><p><code>onprogress</code>: Sets a new event listener to the progress event. See <a href="#Preloader.events.progress"><code>progress</code></a> event.</p></li>
+<li><p><code>onload</code>: Sets a new event listener to the load event. See <a href="#Preloader.events.load"><code>load</code></a> event.</p></li>
+<li><p><code>oncomplete</code>: Alias of <code>onload</code>.</p></li>
+<li><p><code>onerror</code>: Sets a new event listener to the error event. See <a href="#Preloader.events.error"><code>error</code></a> event</p></li>
+</ul>
+
+<h4>
+<a id="metohds-1" class="anchor" href="#metohds-1" aria-hidden="true"><span class="octicon octicon-link"></span></a>Metohds</h4>
+
+<ul>
+<li><p><code>#preloadImage(imageUrl)</code>: Preloads the image specified by the url. </p></li>
+<li><p><code>#preloadSound(soundUrl)</code>: Preloads the sound specified by the url.</p></li>
+<li><p><code>#on(eventName, listener)</code>: Subcribe an event listener for an event.</p></li>
+<li><p><code>#addEventListener(eventName, listener)</code>: Subcribe an event listener for an event.</p></li>
+</ul>
+
+<h4>
+<a id="events" class="anchor" href="#events" aria-hidden="true"><span class="octicon octicon-link"></span></a>Events</h4>
+
+<p>As we can see, the <code>ResourcePreloader</code> object supports 3 events: </p>
+
+<ul>
+<li>
+<p><code>progress</code>: <a name="Preloader.events.progress"></a></p>
+
+<p>Triggers when one of the items preloaded id fully loaded. The event object used as argument of the <code>progress</code> event listener contains these variables:</p>
+
+<ul>
+<li><p><code>resource</code>: An HTML element of the loaded element.</p></li>
+<li><p><code>progress</code>: The current progress on loading the resources.</p></li>
+</ul>
+</li>
+<li>
+<p><code>load</code>: <a name="Preloader.events.load"></a></p>
+
+<p>Triggers when all elements are loaded. The event object used as argument of the <code>load</code> event listener contains the variable <code>resources</code> wich contains all the resources fully loaded.</p>
+</li>
+<li>
+<p><code>error</code>: <a name="Preloader.events.error"></a></p>
+
+<p>Triggers each time an resource fails to load. The event object contain the element <code>resource</code> which is the non loaded element.</p>
+</li>
+</ul>
+
+<p>You can use tu subcribe an event listener the methods <code>#on(eventName, listener)</code> and <code>#addEventListener(eventName, listener)</code>, as well as <strong>on<code>eventName</code></strong> property. </p>
+        </section>
+
+        <aside id="sidebar">
+          <a href="https://github.com/enjoythelive1/Trios2D/zipball/master" class="button">
+            <small>Download</small>
+            .zip file
+          </a>
+          <a href="https://github.com/enjoythelive1/Trios2D/tarball/master" class="button">
+            <small>Download</small>
+            .tar.gz file
+          </a>
+
+          <p class="repo-owner"><a href="https://github.com/enjoythelive1/Trios2D"></a> is maintained by <a href="https://github.com/enjoythelive1">enjoythelive1</a>.</p>
+
+          <p>This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the Architect theme by <a href="https://twitter.com/jasonlong">Jason Long</a>.</p>
+        </aside>
+      </div>
+    </div>
+
+  
+  </body>
+</html>
