@@ -1,3 +1,38 @@
+// http://paulirish.com/2011/requestanimationframe-for-smart-animating/
+// http://my.opera.com/emoller/blog/2011/12/20/requestanimationframe-for-smart-er-animating
+
+// requestAnimationFrame polyfill by Erik Möller. fixes from Paul Irish and Tino Zijdel
+
+// MIT license
+
+(function () {
+    var lastTime = 0;
+    var vendors = ['ms', 'moz', 'webkit', 'o'];
+    for (var x = 0; x < vendors.length && !window.requestAnimationFrame; ++x) {
+        window.requestAnimationFrame = window[vendors[x] + 'RequestAnimationFrame'];
+        window.cancelAnimationFrame = window[vendors[x] + 'CancelAnimationFrame'] || window[vendors[x] + 'CancelRequestAnimationFrame'];
+    }
+
+    if (!window.requestAnimationFrame)
+        window.requestAnimationFrame = function (callback, element) {
+            var currTime = new Date().getTime();
+            var timeToCall = Math.max(0, 16 - (currTime - lastTime));
+            var id = window.setTimeout(function () {
+                    callback(currTime + timeToCall);
+                },
+                timeToCall);
+            lastTime = currTime + timeToCall;
+            return id;
+        };
+
+    if (!window.cancelAnimationFrame)
+        window.cancelAnimationFrame = function (id) {
+            clearTimeout(id);
+        };
+}());
+
+
+// Trios 2d
 (function (window, u) {
     "use strict";
 
@@ -532,6 +567,11 @@
          */
         pauseOnBlur: true,
 
+        /**
+         * Indicate is the engine will use the window.requestAnimationFrame or not
+         */
+        useRequestAnimationFrame: true,
+
         /*
          * Stores info about the keyboard input
          */
@@ -606,8 +646,18 @@
                 }
             });
 
-            this.updateInterval = setInterval(this._update_.bind(this), 1000 / this.maxUpdates);
-            this.renderInterval = setInterval(this._render_.bind(this), 1000 / this.maxFrameRate);
+            if (this.useRequestAnimationFrame) {
+                // function name need to be enhanced
+                window.requestAnimationFrame(function doGameStuff(time) {
+                    self._update_(time);
+                    self._render_();
+
+                    window.requestAnimationFrame(doGameStuff);
+                });
+            } else {
+                this.updateInterval = setInterval(this._update_.bind(this), 1000 / this.maxUpdates);
+                this.renderInterval = setInterval(this._render_.bind(this), 1000 / this.maxFrameRate);
+            }
         },
 
         /*
@@ -728,8 +778,8 @@
         /*
          * Encapsulates all the update behavior
          */
-        _update_: function _update_() {
-            var startRender = new Date().getTime(),
+        _update_: function _update_(time) {
+            var startRender = time || new Date().getTime(),
                 delta = this.lastUpdate ? startRender - this.lastUpdate : 0;
 
             this.lastUpdate = startRender;
