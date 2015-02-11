@@ -634,25 +634,24 @@
             this.canvas.addEventListener("keydown", this.keydown.bind(this));
             this.canvas.addEventListener("keyup", this.keyup.bind(this));
             this.canvas.addEventListener("focusin", function (e) {
-                if (!self.renderInterval) {
-                    self.lastUpdate = u;
+                if (self.paused) {
                     self.resume();
                 }
             });
 
             this.canvas.addEventListener("blur", function (e) {
-                if (self.renderInterval && self.pauseOnBlur) {
+                if (!self.paused && self.pauseOnBlur) {
                     self.pause();
                 }
             });
 
             if (this.useRequestAnimationFrame) {
                 // function name need to be enhanced
-                window.requestAnimationFrame(function doGameStuff(time) {
+                this.processInterval = window.requestAnimationFrame(function doGameStuff(time) {
                     self._update_(time);
                     self._render_();
 
-                    window.requestAnimationFrame(doGameStuff);
+                    self.processInterval = window.requestAnimationFrame(doGameStuff);
                 });
             } else {
                 this.updateInterval = setInterval(this._update_.bind(this), 1000 / this.maxUpdates);
@@ -803,19 +802,35 @@
          * Pauses the game
          */
         pause: function pause() {
+            window.cancelAnimationFrame(this.processInterval);
             clearInterval(this.updateInterval);
             clearInterval(this.renderInterval);
+            delete this.processInterval;
             delete this.updateInterval;
             delete this.renderInterval;
+            self.lastUpdate = u;
+            this.paused = true;
         },
 
         /*
          * Continues the game
          */
         resume: function resume() {
+            var self = this;
+             if (this.useRequestAnimationFrame) {
+                // function name need to be enhanced
+                this.processInterval = window.requestAnimationFrame(function doGameStuff(time) {
+                    self._update_(time);
+                    self._render_();
 
-            this.updateInterval = setInterval(this._update_.bind(this), 1000 / this.maxUpdates);
-            this.renderInterval = setInterval(this._render_.bind(this), 1000 / this.maxFrameRate);
+                    self.processInterval = window.requestAnimationFrame(doGameStuff);
+                });
+            } else {
+                this.updateInterval = setInterval(this._update_.bind(this), 1000 / this.maxUpdates);
+                this.renderInterval = setInterval(this._render_.bind(this), 1000 / this.maxFrameRate);
+            }
+
+            this.paused = false;
         },
 
         click: function click(event) {
