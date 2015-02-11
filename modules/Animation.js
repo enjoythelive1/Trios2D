@@ -128,15 +128,22 @@
             var excess = this.current - this.images.length;
             if (excess >= 0) {
                 if (this.pingpong) {
-                    this.current = this.images.length - excess - 1;
-                    this.step = -this.step;
+
+                    this.current = (parseInt(excess / this.images.length) % 2 == 0) ?
+                        (this.images.length - (excess % this.images.length) - 1)
+                        : (excess % this.images.length);
+
+                    this.step = (parseInt(excess / this.images.length) % 2 == 0 ? -1 : 1) * this.step;
+
                 } else {
-                    this.current = excess;
+                    this.current = excess % this.images.length;
                 }
             } else if (excess <= -this.images.length) {
                 if (this.pingpong) {
-                    this.current = -(this.images.length + excess);
-                    this.step = -this.step;
+
+                    this.current = (parseInt(excess / this.images.length) % 2 == 0) ? (-excess % this.images.length) : (this.images.length - (-excess % this.images.length) - 1);
+
+                    this.step = (parseInt(excess / this.images.length) % 2 == 0 ? -1 : 1) * this.step;
                 }
             }
         }
