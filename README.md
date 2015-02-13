@@ -106,6 +106,10 @@ Here what these functions are for:
 
 ###Instance Variables
 
+* `useRequestAnimationFrame`: Indicates if the engine should work with `window.requestAnimationFrame`. Default to `true`.
+
+* `canvasAlwaysRealSize`: Indicates if the canvas size (context size) wuld be always equal to the css size (ensures pixel size to 1:1). Default to `true`.
+
 * `maxFrameRate`: is the max times `render` will be called in a second. It is default to 60, but you can set the framerate you think is better for your game.
 
 * `maxUpdates`: is the max times `update` will be called in a second. It is default to 60, but you can set the framerate you think is better for your game.
@@ -131,6 +135,9 @@ Here what these functions are for:
 * `#resume()`: Resumes the game.
 
 * `#getInput()`: Return the current input of the user in an [`Input`](#input) object.
+
+* `#setCanvasRealSize()`: Makes the canvas size (contect size) to be equal to the css size (ensures pixel size to 1:1).
+
 
 ##Built-in Objects
 
