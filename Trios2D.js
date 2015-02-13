@@ -586,6 +586,11 @@
          */
         useRequestAnimationFrame: true,
 
+        /**
+         * Define if the canvas will be resized to it real size
+         */
+        canvasAlwaysRealSize: true,
+
         /*
          * Stores info about the keyboard input
          */
@@ -663,6 +668,18 @@
                     self.pause();
                 }
             });
+
+            window.addEventListener("resize", function (e) {
+                if (self.canvasAlwaysRealSize) {
+                    self.setCanvasRealSize();
+                }
+            });
+
+            if (self.canvasAlwaysRealSize) {
+                self.setCanvasRealSize();
+            }
+
+
 
             if (this.useRequestAnimationFrame) {
                 // function name need to be enhanced
@@ -911,6 +928,13 @@
 
         getInput: function getInput() {
             return new Input(this.kbInput);
+        },
+
+        setCanvasRealSize: function setCanvasRealSize() {
+            var canvasStyle = window.getComputedStyle(this.canvas);
+
+            this.canvas.width = canvasStyle.width.substr(0, canvasStyle.width.length - 2);
+            this.canvas.height = canvasStyle.height.substr(0, canvasStyle.height.length - 2);
         }
 
     };
