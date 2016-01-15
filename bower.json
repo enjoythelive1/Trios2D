@@ -1,0 +1,23 @@
+{
+  "name": "Trios2D",
+  "main": "Trios2D.js",
+  "version": "0.1.2",
+  "homepage": "https://github.com/enjoythelive1/Trios2D",
+  "description": "It is a simple, lightweight HTML5 game engine for the web working over canvas",
+  "keywords": [
+    "game",
+    "engine",
+    "animations"
+  ],
+  "authors": [
+    "Fausto A. Guerrero <enjoythelive1@gmail.com>"
+  ],
+  "license": "MIT",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
