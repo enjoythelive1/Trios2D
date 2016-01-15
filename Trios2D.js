@@ -229,7 +229,7 @@
         },
 
         get degrees() {
-            this._value / Math.PI * 180
+            return this._value / Math.PI * 180;
         },
 
         set degrees(val) {
@@ -547,7 +547,7 @@
 
         this.children = [];
         this.logic = logic || {};
-        this.camera = new Camera()
+        this.camera = new Camera();
     }
 
     Engine.prototype = {
@@ -968,8 +968,8 @@
         _postupdate: function _postupdate(delta, gameObject) {
             if (typeof this.postupdate === "function")
                 this.postupdate(delta, gameObject);
-        },
-    }
+        }
+    };
 
     /************************************************************************************************************/
     /******************************************** GameObject ****************************************************/
