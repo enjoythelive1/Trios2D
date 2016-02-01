@@ -1,0 +1,75 @@
+<html>
+
+<head>
+    <title>Ping Pong</title>
+    <style>
+        body,
+        html {
+            color: white;
+            background-color: #232323;
+            height: 100%;
+            width: 100%;
+            position: relative;
+        }
+    </style>
+</head>
+
+<body>
+    Loaded progress:
+    <progress value="0" max="100"></progress>
+</body>
+<script type="text/javascript" src="../../Trios2D.js"></script>
+<script type="text/javascript" src="../../utilities/ResourcePreloader.js"></script>
+
+
+<script>
+    window.addEventListener("load", function () {
+        "use strict";
+        var preloader = new Trios2D.Utilities.ResourcePreloader(),
+            progressNot = document.querySelector("progress");
+
+        preloader.on("progress", function (e) {
+            progressNot.setAttribute("value", e.progress * 100);
+            console.log(e.resource);
+        });
+
+        preloader.on("load", function (e) {
+            console.log("Complete", e.resources);
+        });
+
+        preloader.on("error", function (e) {
+            console.error("Error", e);
+        });
+
+        preloader.preloadImage("http://blog.ecollegefinder.org/wp-content/uploads/2012/01/101474454.jpg");
+        preloader.preloadImage("http://cs.njit.edu/cs/images/programming-400x267.jpg");
+        preloader.preloadImage("http://www.cs.ox.ac.uk/images/research/pl.jpg");
+        preloader.preloadImage("http://www.panou.gr/sites/default/files/imagecache/innode727x427/programming.jpg");
+        preloader.preloadImage("http://upload.wikimedia.org/wikipedia/commons/thumb/e/e1/Python_add5_syntax.svg/292px-Python_add5_syntax.svg.png");
+        preloader.preloadImage("http://financeandcareer.com/wp-content/uploads/2013/03/webProgrammingInternship.jpg");
+        preloader.preloadImage("http://robbiemadan.files.wordpress.com/2011/05/10580033-it-a-full-collection-of-programming-language.jpg");
+        preloader.preloadImage("http://4.bp.blogspot.com/-vfKNRvdKkKQ/UAjqHyRKcUI/AAAAAAAAAPc/QjAvGQM9OP0/s1600/systems_programming.jpg");
+        preloader.preloadImage("http://freevideolectures.com/images/CS_Programming.png");
+        preloader.preloadImage("http://technicallyeasy.net/wp-content/uploads/2009/10/html-code-503x503-256x256.png");
+        preloader.preloadImage("http://www.symkat.com/static/icons/programming.png");
+        preloader.preloadImage("http://www.anthonywebdesign.com/wp-content/uploads/2011/11/datos.png");
+        preloader.preloadImage("http://itpings.com/wp-content/uploads/2014/08/Python.png");
+        preloader.preloadImage("http://itpings.com");
+        preloader.preloadImage("http://ldknihhfdsmgfusdbgydg.com");
+
+
+        preloader.preloadSound("http://soundbible.com/grab.php?id=2078&type=mp3");
+        preloader.preloadSound("http://soundbible.com/grab.php?id=2077&type=mp3");
+        preloader.preloadSound("http://soundbible.com/grab.php?id=2076&type=mp3");
+        preloader.preloadSound("http://soundbible.com/grab.php?id=2075&type=mp3");
+        preloader.preloadSound("http://soundbible.com/grab.php?id=2074&type=mp3");
+        preloader.preloadSound("http://soundbible.com/grab.php?id=2080&type=mp3");
+        preloader.preloadSound("http://soundbible.com/grab.php?id=2079&type=mp3");
+        preloader.preloadSound("http://soundbible.com/grab.php?id=2071&type=mp3");
+
+
+
+    });
+</script>
+
+</html>

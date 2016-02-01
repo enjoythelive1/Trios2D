@@ -106,6 +106,10 @@ Here what these functions are for:
 
 ###Instance Variables
 
+* `useRequestAnimationFrame`: Indicates if the engine should work with `window.requestAnimationFrame`. Default to `true`.
+
+* `canvasAlwaysRealSize`: Indicates if the canvas size (context size) wuld be always equal to the css size (ensures pixel size to 1:1). Default to `true`.
+
 * `maxFrameRate`: is the max times `render` will be called in a second. It is default to 60, but you can set the framerate you think is better for your game.
 
 * `maxUpdates`: is the max times `update` will be called in a second. It is default to 60, but you can set the framerate you think is better for your game.
@@ -116,7 +120,7 @@ Here what these functions are for:
 
 * `camera`: Is an `Camera` object which manages the render perspective. Click [here](#camera) to se more.
 
-* `childen`: Is an array containing all the `GameObject` objects that are directly in the game (not the `GameObject` children, see [`GameObject#children`](#GameObject.children)). **DO NOT MODIFY THIS ARRAY OR SET IT DIRECTLY UNLESS YOU KNOW WHAT YOU ARE DOING!!!**
+* `children`: Is an array containing all the `GameObject` objects that are directly in the game (not the `GameObject` children, see [`GameObject#children`](#GameObject.children)). **DO NOT MODIFY THIS ARRAY OR SET IT DIRECTLY UNLESS YOU KNOW WHAT YOU ARE DOING!!!**
 
 ###Methods
 
@@ -131,6 +135,9 @@ Here what these functions are for:
 * `#resume()`: Resumes the game.
 
 * `#getInput()`: Return the current input of the user in an [`Input`](#input) object.
+
+* `#setCanvasRealSize()`: Makes the canvas size (contect size) to be equal to the css size (ensures pixel size to 1:1).
+
 
 ##Built-in Objects
 
@@ -180,6 +187,7 @@ As mentioned before the an `Vector` object has some utility methods. Currents ar
 
 * `#equal(vector)`: Check if both `Vector`s have the same value.
 
+* `#round(precision)`: Return a copy of the `Vector` with rounded values by `precision`.
 
 ###Angle
 
@@ -221,6 +229,8 @@ The constructor arguments are `value` and `isDegree`. `value` specfy it values a
 
 * `#invert()`: Inverts the angle value. (the same as doing `-x`, x being a number).
 
+* `#round(precision)`: Return a copy of the `Angle` with rounded value by `precision`.
+
 * `#valueOf()`: Return the angle value in radians.
 
 
@@ -260,7 +270,7 @@ Here we can se some other things not mentioned in the coment. First the `#addChi
 
 * `renderPosition`: Indicates the render priotity of the `GameObject` and that way if it is in the front or the back. Higher values means that is more on the front. By default 0.
 
-* `rotation`: Is an `Angle` object that indicates the rotation of the object. Every thing rendered by a `GameObject` with an specified rotation will be rotated by the same amount and the childen rotation is relative to the parent.
+* `rotation`: Is an `Angle` object that indicates the rotation of the object. Every thing rendered by a `GameObject` with an specified rotation will be rotated by the same amount and the children rotation is relative to the parent.
 
 * `rotationAnchor`: specifies the rotation anchor of an object. Its values can be `Vector` object indicating a point relative to the parent where the rotation will be anchored or some of the following values:
 
@@ -278,9 +288,11 @@ Here we can se some other things not mentioned in the coment. First the `#addChi
     | `"bottom-middle"`  | ![bottom-middle](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/bottom-middle.png) |
     | `"bottom-right"`   | ![bottom-right](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/bottom-right.png)   |  
 
-* <a name="GameObject.children"></a>`childen`: Is an array containing all the `GameObject` objects that are children of the `GameObject`. **DO NOT MODIFY THIS ARRAY OR SET IT DIRECTLY UNLESS YOU KNOW WHAT YOU ARE DOING!!!**
+* <a name="GameObject.children"></a>`children`: Is an array containing all the `GameObject` objects that are children of the `GameObject`. **DO NOT MODIFY THIS ARRAY OR SET IT DIRECTLY UNLESS YOU KNOW WHAT YOU ARE DOING!!!**
 
 * `components`: Is an array containing all `Component` (See more about `Component` [here](#components)) which belongs to the `GameObject`. **DO NOT MODIFY THIS ARRAY OR SET IT DIRECTLY UNLESS YOU KNOW WHAT YOU ARE DOING!!!**
+
+* `engine`: Returns the engine the `GameObject` is subscrided to.
 
 
 ####Methods
@@ -557,7 +569,7 @@ You can chage any of the options at any time changin the value tu the instance. 
 
 ####Animation
 
-Animation is module whichmanages and render a set of images which changes every time. It makes easyer thinks like render a walking dog or an jumping player. You can make an animation from several images (url ot `HTMLImage` object), or an spritesheet specifing the spritesheet size, the margin between images and the size of each image. It will calculate how much sprites the sprite sheet has depending of the sizes provided, but you can specify how much images to take.
+Animation is module which manages and render a set of images which changes every time. It makes easyer thinks like render a walking dog or an jumping player. You can make an animation from several images (url ot `HTMLImage` object), or an spritesheet specifing the spritesheet size, the margin between images and the size of each image. It will calculate how much sprites the sprite sheet has depending of the sizes provided, but you can specify how much images to take.
 
 To use it you must import the `./modules/Animation.js` script.
 
@@ -660,6 +672,57 @@ We have seen that you can pass an array of images url, `HTMLImage` objects, or o
 #####Methods
 
 * `#reverse()`: Reverses the current animation.
+
+####GameSound
+
+This is a module wich simplify the audio management in your game. It internaly works using the `<audio>` HTML5 element.
+
+To use it you must import the `./modules/GameSound.js` script.
+
+```html
+<script src="js/Trios2D.js"></script>
+...
+<script src="js/modules/GameSound.js"></script>
+```
+
+Here an example of how to use it:
+
+```javascript
+var sound = new Trios2D.GameSound(audio);
+
+sound.play();
+
+game.addChild(sound);
+```
+
+Here `audio` could be the audio file url or an `<audio>` HTML element.
+
+Some of the utilities about this object is that the audio starts to load inmediatly you create it, in difference to the `<audio>` element, and the fact that the audio automaticly pauses when the game is paused.
+
+#####Instance Variablesa and properties
+
+* `currentTime`: Property proxy to the `<audio>`'s property `currentTime`. See more about this property in [W3Schools](http://www.w3schools.com/tags/av_prop_currenttime.asp).
+
+* `duration`: Property proxy to the `<audio>`'s property `duration`. See more about this property in [W3Schools](http://www.w3schools.com/tags/av_prop_duration.asp).
+
+* `ended`: Property proxy to the `<audio>`'s property `ended`. See more about this property in [W3Schools](http://www.w3schools.com/tags/av_prop_ended.asp).
+
+* `loop`: Property proxy to the `<audio>`'s property `loop`. See more about this property in [W3Schools](http://www.w3schools.com/tags/av_prop_loop.asp).
+
+* `paused`: Property proxy to the `<audio>`'s property `paused`. See more about this property in [W3Schools](http://www.w3schools.com/tags/av_prop_paused.asp).
+
+* `volume`: Property proxy to the `<audio>`'s property `volume`. See more about this property in [W3Schools](http://www.w3schools.com/tags/av_prop_volume.asp).
+
+#####Methods
+
+* `#play()`: Plays the sound. If the audio is currently playing, it start to play the sound again from the begining. If paused, the sound reproduction just resumes.
+
+* `#resume()`: Resumens the sound playing if it is paused. Otherwise it does nothing.
+
+* `#pause()`: Pauses the sound reproduction.
+
+* `#stop()`: Stops the sound reproduction and the the next time the sound plays, it will start from the begining.
+
 
 ###How To Make my own modules
 
@@ -816,6 +879,14 @@ This way you can make the component really reusable:
         renderStuff();                                              //Do your render stuff here
     };
     
+    MyComponent.prototype.postupdate = function postupdate(delta, gameObject) {
+        updateStuff();                                              // If you need to do logic after the game object updates, you can do it in here 
+    };
+    
+    MyComponent.prototype.postrender = function postrender(context, parentPosition, gameObject) {
+        renderStuff();                                              //If you need to render things after the game object renders, you can do it in here 
+    };
+    
      
     
     MyComponent.prototype.customMethod = function customMethod(param1, param2) {
@@ -833,3 +904,88 @@ This way you can make the component really reusable:
 ```
 
 Now your component can be used again and again simply using `new MyCompoent()`. More about `Object.create` [here](https://developer.mozilla.org/es/docs/Web/JavaScript/Referencia/Objetos_globales/Object/create).
+
+##Utilities
+
+**Trios2D** game engine bring some utilities. Those utilities are in the `./utilities/` folder and are registered unther the `Trios2D.Utilities` namespace. 
+
+Depending of the engine it will need you to import the `Trios2d.js` script or not.
+
+###ResourcePreloader utility
+
+This is an utility to help you to preload you game resources as images and sounds. It provides also *events* so your code can know when all content is loaded, the preload progress and error in them.
+
+To use this utility you must import the `./utilities/ResourcePreloader.js` script to use it. **NOTE:** If you import this script and then you import the `Trios2D.js` script, the `Trios2D` namespace would be overwritten and `Trios2D.Utilities.ResourcePreloader` won't be available. 
+
+Here is how to use it:
+
+```javascript
+var preloader = new Trios2D.Utilities.ResourcePreloader();
+
+preloader.on("progress", function (event) {
+    console.log((event.progress * 100).toString() + "%");
+});
+
+preloader.onload = function (event) {
+    console.log(event.resources); // event.resources is a list of all loaded items
+};
+
+preloader.addEventListener("error", function (event) {
+    console.log(event.resource.src + " failed to load"); // event resource is the element that failed loading
+});
+
+
+preloader.preloadImage("/images/p1sprite.png"); // preload an image
+
+preloader.preloadSound("/sounds/hurt.mp3"); // preload an audio file
+
+```
+
+####Instance Variables and Properties
+
+* `loaded`: Gets the number of loaded elements.
+
+* `total`: Get the total number of object registered to load.
+
+* `progress`: Get the current progress of the preloading.
+
+* `onprogress`: Sets a new event listener to the progress event. See [`progress`](#Preloader.events.progress) event.
+
+* `onload`: Sets a new event listener to the load event. See [`load`](#Preloader.events.load) event.
+
+* `oncomplete`: Alias of `onload`.
+
+* `onerror`: Sets a new event listener to the error event. See [`error`](#Preloader.events.error) event
+
+####Metohds
+
+* `#preloadImage(imageUrl)`: Preloads the image specified by the url. 
+
+* `#preloadSound(soundUrl)`: Preloads the sound specified by the url.
+
+* `#on(eventName, listener)`: Subcribe an event listener for an event.
+
+* `#addEventListener(eventName, listener)`: Subcribe an event listener for an event.
+
+
+####Events
+
+As we can see, the `ResourcePreloader` object supports 3 events: 
+
+* `progress`: <a name="Preloader.events.progress"></a>
+
+    Triggers when one of the items preloaded id fully loaded. The event object used as argument of the `progress` event listener contains these variables:
+
+    + `resource`: An HTML element of the loaded element.
+
+    + `progress`: The current progress on loading the resources.
+
+* `load`: <a name="Preloader.events.load"></a>
+
+    Triggers when all elements are loaded. The event object used as argument of the `load` event listener contains the variable `resources` wich contains all the resources fully loaded.
+    
+* `error`: <a name="Preloader.events.error"></a>
+    
+    Triggers each time an resource fails to load. The event object contain the element `resource` which is the non loaded element.
+
+You can use tu subcribe an event listener the methods `#on(eventName, listener)` and `#addEventListener(eventName, listener)`, as well as **on`eventName`** property. 

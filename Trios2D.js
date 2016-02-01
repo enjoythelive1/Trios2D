@@ -173,6 +173,13 @@
          */
         lerp: function lerp(other, step) {
             return this.add(other.sub(this).multiply(step));
+        },
+
+        /*
+         * Round the vector
+         */
+        round: function round(digits) {
+            return new Vector(Math.round(this.x, digits), Math.round(this.y, digits));
         }
 
     };
@@ -222,7 +229,7 @@
         },
 
         get degrees() {
-            this._value / Math.PI * 180
+            return this._value / Math.PI * 180;
         },
 
         set degrees(val) {
@@ -313,6 +320,13 @@
          */
         invert: function invert() {
             return new Angle(this.isDegree ? -this.degrees : -this.rads, this.isDegree);
+        },
+
+        /*
+         * Round the angle
+         */
+        round: function round(digits) {
+            return new Angle(Math.round(this.isDegree ? this.degrees : -this.rads, digits), this.isDegree);
         }
 
 
@@ -338,7 +352,7 @@
          */
         isKeyPressed: function isKeyPressed(keyCode) {
             var pressed = this.kbInput.keypress[keyCode];
-            delete this.kbInput.keypress[keyCode];
+            //delete this.kbInput.keypress[keyCode];
             return pressed;
         },
 
@@ -533,7 +547,7 @@
 
         this.children = [];
         this.logic = logic || {};
-        this.camera = new Camera()
+        this.camera = new Camera();
     }
 
     Engine.prototype = {
@@ -571,6 +585,11 @@
          * Indicate is the engine will use the window.requestAnimationFrame or not
          */
         useRequestAnimationFrame: true,
+
+        /**
+         * Define if the canvas will be resized to it real size
+         */
+        canvasAlwaysRealSize: true,
 
         /*
          * Stores info about the keyboard input
@@ -619,6 +638,11 @@
             }
         },
 
+
+        get engine() {
+            return this;
+        },
+
         /*
          * Initialization of the engine
          */
@@ -644,6 +668,18 @@
                     self.pause();
                 }
             });
+
+            window.addEventListener("resize", function (e) {
+                if (self.canvasAlwaysRealSize) {
+                    self.setCanvasRealSize();
+                }
+            });
+
+            if (self.canvasAlwaysRealSize) {
+                self.setCanvasRealSize();
+            }
+
+
 
             if (this.useRequestAnimationFrame) {
                 // function name need to be enhanced
@@ -743,7 +779,7 @@
          */
         _render_: function _render_() {
             var self = this,
-                torender = this.children.sort(sortGameObjects);
+                torender = this.children.concat().sort(sortGameObjects);
 
             this.prerender(this.context);
 
@@ -808,6 +844,10 @@
             delete this.processInterval;
             delete this.updateInterval;
             delete this.renderInterval;
+
+            this.children.forEach(function (item) {
+                item._pause();
+            });
             self.lastUpdate = u;
             this.paused = true;
         },
@@ -830,6 +870,10 @@
                 this.renderInterval = setInterval(this._render_.bind(this), 1000 / this.maxFrameRate);
             }
 
+            this.children.forEach(function (item) {
+                item._resume();
+            });
+
             this.paused = false;
         },
 
@@ -849,7 +893,7 @@
 
             clickPosition = new Vector(x, y);
 
-            this.children.sort(sortGameObjects).reverse().every(function (item) {
+            this.children.concat().sort(sortGameObjects).reverse().every(function (item) {
                 if (clickPosition.isBetween(item.position, item.position.add(item.size))) {
                     item._click(clickPosition);
                     return false;
@@ -884,6 +928,13 @@
 
         getInput: function getInput() {
             return new Input(this.kbInput);
+        },
+
+        setCanvasRealSize: function setCanvasRealSize() {
+            var canvasStyle = window.getComputedStyle(this.canvas);
+
+            this.canvas.width = canvasStyle.width.substr(0, canvasStyle.width.length - 2);
+            this.canvas.height = canvasStyle.height.substr(0, canvasStyle.height.length - 2);
         }
 
     };
@@ -904,11 +955,21 @@
                 this.render(context, parentPosition, gameObject);
         },
 
+        _postrender: function _postrender(context, parentPosition, gameObject) {
+            if (typeof this.postrender === "function")
+                this.postrender(context, parentPosition, gameObject);
+        },
+
         _update: function _update(delta, gameObject) {
             if (typeof this.update === "function")
                 this.update(delta, gameObject);
         },
-    }
+
+        _postupdate: function _postupdate(delta, gameObject) {
+            if (typeof this.postupdate === "function")
+                this.postupdate(delta, gameObject);
+        }
+    };
 
     /************************************************************************************************************/
     /******************************************** GameObject ****************************************************/
@@ -1005,6 +1066,13 @@
             }
         },
 
+        /*
+         * Get the engine which the object is subscribed
+         */
+        get engine() {
+            return this.parent.engine;
+        },
+
         autoCalcSize: function autoCalcSize() {
             if (this.children.length) {
                 this.size = new Engine.Vector(Math.max.apply(Math, this.children.map(function (item) {
@@ -1039,6 +1107,11 @@
                 item._update(delta);
             });
 
+            //components postupdate
+            this.components.forEach(function (item) {
+                item._postupdate(delta, this);
+            }, this);
+
         },
 
         /*
@@ -1047,7 +1120,7 @@
          */
         _render: function (context, parentPosition) {
             var self = this,
-                torender = this.children.sort(sortGameObjects);
+                torender = this.children.concat().sort(sortGameObjects);
 
             this.absolutePosition = parentPosition.add(this.position);
 
@@ -1066,6 +1139,11 @@
             torender.forEach(function (item) {
                 item._render(context, self.absolutePosition);
             });
+
+            //components render
+            this.components.forEach(function (item) {
+                item._postrender(context, parentPosition, this);
+            }, this);
 
             this._postrender(context, parentPosition);
 
@@ -1133,7 +1211,7 @@
             var localClick = clickPosition.sub(this.position);
             if (typeof this.click !== "function" || this.click(localClick) !== false) {
 
-                this.children.sort(sortGameObjects).reverse().every(function (item) {
+                this.children.concat().sort(sortGameObjects).reverse().every(function (item) {
                     if (localClick.isBetween(item.position, item.position.add(item.size))) {
                         item._click(localClick);
                         return false;
@@ -1142,7 +1220,27 @@
                     return true;
                 });
             }
+        },
+
+        _pause: function _pause() {
+            if (typeof this.pause === "function")
+                this.pause();
+
+            this.children.forEach(function (item) {
+                item._pause();
+            });
+        },
+
+        _resume: function _resume() {
+            if (typeof this.resume === "function")
+                this.resume();
+
+            this.children.forEach(function (item) {
+                item._resume();
+            });
         }
+
+
     };
 
 

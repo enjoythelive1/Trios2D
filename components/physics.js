@@ -14,25 +14,90 @@
         // Calling Component Constructor
         Component.apply(this);
 
-        this.velocity = new Vector();
-        this.aceleration = new Vector();
+        this._velocity = new Vector();
+        this._aceleration = new Vector();
+
+        this._lastVelocity = this._velocity;
 
     }
 
-    Physics.prototype = Object.create(Component.prototype);
+    Physics.prototype = Object.create(Component.prototype, {
+        position: {
+            get: function position() {
+                if (this.gameObject) {
+                    return this.gameObject.position;
+                }
+            },
+
+            set: function position(val) {
+                if (this.gameObject) {
+                    this.gameObject.position = val;
+                }
+            },
+
+            enumerable: true
+        },
+
+        velocity: {
+            get: function velocity() {
+                if (this.position.equal(this._lastPosition || this.position)) {
+                    return this._velocity;
+                } else {
+                    // immediat position change would make the velocity increases in the update frame where it was made
+                    return this.position.sub(this._lastPosition).divide(this._lastDelta / 1000).round(5);
+                }
+            },
+
+            set: function  velocity(val) {
+                this._velocity = val;
+                this._lastPosition = undefined;
+            }
+        },
+
+        aceleration: {
+            get: function aceleration() {
+                if (this.velocity.equal(this._lastVelocity)) {
+                    return this._aceleration;
+                } else {
+                    // immediat velocity change would make the aceleration increases in the update frame where it was made
+                    return this.velocity.sub(this._lastVelocity).divide(this._lastDelta / 1000).round(5);
+                }
+            },
+
+            set: function aceleration(val) {
+                this._aceleration = val;
+                this._lastVelocity = this._velocity;
+
+            }
+        }
+
+    });
 
     Physics.prototype.update = function update(delta, gameObject) {
-        this.position = gameObject.position;
 
-        if (this.aceleration) {
-            this.velocity = this.velocity.add(this.aceleration.multiply(delta / 1000));
+        if (this._aceleration.hasValue()) {
+            this._velocity = this._velocity.add(this._aceleration.multiply(delta / 1000));
         }
 
-        if (this.velocity) {
-            this.position = this.position.add(this.velocity.multiply(delta / 1000));
+        if (this._velocity.hasValue()) {
+            this.position = this.position.add(this._velocity.multiply(delta / 1000));
         }
 
-        gameObject.position = this.position;
+//
+////        this._lastPosition = this.position;
+//        this._lastVelocity = this.velocity;
+//        this._lastPosition = this.position;
+//
+        this._lastDelta = delta;
+    };
+
+    Physics.prototype.postupdate = function postupdate(delta, gameObject) {
+
+//        this._lastPosition = this.position;
+        this._lastVelocity = this.velocity;
+        this._lastPosition = this.position;
+
+//        this._lastDelta = delta;
     };
 
 

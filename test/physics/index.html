@@ -1,0 +1,581 @@
+<html>
+
+<head>
+    <title>Ping Pong</title>
+    <style>
+        body,
+        html {
+            color: white;
+            background-color: #232323;
+            height: 100%;
+            width: 100%;
+            position: relative;
+            padding: 0;
+            margin: 0;
+        }
+        #game,
+        .graphics,
+        .graphics > * {
+            width: 100%;
+            height: 500px;
+            position: relative;
+/*            margin: 10px auto;*/
+            display: block;
+        }
+        .graphics {
+            width: 100%;
+            height: initial;
+        }
+        .graphics > * {
+            height: 500px;
+            width: 800px;
+        }
+        .graphics > button {
+            height: initial;
+        }
+        #game {
+            background-color: white;
+            width: 100%;
+            height: 100%;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas width="700px" height="520" id="game">
+        This game is not supported in your browser.
+    </canvas>
+
+    <section class="graphics">
+        <button onclick="report(info.report)">Do Report</button>
+        <article id="position"></article>
+        <article id="velocity"></article>
+        <article id="aceleration"></article>
+        <article id="rotation"></article>
+    </section>
+
+</body>
+<script type="text/javascript" src="../../Trios2D.js"></script>
+<script type="text/javascript" src="../../modules/GameText.js"></script>
+<script type="text/javascript" src="../../components/Physics.js"></script>
+
+<script src="//code.jquery.com/jquery-1.11.0.min.js"></script>
+
+<script src="http://code.highcharts.com/highcharts.js"></script>
+<script src="http://code.highcharts.com/modules/exporting.js"></script>
+<script>
+    var chart = window.chart = {};
+
+    function report(data) {
+        $('#position').highcharts({
+            chart: {
+                //type: 'area',
+                animation: Highcharts.svg, // don't animate in old IE
+                marginRight: 10
+
+            },
+            title: {
+                text: 'Position'
+            },
+            xAxis: {
+                type: 'datetime',
+                tickPixelInterval: 150
+            },
+            yAxis: {
+                title: {
+                    text: 'Position'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.series.name + '</b><br/>' +
+                        Highcharts.dateFormat('%H:%M:%S', this.x) + '<br/>' +
+                        Highcharts.numberFormat(this.y, 2);
+                }
+            },
+
+            plotOptions: {
+                series: {
+                    //lineWidth: 1,
+                    point: {
+                        events: {
+                            'click': function () {
+                                if (this.series.data.length > 1) {
+                                    this.remove();
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+
+            legend: {
+                enabled: true
+            },
+            exporting: {
+                enabled: false
+            },
+            series: [{
+                name: 'X axis',
+                data: data.position.x
+                }, {
+                name: 'Y axis',
+                data: data.position.y
+                }]
+        });
+
+        chart.position = $('#position').highcharts();
+
+        $('#velocity').highcharts({
+            chart: {
+                //type: 'area',
+                animation: Highcharts.svg, // don't animate in old IE
+                marginRight: 10
+
+            },
+            title: {
+                text: 'Velocity'
+            },
+            xAxis: {
+                type: 'datetime',
+                tickPixelInterval: 150
+            },
+            yAxis: {
+                title: {
+                    text: 'Velocity'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.series.name + '</b><br/>' +
+                        Highcharts.dateFormat('%H:%M:%S', this.x) + '<br/>' +
+                        Highcharts.numberFormat(this.y, 2);
+                }
+
+            },
+
+            plotOptions: {
+                series: {
+                    //lineWidth: 1,
+                    point: {
+                        events: {
+                            'click': function () {
+                                if (this.series.data.length > 1) {
+                                    this.remove();
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+
+            legend: {
+                enabled: true
+            },
+            exporting: {
+                enabled: false
+            },
+            series: [{
+                name: 'X axis',
+                data: data.velocity.x
+                }, {
+                name: 'Y axis',
+                data: data.velocity.y
+                }]
+        });
+
+        chart.velocity = $('#velocity').highcharts();
+
+        $('#aceleration').highcharts({
+            chart: {
+                //type: 'area',
+                animation: Highcharts.svg, // don't animate in old IE
+                marginRight: 10
+
+            },
+            title: {
+                text: 'Aceleration'
+            },
+            xAxis: {
+                type: 'datetime',
+                tickPixelInterval: 150
+            },
+            yAxis: {
+                title: {
+                    text: 'Aceleration'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+
+            plotOptions: {
+                series: {
+                    //lineWidth: 1,
+                    point: {
+                        events: {
+                            'click': function () {
+                                if (this.series.data.length > 1) {
+                                    this.remove();
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.series.name + '</b><br/>' +
+                        Highcharts.dateFormat('%H:%M:%S', this.x) + '<br/>' +
+                        Highcharts.numberFormat(this.y, 2);
+                }
+
+            },
+            legend: {
+                enabled: true
+            },
+            exporting: {
+                enabled: false
+            },
+            series: [{
+                name: 'X axis',
+                data: data.aceleration.x
+                }, {
+                name: 'Y axis',
+                data: data.aceleration.y
+                }]
+        });
+
+        chart.aceleration = $('#aceleration').highcharts();
+
+        $('#rotation').highcharts({
+            chart: {
+                //type: 'area',
+                animation: Highcharts.svg, // don't animate in old IE
+                marginRight: 10
+
+            },
+            title: {
+                text: 'Rotation'
+            },
+            xAxis: {
+                type: 'datetime',
+                tickPixelInterval: 150
+            },
+            yAxis: {
+                title: {
+                    text: 'Rotation'
+                },
+                plotLines: [{
+                    value: 0,
+                    width: 1,
+                    color: '#808080'
+                }]
+            },
+            tooltip: {
+                formatter: function () {
+                    return '<b>' + this.series.name + '</b><br/>' +
+                        Highcharts.dateFormat('%H:%M:%S', this.x) + '<br/>' +
+                        Highcharts.numberFormat(this.y, 2);
+                }
+
+            },
+
+            plotOptions: {
+                series: {
+                    //lineWidth: 1,
+                    point: {
+                        events: {
+                            'click': function () {
+                                if (this.series.data.length > 1) {
+                                    this.remove();
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+
+            legend: {
+                enabled: true
+            },
+            exporting: {
+                enabled: false
+            },
+            series: [{
+                name: 'Angle',
+                data: data.rotation
+                }]
+        });
+
+        chart.rotation = $('#rotation').highcharts();
+    }
+</script>
+<script>
+    (function (window) {
+        "use strict";
+
+        var Engine = window.Trios2D,
+            ruleSep = 30,
+            gamelogic = {
+
+                init: function init(engine) {
+                    var self = this;
+
+                    this.rule = new Engine.GameObject();
+
+                    this.rule.horizontal = new Engine.GameObject();
+                    this.rule.addChild(this.rule.horizontal);
+
+                    this.rule.vertical = new Engine.GameObject();
+                    this.rule.addChild(this.rule.vertical);
+
+                    this.rule.vertical.numbers = [];
+                    this.rule.horizontal.numbers = [];
+
+                    var measure;
+
+                    // vertical rule creation
+                    for (var i = 0; i <= Math.ceil(engine.canvas.height / ruleSep); i++) {
+                        measure = new Engine.GameObject();
+                        measure.position = new Engine.Vector(0, i * ruleSep);
+
+                        measure.number = new Engine.GameText(i * ruleSep, {
+                            fillStyle: "black",
+                            baselineAlign: "top"
+                        });
+
+                        measure.number.position = new Engine.Vector(3, 3);
+
+                        measure.addChild(measure.number);
+
+                        measure.line = new Engine.GameObject();
+                        measure.line.size = new Engine.Vector(engine.canvas.width, 1);
+                        measure.line.render = function render(context) {
+                            context.save();
+
+                            context.fillStyle = "#ddd";
+                            context.fillRect(this.absolutePosition.x, this.absolutePosition.y, this.size.x, this.size.y);
+
+                            context.restore();
+                        };
+
+                        measure.addChild(measure.line);
+
+                        this.rule.vertical.numbers.push(measure);
+                        this.rule.vertical.addChild(measure);
+
+                    }
+
+                    // horizontal rule
+                    for (var i = 0; i <= Math.ceil(engine.canvas.width / ruleSep); i++) {
+                        measure = new Engine.GameObject();
+                        measure.position = new Engine.Vector(i * ruleSep, 0);
+
+                        measure.number = new Engine.GameText(i * ruleSep, {
+                            fillStyle: "black",
+                            baselineAlign: "top"
+                        });
+
+                        measure.number.position = new Engine.Vector(3, 3);
+
+
+                        measure.addChild(measure.number);
+
+                        measure.line = new Engine.GameObject();
+                        measure.line.size = new Engine.Vector(1, engine.canvas.height);
+                        measure.line.render = function render(context) {
+                            context.save();
+
+                            context.fillStyle = "#ddd";
+                            context.fillRect(this.absolutePosition.x, this.absolutePosition.y, this.size.x, this.size.y);
+
+                            context.restore();
+                        };
+
+                        measure.addChild(measure.line);
+
+                        this.rule.horizontal.numbers.push(measure);
+                        this.rule.horizontal.addChild(measure);
+
+                    }
+
+                    engine.addChild(this.rule);
+
+                    // physic object --------------------------------------------------------------------------------------------------------------
+
+                    this.angularMom = new Engine.Angle(Math.PI / 2);
+
+                    this.left = new Engine.Vector(-100, 0);
+                    this.right = new Engine.Vector(100, 0);
+                    this.down = new Engine.Vector(0, 100);
+                    this.up = new Engine.Vector(0, -100);
+
+                    this.instantTransport = new Engine.Vector(100, 50);
+                    this.instantVelocity = new Engine.Vector(100, 50);
+
+
+                    var rectangle = new Engine.GameObject();
+
+                    rectangle.addComponent(rectangle.physics = new Engine.Components.Physics());
+
+                    rectangle.position = new Engine.Vector(30, 30);
+                    //rectangle.physics.aceleration = new Engine.Vector(3, 0);
+
+                    rectangle.rotationAnchor = "center";
+
+                    rectangle.size = new Engine.Vector(30, 30);
+
+                    window.info = rectangle.info = {
+                        report: {
+                            position: {
+                                x: [],
+                                y: []
+                            },
+
+                            velocity: {
+                                x: [],
+                                y: []
+                            },
+
+                            aceleration: {
+                                x: [],
+                                y: []
+                            },
+
+                            rotation: []
+                        }
+                    };
+
+                    rectangle.render = function render(context) {
+                        var prev = context.fillStyle;
+
+                        context.fillStyle = "#000";
+                        context.fillRect(this.absolutePosition.x, this.absolutePosition.y,
+                            this.size.x, this.size.y);
+
+                        context.fillStyle = prev;
+                    };
+
+                    rectangle.update = function update(delta) {
+                        var input = engine.getInput();
+
+                        if (input.isKeyDown(Engine.Input.S)) {
+                            this.rotation = this.rotation.add(self.angularMom.multiply(delta / 1000.0));
+                        } else if (input.isKeyDown(Engine.Input.W)) {
+                            this.rotation = this.rotation.sub(self.angularMom.multiply(delta / 1000.0));
+                        }
+
+                        if (input.isKeyDown(Engine.Input.LEFT_ARROW)) {
+                            this.position = this.position.add(self.left.multiply(delta / 1000.0));
+                        } else if (input.isKeyDown(Engine.Input.RIGHT_ARROW)) {
+                            this.position = this.position.add(self.right.multiply(delta / 1000.0));
+                        }
+
+                        if (input.isKeyDown(Engine.Input.UP_ARROW)) {
+                            this.position = this.position.add(self.up.multiply(delta / 1000.0));
+                        } else if (input.isKeyDown(Engine.Input.DOWN_ARROW)) {
+                            this.position = this.position.add(self.down.multiply(delta / 1000.0));
+                        }
+
+                        if (input.isKeyPressed(Engine.Input.T)) {
+                            this.position = this.position.add(self.instantTransport);
+                        }
+
+                        if (input.isKeyPressed(Engine.Input.R)) {
+                            this.position = this.position.sub(self.instantTransport);
+                        }
+
+                        if (input.isKeyPressed(Engine.Input.N)) {
+                            this.physics.velocity = this.physics.velocity.add(self.instantVelocity);
+                        }
+
+                        if (input.isKeyPressed(Engine.Input.B)) {
+                            this.physics.velocity = this.physics.velocity.sub(self.instantVelocity);
+                        }
+
+
+                        // reporting
+
+                        // position
+                        if (!this.info.position || !this.position.equal(this.info.position)) {
+                            this.info.position = new Engine.Vector(this.position);
+
+                            this.info.report.position.x.push([new Date().getTime(), this.info.position.x]);
+
+                            this.info.report.position.y.push([new Date().getTime(), this.info.position.y]);
+                        }
+
+
+                        // rotation
+                        if (!this.info.rotation || !this.rotation.equal(this.info.rotation)) {
+                            this.info.rotation = new Engine.Angle(this.rotation);
+
+                            this.info.report.rotation.push([new Date().getTime(), this.info.rotation.rads]);
+                        }
+
+                        // velocity
+                        if (!this.info.velocity || !this.physics.velocity.equal(this.info.velocity)) {
+                            this.info.velocity = new Engine.Vector(this.physics.velocity);
+
+                            this.info.report.velocity.x.push([new Date().getTime(), this.info.velocity.x]);
+
+                            this.info.report.velocity.y.push([new Date().getTime(), this.info.velocity.y]);
+                        }
+
+                        // aceleration
+                        if (!this.info.aceleration || !this.physics.aceleration.equal(this.info.aceleration)) {
+                            this.info.aceleration = new Engine.Vector(this.physics.aceleration);
+
+                            this.info.report.aceleration.x.push([new Date().getTime(), this.info.aceleration.x]);
+
+                            this.info.report.aceleration.y.push([new Date().getTime(), this.info.aceleration.y]);
+                        }
+
+                    };
+
+                    engine.addChild(rectangle);
+
+
+                },
+
+                update: function update(delta, engine) {
+                    var input = engine.getInput();
+
+                    if (input.isKeyDown(Engine.Input.NUMPAD_8)) {
+                        engine.camera.rotation = engine.camera.rotation.add(this.angularMom.multiply(delta / 1000.0));
+                    } else if (input.isKeyDown(Engine.Input.NUMPAD_2)) {
+                        engine.camera.rotation = engine.camera.rotation.sub(this.angularMom.multiply(delta / 1000.0));
+                    }
+                },
+
+                render: function render(context, engine) {
+                    // console.log("render ");
+                },
+            },
+            game = window.theGame = new Engine("#game", gamelogic);
+
+
+        game.maxUpdates = 30;
+        game.maxFrameRate = 30;
+        game.cleanBeforeRender = true;
+
+        game.start();
+
+    }(window));
+</script>
+
+</html>
