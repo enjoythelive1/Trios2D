@@ -120,7 +120,7 @@ Here what these functions are for:
 
 * `camera`: Is an `Camera` object which manages the render perspective. Click [here](#camera) to se more.
 
-* `childen`: Is an array containing all the `GameObject` objects that are directly in the game (not the `GameObject` children, see [`GameObject#children`](#GameObject.children)). **DO NOT MODIFY THIS ARRAY OR SET IT DIRECTLY UNLESS YOU KNOW WHAT YOU ARE DOING!!!**
+* `children`: Is an array containing all the `GameObject` objects that are directly in the game (not the `GameObject` children, see [`GameObject#children`](#GameObject.children)). **DO NOT MODIFY THIS ARRAY OR SET IT DIRECTLY UNLESS YOU KNOW WHAT YOU ARE DOING!!!**
 
 ###Methods
 
@@ -270,7 +270,7 @@ Here we can se some other things not mentioned in the coment. First the `#addChi
 
 * `renderPosition`: Indicates the render priotity of the `GameObject` and that way if it is in the front or the back. Higher values means that is more on the front. By default 0.
 
-* `rotation`: Is an `Angle` object that indicates the rotation of the object. Every thing rendered by a `GameObject` with an specified rotation will be rotated by the same amount and the childen rotation is relative to the parent.
+* `rotation`: Is an `Angle` object that indicates the rotation of the object. Every thing rendered by a `GameObject` with an specified rotation will be rotated by the same amount and the children rotation is relative to the parent.
 
 * `rotationAnchor`: specifies the rotation anchor of an object. Its values can be `Vector` object indicating a point relative to the parent where the rotation will be anchored or some of the following values:
 
@@ -288,7 +288,7 @@ Here we can se some other things not mentioned in the coment. First the `#addChi
     | `"bottom-middle"`  | ![bottom-middle](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/bottom-middle.png) |
     | `"bottom-right"`   | ![bottom-right](https://raw.githubusercontent.com/enjoythelive1/Trios2D/develop/Readme-res/bottom-right.png)   |  
 
-* <a name="GameObject.children"></a>`childen`: Is an array containing all the `GameObject` objects that are children of the `GameObject`. **DO NOT MODIFY THIS ARRAY OR SET IT DIRECTLY UNLESS YOU KNOW WHAT YOU ARE DOING!!!**
+* <a name="GameObject.children"></a>`children`: Is an array containing all the `GameObject` objects that are children of the `GameObject`. **DO NOT MODIFY THIS ARRAY OR SET IT DIRECTLY UNLESS YOU KNOW WHAT YOU ARE DOING!!!**
 
 * `components`: Is an array containing all `Component` (See more about `Component` [here](#components)) which belongs to the `GameObject`. **DO NOT MODIFY THIS ARRAY OR SET IT DIRECTLY UNLESS YOU KNOW WHAT YOU ARE DOING!!!**
 
